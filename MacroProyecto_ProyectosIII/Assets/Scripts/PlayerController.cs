@@ -6,14 +6,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    // Pausar juego
-    public GameObject pausePanel;
     public PlayerInput playerInput;
     public CinemachineBrain cinemachineBrain;
+
+    // Animaciones jugador
     private Animator capibaraAnimator;
     private SpriteRenderer capibaraSprites;
-
-    public bool isPaused = false;
 
     // Movimiento jugador
     public Rigidbody rb;
@@ -27,8 +25,6 @@ public class PlayerController : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction jumpAction;
-
-    // Animaciones jugador
 
     // Datos jugador
     public int health;
@@ -44,15 +40,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            isPaused = !isPaused;
-            PauseGame();
-        }
-
         Movement();
         Jump();
-
     }
 
     private void Movement()
@@ -75,32 +64,6 @@ public class PlayerController : MonoBehaviour
         if (jumpAction.WasPressedThisFrame() && isGrounded)
         {
             rb.linearVelocity += new Vector3(0f, jumpForce, 0f);
-        }
-    }
-
-    public void PauseGame()
-    {
-        if (isPaused)
-        {
-            Time.timeScale = 0;
-            pausePanel.SetActive(true);
-            playerInput.enabled = false;
-            cinemachineBrain.enabled = false;
-
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-
-            FindFirstObjectByType<PlayerController>().isPaused = true;
-        }
-        else
-        {
-            Time.timeScale = 1;
-            pausePanel.SetActive(false);
-            playerInput.enabled = true;
-            cinemachineBrain.enabled = true;
-            Cursor.lockState = CursorLockMode.Locked;
-
-            FindFirstObjectByType<PlayerController>().isPaused = false;
         }
     }
 }
