@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 608585f2cb060894e8340e5040698ac3
+guid: 2f0e26ed31694b445905a4574adf07b1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Capibara_Idle_0
+      name: Capibara_Idle 1_0
       rect:
         serializedVersion: 2
-        x: 3
+        x: 0
         y: 0
-        width: 29
-        height: 27
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,20 +112,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c84cb26c4cbfb48408c9dcc15f4c850f
-      internalID: -1380135187
+      spriteID: 4d2d975279388114084117fdc679a78f
+      internalID: -898892505
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_1
+      name: Capibara_Idle 1_1
       rect:
         serializedVersion: 2
-        x: 35
+        x: 32
         y: 0
-        width: 29
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,20 +134,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1863092e8f6083047948deefbed4a3c8
-      internalID: 1269947589
+      spriteID: a0380e9be13fad242a0128fc3364838d
+      internalID: -1952893755
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_2
+      name: Capibara_Idle 1_2
       rect:
         serializedVersion: 2
-        x: 67
+        x: 64
         y: 0
-        width: 29
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +156,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed7ca214d4d163a4ba9a765bfb228162
-      internalID: -824568085
+      spriteID: abeaa41a524a48148a14f3482715293a
+      internalID: -724535915
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_3
+      name: Capibara_Idle 1_3
       rect:
         serializedVersion: 2
-        x: 99
+        x: 96
         y: 0
-        width: 29
-        height: 29
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,20 +178,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 000c9fbe6e6282047886d5dccb32576b
-      internalID: -100183511
+      spriteID: dc8c547d3cf758444bbf7da80be6240b
+      internalID: 922902062
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_4
+      name: Capibara_Idle 1_4
       rect:
         serializedVersion: 2
-        x: 131
+        x: 128
         y: 0
-        width: 29
-        height: 29
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +200,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9d22c2539f1f41d409037f6f6cf6b389
-      internalID: -275957782
+      spriteID: 0a6368492ab384049b1c6f204ff39ca1
+      internalID: 1882059443
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_5
+      name: Capibara_Idle 1_5
       rect:
         serializedVersion: 2
-        x: 163
+        x: 160
         y: 0
-        width: 29
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,20 +222,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5dc7476f02625604c9228fdb537dd96e
-      internalID: -1826175592
+      spriteID: fe6d63fd2cfc1904a9b157e911955095
+      internalID: 1641959450
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_6
+      name: Capibara_Idle 1_6
       rect:
         serializedVersion: 2
-        x: 195
+        x: 192
         y: 0
-        width: 29
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -244,20 +244,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ade8f85cf145a8440abd61c9d9b337c3
-      internalID: -1943205656
+      spriteID: 80b796f463668ab47b34100506f3eafb
+      internalID: -1203647651
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_7
+      name: Capibara_Idle 1_7
       rect:
         serializedVersion: 2
-        x: 227
+        x: 224
         y: 0
-        width: 29
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -266,20 +266,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 898ba82ee32eb104d92d42dbc8e6bb8a
-      internalID: 1845246011
+      spriteID: f6477a7fc4f7baf47a9b1f773ae8b117
+      internalID: 1019724823
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_8
+      name: Capibara_Idle 1_8
       rect:
         serializedVersion: 2
-        x: 259
+        x: 256
         y: 0
-        width: 29
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -288,20 +288,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a0fca8ae5755aff4fafde2ad827d6c84
-      internalID: -1873074052
+      spriteID: 173ffad5d1335a74f9e310ce1da24b72
+      internalID: 223717218
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_9
+      name: Capibara_Idle 1_9
       rect:
         serializedVersion: 2
-        x: 291
+        x: 288
         y: 0
-        width: 29
-        height: 27
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -310,20 +310,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9ecec1a8c4f0c1c479d23229a1988920
-      internalID: 1207232816
+      spriteID: b1ff14af7a3a9a5458d6bf9953f70eef
+      internalID: -512455604
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Idle_10
+      name: Capibara_Idle 1_10
       rect:
         serializedVersion: 2
-        x: 323
+        x: 320
         y: 0
-        width: 29
-        height: 27
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -332,8 +332,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d900454e14cd07b4783e3f1ddc7e7364
-      internalID: -504413538
+      spriteID: f655c337b5eb07742a9fbfd9b838fb2f
+      internalID: 2039192569
       vertices: []
       indices: 
       edges: []
@@ -342,7 +342,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: a66386539a38642499a5cbac8899418e
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -352,17 +352,17 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Capibara_Idle_0: -1380135187
-      Capibara_Idle_1: 1269947589
-      Capibara_Idle_10: -504413538
-      Capibara_Idle_2: -824568085
-      Capibara_Idle_3: -100183511
-      Capibara_Idle_4: -275957782
-      Capibara_Idle_5: -1826175592
-      Capibara_Idle_6: -1943205656
-      Capibara_Idle_7: 1845246011
-      Capibara_Idle_8: -1873074052
-      Capibara_Idle_9: 1207232816
+      Capibara_Idle 1_0: -898892505
+      Capibara_Idle 1_1: -1952893755
+      Capibara_Idle 1_10: 2039192569
+      Capibara_Idle 1_2: -724535915
+      Capibara_Idle 1_3: 922902062
+      Capibara_Idle 1_4: 1882059443
+      Capibara_Idle 1_5: 1641959450
+      Capibara_Idle 1_6: -1203647651
+      Capibara_Idle 1_7: 1019724823
+      Capibara_Idle 1_8: 223717218
+      Capibara_Idle 1_9: -512455604
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

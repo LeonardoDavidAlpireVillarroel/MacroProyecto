@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement Settings")]
     public float runSpeed = 5f;
+    private Vector2 lastMoveDirection = new Vector2(1, 0);
+    private bool isMoving = false;
     public float jumpSpeed = 5f;
     public float doubleJumpSpeed = 4f;
     private bool canDoubleJump;
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public float waterFloatForce = 5f;
     private bool isInWater;
 
+    //Player Stats
     public int health;
     public int score;
 
@@ -87,20 +90,39 @@ public class PlayerController : MonoBehaviour
 
         if (moveDirection.magnitude >= 0.1f)
         {
+            isMoving = true;
+            lastMoveDirection = moveInput; // Actualizamos última dirección
+
             Vector3 movement = moveDirection * runSpeed;
             rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z);
-
-            if (capibaraSprites != null)
-            {
-                capibaraSprites.flipX = moveInput.x < 0;
-            }
-
-            capibaraAnimator.SetBool("IsRun", true);
         }
         else
         {
+            isMoving = false;
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-            capibaraAnimator.SetBool("IsRun", false);
+        }
+
+        UpdateVisualDirection();
+
+        capibaraAnimator.SetBool("IsRun", isMoving);
+    }
+
+    void UpdateVisualDirection()
+    {
+        if (capibaraSprites == null)
+            return;
+
+        Vector2 dir = isMoving ? moveInput : lastMoveDirection;
+
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.y))
+        {
+            capibaraSprites.flipX = dir.x < 0;
+            capibaraAnimator.SetFloat("LookDirection", dir.x > 0 ? 0f : 1f);
+        }
+        else
+        {
+            capibaraSprites.flipX = false;
+            capibaraAnimator.SetFloat("LookDirection", dir.y > 0 ? 2f : 3f);
         }
     }
 

@@ -127,14 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2053678227865725602, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      propertyPath: FollowOffset.y
-      value: 7.62
-      objectReference: {fileID: 0}
-    - target: {fileID: 2053678227865725602, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      propertyPath: FollowOffset.z
-      value: -14.76
-      objectReference: {fileID: 0}
     - target: {fileID: 2492534816086940807, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
       propertyPath: m_Name
       value: Player
@@ -178,30 +170,6 @@ PrefabInstance:
     - target: {fileID: 2746088166043607327, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4668714706512621908, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.8099997
-      objectReference: {fileID: 0}
-    - target: {fileID: 4668714706512621908, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -7.38
-      objectReference: {fileID: 0}
-    - target: {fileID: 4668714706512621908, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9717441
-      objectReference: {fileID: 0}
-    - target: {fileID: 4668714706512621908, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.23603688
-      objectReference: {fileID: 0}
-    - target: {fileID: 4668714706512621908, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.0000000144801175
-      objectReference: {fileID: 0}
-    - target: {fileID: 4668714706512621908, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.000000003517224
       objectReference: {fileID: 0}
     - target: {fileID: 9150419675370615417, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
       propertyPath: cinemachineBrain

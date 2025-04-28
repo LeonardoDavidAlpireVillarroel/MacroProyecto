@@ -679,11 +679,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1468069845 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2492534816086940807, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-  m_PrefabInstance: {fileID: 8983193682151812084}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1740205467
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,10 +908,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 2492534816086940807, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 2746088166043607327, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -968,37 +959,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2492534816086940807, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8983193682151812086}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
 --- !u!114 &8983193682151812085 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9150419675370615417, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
   m_PrefabInstance: {fileID: 8983193682151812084}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468069845}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54ce8d69769576446904939bb26f68b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8983193682151812086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1468069845}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d9cf9ed7cb0b7d4c914fbe12350fa7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fruitPrefab: {fileID: 2104970276460936207, guid: b995ecb1cc3a73f46a8eda6f67ea5e3b, type: 3}
-  shootSpeed: 10
-  fruitLifetime: 5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
