@@ -33,12 +33,14 @@ public class Menus : MonoBehaviour
 
     public void GoToNewGame()
     {
-        ScenesManager.Instance.LoadScene("NewGame", "CrossFade");
         MusicManager.Instance.PlayMusic("NewGame");
+        ScenesManager.Instance.LoadScene("NewGame", "CrossFade");
     }
 
     public void PlayClaroPacificoScene()
     {
+        MapController.Instance.UnlockLevels();
+
         MusicManager.Instance.PlayMusic("ClaroPacifico");
         ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
     }

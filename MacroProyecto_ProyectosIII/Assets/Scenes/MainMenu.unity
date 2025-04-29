@@ -647,18 +647,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1291278137244388960, guid: 89e58c1bf562bb24799b493bf28d8f04, type: 3}
-      propertyPath: m_text
-      value: Titulo
-      objectReference: {fileID: 0}
-    - target: {fileID: 1291278137244388960, guid: 89e58c1bf562bb24799b493bf28d8f04, type: 3}
-      propertyPath: m_fontSize
-      value: 150
-      objectReference: {fileID: 0}
-    - target: {fileID: 1291278137244388960, guid: 89e58c1bf562bb24799b493bf28d8f04, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 150
-      objectReference: {fileID: 0}
     - target: {fileID: 5414986597717759692, guid: 89e58c1bf562bb24799b493bf28d8f04, type: 3}
       propertyPath: m_Name
       value: MainMenu_Canvas
@@ -768,10 +756,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1706776871615967664, guid: 7d7b4ffa6b030e244b771f34b2f553bd, type: 3}
-      propertyPath: tracks.Array.data[2].trackName
-      value: ClaroPacifico
-      objectReference: {fileID: 0}
     - target: {fileID: 1994105944453276009, guid: 7d7b4ffa6b030e244b771f34b2f553bd, type: 3}
       propertyPath: m_Name
       value: AudioManager

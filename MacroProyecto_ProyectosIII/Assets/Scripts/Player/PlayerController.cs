@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction jumpAction;
+    public InputAction interactAction;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour
 
         moveAction = playerInput.actions["Move"];
         jumpAction = playerInput.actions["Jump"];
+        interactAction = playerInput.actions["Interact"];
     }
 
     void Update()
