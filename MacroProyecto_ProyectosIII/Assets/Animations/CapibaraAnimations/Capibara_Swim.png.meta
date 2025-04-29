@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 37ed050bda4af49478781a75959e9d68
+guid: 58d6c9f6614865d40b84900623447b4d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Capibara_Run_0
+      name: Capibara_Swim_0
       rect:
         serializedVersion: 2
-        x: 2
+        x: 0
         y: 0
-        width: 30
-        height: 29
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,86 +112,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5d3c90f0b6ff8fb4a98b2eb70fe5874e
-      internalID: 954397368
+      spriteID: b840139298bf3cf40af7d17a502626ff
+      internalID: -1271554797
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Run_1
+      name: Capibara_Swim_1
       rect:
         serializedVersion: 2
-        x: 35
-        y: 1
-        width: 29
-        height: 29
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 749ba765bf8f7fa43bdf039a520b7086
-      internalID: 1298555410
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Capibara_Run_2
-      rect:
-        serializedVersion: 2
-        x: 67
-        y: 3
-        width: 29
-        height: 28
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8caa873f92ec62649b6bf18220d59f4b
-      internalID: 2060466342
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Capibara_Run_3
-      rect:
-        serializedVersion: 2
-        x: 99
-        y: 1
-        width: 29
-        height: 29
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f2d6a22b8ff635044b9a86f67103db1f
-      internalID: -1029151752
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Capibara_Run_4
-      rect:
-        serializedVersion: 2
-        x: 131
+        x: 32
         y: 0
-        width: 29
-        height: 29
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +134,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b85d2d6ee09331d41bbd4f5efce41d68
-      internalID: -1695201469
+      spriteID: 50c8b2c81b50f444186bce56d534d796
+      internalID: 826628000
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Run_5
+      name: Capibara_Swim_2
       rect:
         serializedVersion: 2
-        x: 163
+        x: 64
         y: 0
-        width: 29
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,20 +156,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df35c123628484741bf0aebb6b769521
-      internalID: 1528152556
+      spriteID: f6400ccf4b989a64488e4d6187b06a4e
+      internalID: 165146907
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Run_6
+      name: Capibara_Swim_3
       rect:
         serializedVersion: 2
-        x: 195
+        x: 96
         y: 0
-        width: 29
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -244,20 +178,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fb0e0faadf69ee94a96f7829d1b11521
-      internalID: 2021105633
+      spriteID: bd931d8fea6ad0a47849a7e0ca9a6d52
+      internalID: 826283934
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Run_7
+      name: Capibara_Swim_4
       rect:
         serializedVersion: 2
-        x: 226
+        x: 128
         y: 0
-        width: 30
-        height: 29
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -266,86 +200,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 349f85f97f9520446a9b8600d45835af
-      internalID: 102155187
+      spriteID: b942b1b56d42e9449af1fffde03d263c
+      internalID: -1208428766
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Run_8
+      name: Capibara_Swim_5
       rect:
         serializedVersion: 2
-        x: 259
-        y: 1
-        width: 29
-        height: 29
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e9199926080829c4a9c14f25c1c0da20
-      internalID: -270291112
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Capibara_Run_9
-      rect:
-        serializedVersion: 2
-        x: 291
-        y: 3
-        width: 29
-        height: 28
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f8d3d369b71d0854e8601cd6a7b1531e
-      internalID: -555890012
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Capibara_Run_10
-      rect:
-        serializedVersion: 2
-        x: 323
-        y: 1
-        width: 29
-        height: 29
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ac27a2e6350bbd24a8f6611176a3b28f
-      internalID: -1436243700
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Capibara_Run_11
-      rect:
-        serializedVersion: 2
-        x: 355
+        x: 160
         y: 0
-        width: 29
-        height: 29
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -354,20 +222,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 25df4b0b700ad44409e1e3739ab480f7
-      internalID: -593151316
+      spriteID: b69ed2cb097b70b45a0c3594c319ef1b
+      internalID: -572743838
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Run_12
+      name: Capibara_Swim_6
       rect:
         serializedVersion: 2
-        x: 387
+        x: 192
         y: 0
-        width: 29
-        height: 27
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -376,20 +244,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 06e597fa0d5598047b90d72ddcab6a92
-      internalID: 1881887318
+      spriteID: 88f54089506624c4fb3adc312f3cdc30
+      internalID: 438798156
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Capibara_Run_13
+      name: Capibara_Swim_7
       rect:
         serializedVersion: 2
-        x: 419
+        x: 224
         y: 0
-        width: 29
-        height: 28
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -398,8 +266,96 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 69967e57f17c0104bab8258740bf23b7
-      internalID: 1966065002
+      spriteID: de9a60b996ee18048a9e1415089eb630
+      internalID: 48272296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Capibara_Swim_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a728b2ce76b353f479d7d906ecc52453
+      internalID: -2012063168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Capibara_Swim_9
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ee37d3bb73d61649a2e8801a189f340
+      internalID: 913519951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Capibara_Swim_10
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de32d1cc7902ca3428f6cf7d4bbace12
+      internalID: 1743283840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Capibara_Swim_11
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c681eda6145a9541b3dd6676375d13b
+      internalID: 950715150
       vertices: []
       indices: 
       edges: []
@@ -408,7 +364,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: f3b95ff5a9e373a438c435a1194f5117
+    spriteID: cde4e25ad2b227e4aa72dfe1898b5f34
     internalID: 0
     vertices: []
     indices: 
@@ -418,20 +374,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Capibara_Run_0: 954397368
-      Capibara_Run_1: 1298555410
-      Capibara_Run_10: -1436243700
-      Capibara_Run_11: -593151316
-      Capibara_Run_12: 1881887318
-      Capibara_Run_13: 1966065002
-      Capibara_Run_2: 2060466342
-      Capibara_Run_3: -1029151752
-      Capibara_Run_4: -1695201469
-      Capibara_Run_5: 1528152556
-      Capibara_Run_6: 2021105633
-      Capibara_Run_7: 102155187
-      Capibara_Run_8: -270291112
-      Capibara_Run_9: -555890012
+      Capibara_Swim_0: -1271554797
+      Capibara_Swim_1: 826628000
+      Capibara_Swim_10: 1743283840
+      Capibara_Swim_11: 950715150
+      Capibara_Swim_2: 165146907
+      Capibara_Swim_3: 826283934
+      Capibara_Swim_4: -1208428766
+      Capibara_Swim_5: -572743838
+      Capibara_Swim_6: 438798156
+      Capibara_Swim_7: 48272296
+      Capibara_Swim_8: -2012063168
+      Capibara_Swim_9: 913519951
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

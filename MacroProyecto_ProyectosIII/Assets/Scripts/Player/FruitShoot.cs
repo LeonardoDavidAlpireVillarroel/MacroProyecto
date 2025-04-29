@@ -2,32 +2,84 @@ using UnityEngine;
 
 public class FruitShoot : MonoBehaviour
 {
-    public GameObject fruitPrefab;    // Prefab asignado desde el inspector
-    public float shootSpeed = 10f;     // Velocidad de disparo de la fruta
-    public float fruitLifetime = 5f;   // Tiempo de vida de la fruta en segundos
+    public GameObject fruitPrefab;
+    public float shootSpeed = 10f;
+    public float fruitLifetime = 5f;
+    public GameObject arrowInstance;
+    public Transform spawnPoint;
+
+    public bool isAiming { get; private set; }
+    public bool hasShot { get; set; }
+
+    private Vector3 currentAimDirection = Vector3.forward;
+
+    void Start()
+    {
+        if (arrowInstance != null)
+        {
+            arrowInstance.SetActive(false);
+        }
+    }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // Click izquierdo presionado
+        if (arrowInstance == null) return;
+
+        isAiming = Input.GetMouseButton(1);
+
+        if (isAiming)
         {
-            ShootFruit();
+            if (!arrowInstance.activeSelf)
+                arrowInstance.SetActive(true);
+
+            UpdateArrowDirection();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                ShootFruit();
+            }
         }
+        else
+        {
+            if (arrowInstance.activeSelf)
+                arrowInstance.SetActive(false);
+        }
+    }
+
+    void UpdateArrowDirection()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Plane groundPlane = new Plane(Vector3.up, transform.position);
+
+        if (groundPlane.Raycast(ray, out float distance))
+        {
+            Vector3 targetPoint = ray.GetPoint(distance);
+            targetPoint.y = transform.position.y;
+
+            Vector3 direction = (targetPoint - transform.position).normalized;
+
+            arrowInstance.transform.forward = direction;
+            currentAimDirection = direction;
+        }
+    }
+
+    public Vector3 GetAimDirection()
+    {
+        return currentAimDirection;
     }
 
     void ShootFruit()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero); // Plano XZ
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
 
         if (groundPlane.Raycast(ray, out float distance))
         {
             Vector3 targetPoint = ray.GetPoint(distance);
-            Vector3 shootDirection = (targetPoint - transform.position).normalized;
+            Vector3 shootDirection = (targetPoint - spawnPoint.position).normalized;
 
-            // Instanciamos la fruta
-            GameObject newFruit = Instantiate(fruitPrefab, transform.position, Quaternion.identity);
+            GameObject newFruit = Instantiate(fruitPrefab, spawnPoint.position, Quaternion.identity);
 
-            // Asegurarse de que tiene Rigidbody
             Rigidbody rb = newFruit.GetComponent<Rigidbody>();
             if (rb == null)
             {
@@ -36,7 +88,7 @@ public class FruitShoot : MonoBehaviour
             rb.useGravity = false;
             rb.linearVelocity = shootDirection * shootSpeed;
 
-            // Ignorar colisión con el Player
+            // Ignorar la colisiï¿½n entre la fruta y el jugador
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
             {
@@ -49,8 +101,8 @@ public class FruitShoot : MonoBehaviour
                 }
             }
 
-            // Destruir la fruta después de cierto tiempo
             Destroy(newFruit, fruitLifetime);
+            hasShot = true;
         }
     }
 }

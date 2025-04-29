@@ -15,5 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/ClaroPacifico.unity
     guid: d8899c5c8a5ecae4c9b7ebd4b5c00173
   m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 3e53a57fa18e8a344b826ab2a0c33810, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

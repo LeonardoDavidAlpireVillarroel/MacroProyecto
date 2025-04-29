@@ -8,19 +8,24 @@ public class PlayerController : MonoBehaviour
     public CinemachineBrain cinemachineBrain;
 
     private SpriteRenderer capibaraSprites;
+    private FruitShoot fruitShoot;
 
     [Header("Movement Settings")]
     public float runSpeed = 5f;
-    private Vector2 lastMoveDirection = new Vector2(1, 0);
     private bool isMoving = false;
+
     public float jumpSpeed = 5f;
     public float doubleJumpSpeed = 4f;
     private bool canDoubleJump;
 
+    public bool isDashing = false;
+
     [Header("References")]
+    public Vector2 moveInput { get; private set; }
+    public Vector2 lastMoveDirection { get; private set; }
+
     private Animator capibaraAnimator;
     private Rigidbody rb;
-    private Vector2 moveInput;
     private bool jumpPressed;
 
     private InputAction moveAction;
@@ -57,6 +62,15 @@ public class PlayerController : MonoBehaviour
         moveInput = moveAction.ReadValue<Vector2>();
         if (jumpAction.triggered)
             jumpPressed = true;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            capibaraAnimator.SetBool("IsShooting", true);
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            capibaraAnimator.SetBool("IsShooting", false);
+        }
     }
 
     void FixedUpdate()
@@ -84,14 +98,16 @@ public class PlayerController : MonoBehaviour
         isInWater = Physics.CheckSphere(groundCheck.position, groundCheckRadius, waterLayer);
     }
 
-    void MovePlayer()
+    public void MovePlayer()
     {
+        if (isDashing) return;
+
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
         if (moveDirection.magnitude >= 0.1f)
         {
             isMoving = true;
-            lastMoveDirection = moveInput; // Actualizamos última dirección
+            lastMoveDirection = moveInput;
 
             Vector3 movement = moveDirection * runSpeed;
             rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z);
@@ -103,7 +119,6 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdateVisualDirection();
-
         capibaraAnimator.SetBool("IsRun", isMoving);
     }
 
@@ -163,22 +178,24 @@ public class PlayerController : MonoBehaviour
 
     void SwimPlayer()
     {
+        if (isDashing) return;
+
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
         if (moveDirection.magnitude >= 0.1f)
         {
-            Vector3 movement = moveDirection * runSpeed * 0.5f;
-
+            Vector3 movement = moveDirection * (runSpeed * 0.5f);
             rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z);
 
-            capibaraSprites.flipX = moveInput.x < 0;
-            capibaraAnimator.SetBool("IsRun", true);
+            isMoving = true;
         }
         else
         {
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-            capibaraAnimator.SetBool("IsRun", false);
+            isMoving = false;
         }
+
+        UpdateVisualDirection();
 
         if (!jumpPressed)
         {
@@ -186,6 +203,7 @@ public class PlayerController : MonoBehaviour
         }
 
         capibaraAnimator.SetBool("IsSwimming", true);
+        capibaraAnimator.SetBool("IsRun", isMoving);
         capibaraAnimator.SetBool("IsJump", false);
         capibaraAnimator.SetBool("DoubleJump", false);
         capibaraAnimator.SetBool("Falling", false);
