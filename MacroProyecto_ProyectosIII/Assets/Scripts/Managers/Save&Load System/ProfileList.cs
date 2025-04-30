@@ -1,0 +1,37 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class ProfileList : MonoBehaviour
+{
+    public Transform profileHolder;
+
+    public GameObject profileUIBoxPrefab;
+
+    private void Start()
+    {
+        var index = ProfileStorage.GetProfileIndex();
+
+        foreach (var profileName in index.ProfileFileNames)
+        {
+            var go = Instantiate(this.profileUIBoxPrefab);
+            var uibox = go.GetComponent<ProfileBoxUI>();
+
+            uibox.nameLabel.text = profileName;
+
+            uibox.loadButton.onClick.AddListener(() => {
+                ProfileStorage.LoadProfile(profileName);
+                MapController.Instance.UnlockLevels();
+
+                MusicManager.Instance.PlayMusic("ClaroPacifico");
+                ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
+            });
+
+            uibox.deleteButton.onClick.AddListener(() => {
+                ProfileStorage.DeleteProfile(profileName);
+                Destroy(go);
+            });
+
+            go.transform.SetParent(this.profileHolder, false);
+        }
+    }
+}
