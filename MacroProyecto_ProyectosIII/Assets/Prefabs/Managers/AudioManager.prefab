@@ -81,7 +81,7 @@ MonoBehaviour:
   tracks:
   - trackName: MainMenu
     clip: {fileID: 8300000, guid: 3aa8f1d7601a19d4c88dcaaa262c2e06, type: 3}
-  - trackName: NewGame
+  - trackName: OtherMenus
     clip: {fileID: 8300000, guid: 40ac39dff6e2f354f81de00e760e72fd, type: 3}
   - trackName: ClaroPacifico
     clip: {fileID: 8300000, guid: c6c5cd0ee2d7db447be3ac0e13978c23, type: 3}

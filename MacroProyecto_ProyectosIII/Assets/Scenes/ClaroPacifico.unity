@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: cinemachineBrain
       value: 
       objectReference: {fileID: 1943606776}
+    - target: {fileID: 9150419675370615417, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: interactAction.m_Name
+      value: Interact
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -921,6 +925,7 @@ GameObject:
   - component: {fileID: 470227402}
   - component: {fileID: 470227401}
   - component: {fileID: 470227403}
+  - component: {fileID: 470227404}
   m_Layer: 0
   m_Name: LevelsController
   m_TagString: Untagged
@@ -988,6 +993,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.9169054, y: 1, z: 2.1739717}
   m_Center: {x: 0.09205723, y: 0, z: 0.16321564}
+--- !u!114 &470227404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470227400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ddd3ad0e78b6b3429cea8eb04462482, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &553886181
 GameObject:
   m_ObjectHideFlags: 0

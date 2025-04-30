@@ -14,7 +14,9 @@ public class NewGame : MonoBehaviour
         string profileName = this.profileInput.text;
         ProfileStorage.CreateNewGame(profileName);
 
-        MusicManager.Instance.PlayMusic("PacificLake");
-        ScenesManager.Instance.LoadScene("PacificLake", "CrossFade");
+        MapController.Instance.UnlockLevels();
+
+        MusicManager.Instance.PlayMusic("ClaroPacifico");
+        ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
     }
 }

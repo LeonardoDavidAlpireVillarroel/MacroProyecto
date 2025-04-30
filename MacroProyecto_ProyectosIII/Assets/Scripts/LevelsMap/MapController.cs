@@ -33,7 +33,9 @@ public class MapController : MonoBehaviour
                 levelButtons[i].interactable = false;
             }
 
-            for (int i = 0; i < PlayerPrefs.GetInt("UnlockLevels", 1); i++)
+            int levelsUnlocked = Mathf.Max(ProfileStorage.s_currentProfile.unlockedLevelCount, 2);
+
+            for (int i = 0; i < levelsUnlocked && i < levelButtons.Length; i++)
             {
                 levelButtons[i].interactable = true;
             }
@@ -100,9 +102,15 @@ public class MapController : MonoBehaviour
 
     public void UnlockLevels()
     {
-        if (unlockLevel > PlayerPrefs.GetInt("UnlockLevels", 1))
+        if (unlockLevel > ProfileStorage.s_currentProfile.unlockedLevelCount)
         {
-            PlayerPrefs.SetInt("UnlockLevels", unlockLevel);
+            ProfileStorage.s_currentProfile.unlockedLevelCount = unlockLevel;
+
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                ProfileStorage.StorePlayerProfile(player);
+            }
         }
     }
 }
