@@ -8,88 +8,62 @@ public class GameManager : MonoBehaviour
     public GameObject buttonOptionsPanel;
     public GameObject controlsPanel;
     public GameObject optionsPanel;
+
+    public GameObject levelPanel;
+    public GameObject interactionText;
+
     public bool isPaused = false;
 
     [SerializeField] private PlayerController playerController;
 
     void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (playerController.pauseAction.WasPressedThisFrame())
         {
-            isPaused = !isPaused;
-            PauseGame();
+            if (pausePanel != null && pausePanel.activeSelf)
+            {
+                ResumeGame();
+            }
+            else
+            {
+                isPaused = !isPaused; 
+                if (pausePanel != null)
+                    pausePanel.SetActive(true);
+                PauseGame();
+            }
+        }
+
+        if (playerController.playerInput.actions["Back"].WasPressedThisFrame() && isPaused)
+        {
+            ResumeGame();
         }
     }
 
     public void PauseGame()
     {
-        if (isPaused)
-        {
-            Time.timeScale = 0;
+        Time.timeScale = 0;
 
-            if (pausePanel != null)
-                pausePanel.SetActive(true);
+        playerController.playerInput.SwitchCurrentActionMap("UI");
 
-            if (playerController != null)
-            {
-                if (playerController.playerInput != null)
-                    playerController.playerInput.enabled = false;
-
-                if (playerController.cinemachineBrain != null)
-                    playerController.cinemachineBrain.enabled = false;
-            }
-
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Time.timeScale = 1;
-
-            if (pausePanel != null)
-            {
-                pauseMenuPanel.SetActive(true);
-                buttonOptionsPanel.SetActive(true);
-                controlsPanel.SetActive(false);
-                optionsPanel.SetActive(false); 
-                pausePanel.SetActive(false);
-            }
-
-            if (playerController != null)
-            {
-                if (playerController.playerInput != null)
-                    playerController.playerInput.enabled = true;
-
-                if (playerController.cinemachineBrain != null)
-                    playerController.cinemachineBrain.enabled = true;
-            }
-
-            Cursor.lockState = CursorLockMode.Locked;
-            isPaused = false;
-        }
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        isPaused = true;
     }
 
     public void ResumeGame()
     {
         Time.timeScale = 1;
 
-        pauseMenuPanel.SetActive(true);
-        buttonOptionsPanel.SetActive(true);
-        controlsPanel.SetActive(false);
-        optionsPanel.SetActive(false);
-        pausePanel.SetActive(false);
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
 
-        if (playerController != null)
-        {
-            if (playerController.playerInput != null)
-                playerController.playerInput.enabled = true;
+        if (levelPanel != null)
+            levelPanel.SetActive(false);
 
-            if (playerController.cinemachineBrain != null)
-                playerController.cinemachineBrain.enabled = true;
-        }
+        playerController.playerInput.SwitchCurrentActionMap("Player");
 
-        isPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        isPaused = false;
     }
 }

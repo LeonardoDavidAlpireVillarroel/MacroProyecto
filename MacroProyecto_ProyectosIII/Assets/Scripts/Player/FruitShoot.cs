@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FruitShoot : MonoBehaviour
 {
@@ -8,10 +9,15 @@ public class FruitShoot : MonoBehaviour
     public GameObject arrowInstance;
     public Transform spawnPoint;
 
+    private float unpausedCooldownTime = 0.1f;
+    private float unpausedTimer = 0f;
+
     public bool isAiming { get; private set; }
     public bool hasShot { get; set; }
 
     private Vector3 currentAimDirection = Vector3.forward;
+
+    [SerializeField] private PlayerController playerController;
 
     void Start()
     {
@@ -19,13 +25,26 @@ public class FruitShoot : MonoBehaviour
         {
             arrowInstance.SetActive(false);
         }
+
+        playerController = FindFirstObjectByType<PlayerController>();
+    }
+
+    void OnEnable()
+    {
+        unpausedTimer = unpausedCooldownTime;
     }
 
     void Update()
     {
         if (arrowInstance == null) return;
 
-        isAiming = Input.GetMouseButton(1);
+        if (unpausedTimer > 0f)
+        {
+            unpausedTimer -= Time.unscaledDeltaTime;
+            return;
+        }
+
+        isAiming = playerController.aimAction.ReadValue<float>() > 0.5f;
 
         if (isAiming)
         {
@@ -34,7 +53,7 @@ public class FruitShoot : MonoBehaviour
 
             UpdateArrowDirection();
 
-            if (Input.GetMouseButtonDown(0))
+            if (playerController.shootAction.WasPressedThisFrame())
             {
                 ShootFruit();
             }
@@ -88,7 +107,6 @@ public class FruitShoot : MonoBehaviour
             rb.useGravity = false;
             rb.linearVelocity = shootDirection * shootSpeed;
 
-            // Ignorar la colisi�n entre la fruta y el jugador
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
             {

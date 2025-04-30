@@ -16,6 +16,8 @@ public class MapController : MonoBehaviour
     public PlayerController playerController = null;
     private bool playerInRange = false;
 
+    private GameManager gameManager;
+
     private void Awake()
     {
         if (Instance == null)
@@ -48,6 +50,11 @@ public class MapController : MonoBehaviour
         if (interactionText != null)
         {
             interactionText.SetActive(false);
+        }
+
+        if (gameManager == null)
+        {
+            gameManager = GameObject.FindFirstObjectByType<GameManager>();
         }
 
         Time.timeScale = 1f;
@@ -84,19 +91,12 @@ public class MapController : MonoBehaviour
             if (levelPanel != null)
             {
                 interactionText.SetActive(false);
-                levelPanel.SetActive(true);
-                Time.timeScale = 0f;
-            }
-        }
-    }
+                levelPanel.SetActive(true);        
+                
+                gameManager.PauseGame();
 
-    public void ClosePanel()
-    {
-        if (levelPanel != null)
-        {
-            levelPanel.SetActive(false);
-            interactionText.SetActive(true);
-            Time.timeScale = 1f;
+                //playerController.enabled = false;
+            }
         }
     }
 

@@ -1,6 +1,8 @@
 using Unity.Cinemachine;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Timeline.DirectorControlPlayable;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,9 +30,17 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private bool jumpPressed;
 
+    //Input Actions
     private InputAction moveAction;
     private InputAction jumpAction;
     public InputAction interactAction;
+    public InputAction backAction;
+    public InputAction pauseAction;
+
+            // Shoot/Aim Inputs
+    public InputAction aimAction;
+    public InputAction shootAction;
+    public InputAction pointerPositionAction;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -50,13 +60,23 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
         playerInput = GetComponent<PlayerInput>();
+        playerInput.defaultActionMap = "Player";
+
         capibaraSprites = GetComponentInChildren<SpriteRenderer>();
         capibaraAnimator = GetComponentInChildren<Animator>();
 
         moveAction = playerInput.actions["Move"];
         jumpAction = playerInput.actions["Jump"];
+
         interactAction = playerInput.actions["Interact"];
+        backAction = playerInput.actions["Back"];
+        pauseAction = playerInput.actions["Pause"];
+
+        aimAction = playerInput.actions["Aim"];
+        shootAction = playerInput.actions["Shoot"];
+        pointerPositionAction = playerInput.actions["PointerPosition"];
     }
 
     void Update()

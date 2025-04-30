@@ -63,12 +63,6 @@ public class Menus : MonoBehaviour
             MusicManager.Instance.PlayMusic("MainMenu");
     }
 
-    public void ResumeGame()
-    {
-        GameManager gameManager = FindFirstObjectByType<GameManager>();
-        gameManager.ResumeGame();
-    }
-
     public void Quit()
     {
         Application.Quit();
