@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProfileData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <filename>Pera.xml</filename>
-  <name>Pera</name>
+  <filename>Jorge.xml</filename>
+  <name>Jorge</name>
   <newGame>false</newGame>
-  <x>4.219637</x>
-  <y>0.106670007</y>
+  <x>4.031982</x>
+  <y>0.3192305</y>
   <playerHealth>3</playerHealth>
   <playerLevel>1</playerLevel>
   <experience>0</experience>
   <inventory />
-  <unlockedLevelCount>4</unlockedLevelCount>
+  <unlockedLevelCount>5</unlockedLevelCount>
   <customPrefs />
 </ProfileData>

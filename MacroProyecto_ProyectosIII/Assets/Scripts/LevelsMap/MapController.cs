@@ -13,10 +13,10 @@ public class MapController : MonoBehaviour
     public Button[] levelButtons;
     public int unlockLevel;
 
-    public PlayerController playerController = null;
-    private bool playerInRange = false;
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private GameManager gameManager;
 
-    private GameManager gameManager;
+    private bool playerInRange = false;
 
     private void Awake()
     {
@@ -28,6 +28,23 @@ public class MapController : MonoBehaviour
 
     void Start()
     {
+        if (ProfileStorage.s_currentProfile == null)
+        {
+            var profileIndex = ProfileStorage.GetProfileIndex();
+
+            if (profileIndex.ProfileFileNames.Count > 0)
+            {
+                ProfileStorage.LoadProfile(profileIndex.ProfileFileNames[0]);
+            }
+        }
+
+        unlockLevel = Mathf.Max(ProfileStorage.s_currentProfile.unlockedLevelCount, 2);
+
+        if (gameManager == null)
+        {
+            gameManager = FindFirstObjectByType<GameManager>();
+        }
+
         if (levelButtons.Length > 0)
         {
             for (int i = 0; i < levelButtons.Length; i++)
@@ -35,9 +52,7 @@ public class MapController : MonoBehaviour
                 levelButtons[i].interactable = false;
             }
 
-            int levelsUnlocked = Mathf.Max(ProfileStorage.s_currentProfile.unlockedLevelCount, 2);
-
-            for (int i = 0; i < levelsUnlocked && i < levelButtons.Length; i++)
+            for (int i = 0; i < unlockLevel && i < levelButtons.Length; i++)
             {
                 levelButtons[i].interactable = true;
             }
@@ -50,11 +65,6 @@ public class MapController : MonoBehaviour
         if (interactionText != null)
         {
             interactionText.SetActive(false);
-        }
-
-        if (gameManager == null)
-        {
-            gameManager = GameObject.FindFirstObjectByType<GameManager>();
         }
 
         Time.timeScale = 1f;
@@ -91,11 +101,11 @@ public class MapController : MonoBehaviour
             if (levelPanel != null)
             {
                 interactionText.SetActive(false);
-                levelPanel.SetActive(true);        
-                
+                levelPanel.SetActive(true);
+
                 gameManager.PauseGame();
 
-                //playerController.enabled = false;
+                playerController.enabled = false;
             }
         }
     }

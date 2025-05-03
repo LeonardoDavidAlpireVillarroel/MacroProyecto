@@ -34,10 +34,8 @@ public class PlayerController : MonoBehaviour
     private InputAction moveAction;
     private InputAction jumpAction;
     public InputAction interactAction;
-    public InputAction backAction;
-    public InputAction pauseAction;
 
-            // Shoot/Aim Inputs
+    // Shoot/Aim Inputs
     public InputAction aimAction;
     public InputAction shootAction;
     public InputAction pointerPositionAction;
@@ -51,11 +49,7 @@ public class PlayerController : MonoBehaviour
     [Header("Water Settings")]
     public LayerMask waterLayer;
     public float waterFloatForce = 5f;
-    private bool isInWater;
-
-    //Player Stats
-    public int health;
-    public int score;
+    private bool isInWater;    
 
     void Awake()
     {
@@ -71,8 +65,6 @@ public class PlayerController : MonoBehaviour
         jumpAction = playerInput.actions["Jump"];
 
         interactAction = playerInput.actions["Interact"];
-        backAction = playerInput.actions["Back"];
-        pauseAction = playerInput.actions["Pause"];
 
         aimAction = playerInput.actions["Aim"];
         shootAction = playerInput.actions["Shoot"];

@@ -263,7 +263,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &2483879902999912624
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -332,6 +332,15 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  inventoryAction:
+    m_Name: Inventory
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 8d1e5870-f6d9-411f-99f1-026105a1d5d9
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   aimAction:
     m_Name: Aim
     m_Type: 0
@@ -368,8 +377,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16
   waterFloatForce: 5
-  health: 3
-  score: 0
 --- !u!114 &3468385661941933053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,6 +408,7 @@ MonoBehaviour:
   fruitLifetime: 5
   arrowInstance: {fileID: 5075733763350922998}
   spawnPoint: {fileID: 1131799069272921646}
+  playerController: {fileID: 9150419675370615417}
 --- !u!1 &8019496250981742057
 GameObject:
   m_ObjectHideFlags: 0

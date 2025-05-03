@@ -3,6 +3,9 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
+    // Referencias a los paneles
     public GameObject pausePanel;
     public GameObject pauseMenuPanel;
     public GameObject buttonOptionsPanel;
@@ -16,9 +19,58 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private PlayerController playerController;
 
+    // HUD Player
+    public PlayerHUD playerHUD;
+    public int TotalPoints { get; private set; }
+    [Header("Player Stats")]
+    public int health = 3;
+    public int fuerza = 10;
+    public int points = 0;
+
+    // Referencia al Inventario
+    public Inventory inventory;
+
+    // Input Actions
+    private PlayerInput playerInput;
+    private InputAction inventoryAction;
+    private InputAction pauseAction;
+    private InputAction backAction;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
+        {
+            playerInput = playerObject.GetComponent<PlayerInput>();
+        }
+
+        if (playerInput != null)
+        {
+            inventoryAction = playerInput.actions["Inventory"];
+            pauseAction = playerInput.actions["Pause"];
+            backAction = playerInput.actions["Back"];
+
+            inventoryAction.Enable();
+            pauseAction.Enable();
+            backAction.Enable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        inventoryAction.Disable();
+        pauseAction.Disable();
+        backAction.Disable();
+    }
+
     void Update()
     {
-        if (playerController.pauseAction.WasPressedThisFrame())
+        if (pauseAction.WasPressedThisFrame())
         {
             if (pausePanel != null && pausePanel.activeSelf)
             {
@@ -26,14 +78,19 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                isPaused = !isPaused; 
+                isPaused = !isPaused;
                 if (pausePanel != null)
                     pausePanel.SetActive(true);
                 PauseGame();
             }
         }
 
-        if (playerController.playerInput.actions["Back"].WasPressedThisFrame() && isPaused)
+        if (inventoryAction.WasPressedThisFrame())
+        {
+            ToggleInventory();
+        }
+
+        if (backAction.WasPressedThisFrame() && isPaused)
         {
             ResumeGame();
         }
@@ -65,5 +122,35 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         isPaused = false;
+    }
+
+    public void SumarPuntos(int pointsToSumar)
+    {
+        TotalPoints += pointsToSumar;
+        playerHUD.ActualizePoints(TotalPoints);
+    }
+
+    public void LoseLifes()
+    {
+        health -= 1;
+
+        if (health >= 0 && health < playerHUD.vidas.Length)
+        {
+            playerHUD.DesactivateLifes(health);
+        }
+    }
+
+    public void RecoverLifes()
+    {
+        playerHUD.ActivateLife(health);
+        health += 1;
+    }
+
+    private void ToggleInventory()
+    {
+        if (inventory != null)
+        {
+            inventory.ToggleInventory();
+        }
     }
 }
