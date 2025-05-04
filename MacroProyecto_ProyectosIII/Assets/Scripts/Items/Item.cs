@@ -23,6 +23,8 @@ public class Item : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private CanvasGroup canvasGroup;
 
+    private bool isPointerOver = false;
+
     private void Start()
     {
         if (ItemDB == null)
@@ -131,18 +133,22 @@ public class Item : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         if (_description != null && ItemDB != null && ItemDB.ObjectsDataBase.Length > ID && Nombre_ != null && Dato_ != null)
         {
-            _description.SetActive(true);
-            Nombre_.text = ItemDB.ObjectsDataBase[ID].nombre;
-            Dato_.text = ItemDB.ObjectsDataBase[ID].description;
-            _description.transform.position = transform.position + offset;
+            isPointerOver = true;
+            if (Inventory.Description != null)
+            {
+                _description = Inventory.Description;
+                _description.SetActive(true);
+                Nombre_.text = ItemDB.ObjectsDataBase[ID].nombre;
+                Dato_.text = ItemDB.ObjectsDataBase[ID].description;
+                _description.transform.position = transform.position + offset;
+            }
         }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (_description != null)
-        {
-            _description.SetActive(false);
-        }
+        if (!isPointerOver) return;
+        _description.SetActive(false);
+        isPointerOver = false;
     }
 }

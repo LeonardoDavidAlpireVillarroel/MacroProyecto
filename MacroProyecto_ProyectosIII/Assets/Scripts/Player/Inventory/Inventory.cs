@@ -49,6 +49,19 @@ public class Inventory : MonoBehaviour
 
     public Transform Contenido;
     public Item item;
+    //[HideInInspector]
+    //public List<ItemSuelto> itemsSueltos = new List<ItemSuelto>;
+    //[HideInInspector]
+    //public List<ItemSuelto> copiasItemsSueltos = new List<ItemSuelto>;
+    //[Space]
+    //[Header("Items Soltados")]
+    //[Tooltip("Aqui arrastra un GameObject vacío en donde reaparecen los items eliminados del inventario")]
+    //public Transform ItemSueltoRespawn;
+    //[HideInInspector]
+    //public Vector3 originalPos;
+
+    public ShopManager shopManager;
+
     public List<ObjectInventoryID> inventory = new List<ObjectInventoryID>();
 
     public static bool InventoryIsOpen { get; private set; }
@@ -73,7 +86,8 @@ public class Inventory : MonoBehaviour
         cg.interactable = false;
         cg.blocksRaycasts = false;
 
-        item._description = item.transform.Find("ItemDescription")?.gameObject;
+        Description = GameObject.Find("ItemDescription");
+        Description.gameObject.SetActive(false);
 
         if (deletePoster != null)
         {
@@ -81,6 +95,17 @@ public class Inventory : MonoBehaviour
         }
 
         canvas = GetComponentInParent<Canvas>()?.transform;
+
+        if (inventory.Count < Contenido.childCount)
+        {
+            int diff = Contenido.childCount - inventory.Count;
+            for (int i = 0; i < diff; i++)
+            {
+                inventory.Add(new ObjectInventoryID(-1, 0));
+            }
+        }
+
+        InventoryUpdate();
     }
 
     public void ToggleInventory()
@@ -112,6 +137,8 @@ public class Inventory : MonoBehaviour
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            SincronizarInventarioDesdeUI();
         }
     }
 
@@ -124,7 +151,6 @@ public class Inventory : MonoBehaviour
         if (raycastResults == null)
             raycastResults = new List<RaycastResult>();
 
-        // Detectamos cuando se presiona el botón izquierdo del ratón
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             pointerData.position = Input.mousePosition;
@@ -147,9 +173,14 @@ public class Inventory : MonoBehaviour
                     if (cg == null)
                         cg = selectedObject.AddComponent<CanvasGroup>();
 
-                    cg.blocksRaycasts = false;  // Desactivamos la interacción con el ítem durante el arrastre.
+                    cg.blocksRaycasts = false;
                 }
             }
+        }
+
+        if (selectedObject != null)
+        {
+            selectedObject.GetComponent<RectTransform>().localPosition = CanvasScreen(Input.mousePosition);
         }
 
         if (selectedObject != null)
@@ -173,7 +204,6 @@ public class Inventory : MonoBehaviour
                 }
             }
 
-            // Solo mostramos el panel de eliminación cuando estamos sobre la zona de eliminar
             if (deletePoster != null)
             {
                 CanvasGroup dpCg = deletePoster.GetComponent<CanvasGroup>();
@@ -194,62 +224,122 @@ public class Inventory : MonoBehaviour
                 pointerData.position = Input.mousePosition;
                 raycastResults.Clear();
                 graphRay.Raycast(pointerData, raycastResults);
-
+                selectedObject.transform.SetParent(exParent);
                 Transform newParent = exParent;
 
                 if (raycastResults.Count > 0)
                 {
                     foreach (var result in raycastResults)
                     {
-                        // Si se suelta sobre un slot vacío
+                        if (result.gameObject == selectedObject)
+                            continue;
+
                         if (result.gameObject.CompareTag("Slot"))
                         {
-                            // Si el slot está vacío, simplemente movemos el ítem allí
                             if (result.gameObject.GetComponentInChildren<Item>() == null)
                             {
                                 newParent = result.gameObject.transform;
                             }
                         }
 
-                        // Si se suelta sobre el área de eliminación
+                        if (result.gameObject.CompareTag("Item"))
+                        {
+                            if (result.gameObject == selectedObject)
+                                continue;
+
+                            Item draggedItem = selectedObject.GetComponent<Item>();
+                            Item targetItem = result.gameObject.GetComponent<Item>();
+
+                            if (draggedItem != null && targetItem != null)
+                            {
+                                if (draggedItem.ID == targetItem.ID && data.ObjectsDataBase[draggedItem.ID].acumulable)
+                                {
+                                    targetItem.itemAmount += draggedItem.itemAmount;
+
+                                    Destroy(selectedObject);
+                                    selectedObject = null;
+
+                                    for (int i = 0; i < inventory.Count; i++)
+                                    {
+                                        if (Contenido.GetChild(i) == draggedItem.transform.parent)
+                                        {
+                                            inventory[i] = new ObjectInventoryID(targetItem.ID, targetItem.itemAmount);
+                                            break;
+                                        }
+                                    }
+
+                                    SincronizarInventarioDesdeUI();
+                                    return;
+                                }
+                                else
+                                {
+                                    Transform parentA = draggedItem.transform.parent;
+                                    Transform parentB = targetItem.transform.parent;
+
+                                    draggedItem.transform.SetParent(parentB);
+                                    draggedItem.transform.localPosition = Vector3.zero;
+
+                                    targetItem.transform.SetParent(parentA);
+                                    targetItem.transform.localPosition = Vector3.zero;
+
+                                    selectedObject = null;
+
+                                    SincronizarInventarioDesdeUI();
+                                    return;
+                                }
+                            }
+                        }
+
                         if (result.gameObject.CompareTag("Eliminar"))
                         {
                             Item selectedItem = selectedObject.GetComponent<Item>();
                             if (selectedItem != null && selectedItem.itemAmount > 0)
                             {
-                                // Asignamos el ítem a selectedItem en DeletePoster
-                                deletePoster.selectedItem = selectedObject;  // Aquí se hace la asignación
+                                deletePoster.selectedItem = selectedObject;
 
-                                deletePoster.EnableDeletePanel();  // Llamamos al panel de eliminación
+                                deletePoster.EnableDeletePanel();
                                 deletePoster.slider.value = 1;
 
-                                // Colocamos el ítem en el panel de eliminar
                                 selectedObject.transform.SetParent(deletePoster.transform);
                                 selectedObject.transform.localPosition = Vector3.zero;
 
                                 deletePoster.selectedItem = selectedObject;
                                 deletePoster.originalParent = exParent;
 
-                                // La cantidad que está a punto de ser eliminada
                                 deletePoster.itemAmountToRemove = selectedItem.itemAmount;
 
-                                selectedObject = null;  // Aseguramos que no quede un ítem seleccionado
+                                selectedObject = null;
 
                                 return;
+                            }
+                        }
+
+                        if (result.gameObject.CompareTag("Shop"))
+                        {
+                            if (selectedObject.GetComponent<Item>().itemAmount >= 2)
+                            {
+                                shopManager.comprarMas.SetActive(true);
+                                shopManager.comprarMas.GetComponent<ComprarMasItems>().compra = false;
+                            }
+                            else
+                            {
+                                shopManager.confCompra.SetActive(true);
+                                shopManager.confCompra.GetComponent<ConfirmarCompra>().id = selectedObject.gameObject.GetComponent<Item>().ID;
+                                shopManager.confCompra.GetComponent<ConfirmarCompra>().cantidad = selectedObject.gameObject.GetComponent<Item>().itemAmount;
+                                shopManager.confCompra.GetComponent<ConfirmarCompra>().compra = false;
                             }
                         }
                     }
                 }
 
-                // Si no se suelta en un slot o en el área de eliminación, el ítem regresa a su lugar
                 if (selectedObject != null)
                 {
-                    selectedObject.transform.SetParent(newParent);
-                    selectedObject.transform.localPosition = Vector3.zero;
-
                     var cg = selectedObject.GetComponent<CanvasGroup>();
                     if (cg != null)
                         cg.blocksRaycasts = true;
+
+                    selectedObject.transform.SetParent(newParent);
+                    selectedObject.transform.localPosition = Vector3.zero;
 
                     if (exParent != null && exParent.childCount == 0)
                     {
@@ -263,7 +353,7 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        raycastResults.Clear();  // Limpiamos la lista de resultados de raycast
+        raycastResults.Clear();
     }
 
     public Vector2 CanvasScreen(Vector2 screenPos)
@@ -283,16 +373,15 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < inventory.Count; i++)
         {
-            if (inventory[i].id == id && data.ObjectsDataBase[id].acumulable)
+            if (inventory[i].id == -1 || inventory[i].cantidadItems <= 0)
             {
-                inventory[i] = new ObjectInventoryID(inventory[i].id, Mathf.Max(0, inventory[i].cantidadItems + cantidad));
+                inventory[i] = new ObjectInventoryID(id, cantidad);
                 InventoryUpdate();
                 return;
             }
         }
 
-        inventory.Add(new ObjectInventoryID(id, cantidad));
-        InventoryUpdate();
+        Debug.LogWarning("Inventario lleno. No se pudo añadir el ítem.");
     }
 
     public void DeleteItem(int id, int cantidad)
@@ -318,65 +407,69 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    List<Item> itemsInventoryList = new List<Item>();
-
     public void InventoryUpdate()
     {
-        for (int i = 0; i < itemsInventoryList.Count; i++)
+        for (int i = 0; i < inventory.Count && i < Contenido.childCount; i++)
         {
-            if (i < inventory.Count)
+            Transform slot = Contenido.GetChild(i);
+
+            // Elimina cualquier hijo visual del slot
+            foreach (Transform child in slot)
             {
-                ObjectInventoryID o = inventory[i];
-                itemsInventoryList[i].ID = o.id;
-                itemsInventoryList[i].GetComponent<Image>().sprite = data.ObjectsDataBase[o.id].icon;
-                itemsInventoryList[i].GetComponent<RectTransform>().localPosition = Vector3.zero;
-                itemsInventoryList[i].itemAmount = o.cantidadItems;
-                itemsInventoryList[i].gameObject.SetActive(true);
+                Destroy(child.gameObject);
+            }
+
+            Image slotImage = slot.GetComponent<Image>();
+            if (slotImage != null)
+            {
+                slotImage.sprite = emptySlotSprite;
+            }
+
+            if (inventory[i].id != -1 && inventory[i].cantidadItems > 0)
+            {
+                Item itemUI = Instantiate(item, slot);
+                itemUI.ID = inventory[i].id;
+                itemUI.itemAmount = inventory[i].cantidadItems;
+                itemUI.GetComponent<Image>().sprite = data.ObjectsDataBase[itemUI.ID].icon;
+                itemUI.transform.localPosition = Vector3.zero;
+                itemUI.transform.localScale = Vector3.one;
+                itemUI.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void IntercambiarItems(Item item1, Item item2)
+    {
+        Transform parent1 = item1.transform.parent;
+        Transform parent2 = item2.transform.parent;
+
+        Vector3 pos1 = item1.transform.localPosition;
+        Vector3 pos2 = item2.transform.localPosition;
+
+        item1.transform.SetParent(parent2);
+        item1.transform.localPosition = pos2;
+
+        item2.transform.SetParent(parent1);
+        item2.transform.localPosition = pos1;
+
+        SincronizarInventarioDesdeUI();
+        InventoryUpdate();
+    }
+
+    public void SincronizarInventarioDesdeUI()
+    {
+        for (int i = 0; i < Contenido.childCount; i++)
+        {
+            Transform slot = Contenido.GetChild(i);
+            Item itemUI = slot.GetComponentInChildren<Item>();
+
+            if (itemUI != null)
+            {
+                inventory[i] = new ObjectInventoryID(itemUI.ID, itemUI.itemAmount);
             }
             else
             {
-                itemsInventoryList[i].gameObject.SetActive(false);
-                if (itemsInventoryList[i]._description != null)
-                {
-                    itemsInventoryList[i]._description.SetActive(false);
-                }
-                itemsInventoryList[i].gameObject.transform.parent.GetComponent<Image>().sprite = emptySlotSprite;
-            }
-        }
-
-        if (inventory.Count > itemsInventoryList.Count)
-        {
-            for (int i = itemsInventoryList.Count; i < inventory.Count; i++)
-            {
-                if (Contenido.GetChild(i).childCount == 0)
-                {
-                    Item it = Instantiate(item, Contenido.GetChild(i));
-                    itemsInventoryList.Add(it);
-
-                    if (Contenido.GetChild(0).childCount >= 2)
-                    {
-                        for (int s = 0; s < Contenido.childCount; s++)
-                        {
-                            if (Contenido.GetChild(s).childCount == 0)
-                            {
-                                it.transform.SetParent(Contenido.GetChild(s));
-                                break;
-                            }
-                        }
-                    }
-
-                    it.transform.position = Vector3.zero;
-                    it.transform.localScale = Vector3.one;
-
-                    ObjectInventoryID o = inventory[i];
-                    itemsInventoryList[i].ID = o.id;
-                    itemsInventoryList[i].GetComponent<RectTransform>().localPosition = Vector3.zero;
-                    itemsInventoryList[i].GetComponent<Image>().sprite = data.ObjectsDataBase[o.id].icon;
-                    itemsInventoryList[i].itemAmount = o.cantidadItems;
-                    itemsInventoryList[i].Button.onClick.RemoveAllListeners();
-                    itemsInventoryList[i].Button.onClick.AddListener(() => gameObject.SendMessage(data.ObjectsDataBase[o.id].Void, SendMessageOptions.DontRequireReceiver));
-                    itemsInventoryList[i].gameObject.SetActive(true);
-                }
+                inventory[i] = new ObjectInventoryID(-1, 0);
             }
         }
     }

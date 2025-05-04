@@ -1,10 +1,9 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class OpenShop : MonoBehaviour
 {
     [Header("UI Panels")]
-    public GameObject proximityPanel; 
+    public GameObject proximityPanel;
     public GameObject shopPanel;
     public GameObject lockedPanel;
 
@@ -12,7 +11,7 @@ public class OpenShop : MonoBehaviour
     public bool storeLocked = false;
 
     private bool isPlayerInside = false;
-    private PlayerInput playerInput;
+    public PlayerController playerController;
 
     private void Start()
     {
@@ -20,7 +19,8 @@ public class OpenShop : MonoBehaviour
         shopPanel.SetActive(false);
         lockedPanel.SetActive(false);
 
-        playerInput = FindFirstObjectByType<PlayerInput>();
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        playerController = playerObject.GetComponent<PlayerController>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,9 +29,6 @@ public class OpenShop : MonoBehaviour
         {
             isPlayerInside = true;
             proximityPanel.SetActive(true);
-
-            playerInput.actions["Interact"].performed += OnInteract;
-            playerInput.actions["Back"].performed += OnExitPanel;
         }
     }
 
@@ -40,15 +37,19 @@ public class OpenShop : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerInside = false;
-            proximityPanel.SetActive(false);
-            CloseAllPanels();
-
-            playerInput.actions["Interact"].performed -= OnInteract;
-            playerInput.actions["Back"].performed -= OnExitPanel;
+            OnExitPanel();
         }
     }
 
-    private void OnInteract(InputAction.CallbackContext context)
+    private void Update()
+    {
+        if (isPlayerInside && playerController.interactAction.WasPressedThisFrame())
+        {
+            OnInteract();
+        }
+    }
+
+    private void OnInteract()
     {
         if (!isPlayerInside) return;
 
@@ -62,7 +63,7 @@ public class OpenShop : MonoBehaviour
         }
     }
 
-    private void OnExitPanel(InputAction.CallbackContext context)
+    private void OnExitPanel()
     {
         if (shopPanel.activeSelf || lockedPanel.activeSelf)
         {
@@ -80,8 +81,8 @@ public class OpenShop : MonoBehaviour
 
     private void OpenLockedPanel()
     {
+        proximityPanel.SetActive(false);
         lockedPanel.SetActive(true);
-        Time.timeScale = 0f;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
@@ -90,6 +91,7 @@ public class OpenShop : MonoBehaviour
     {
         shopPanel.SetActive(false);
         lockedPanel.SetActive(false);
+        proximityPanel.SetActive(false);
         Time.timeScale = 1f;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
