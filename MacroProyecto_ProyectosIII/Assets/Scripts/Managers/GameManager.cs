@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     public bool isPaused = false;
 
-    [SerializeField] private PlayerController playerController;
+    [SerializeField] public PlayerController playerController;
 
     // HUD Player
     public PlayerHUD playerHUD;
@@ -29,12 +29,19 @@ public class GameManager : MonoBehaviour
 
     // Referencia al Inventario
     public Inventory inventory;
+    public GameObject inventoryUIPanel;
+    public bool isOpen;
 
     // Input Actions
     private PlayerInput playerInput;
-    private InputAction inventoryAction;
+    public InputAction inventoryAction;
     private InputAction pauseAction;
     private InputAction backAction;
+
+    // Shoot/Aim Inputs
+    public InputAction aimAction;
+    public InputAction shootAction;
+    public InputAction pointerPositionAction;
 
     private void Awake()
     {
@@ -55,21 +62,23 @@ public class GameManager : MonoBehaviour
             pauseAction = playerInput.actions["Pause"];
             backAction = playerInput.actions["Back"];
 
+            aimAction = playerInput.actions["Aim"];
+            shootAction = playerInput.actions["Shoot"];
+            pointerPositionAction = playerInput.actions["PointerPosition"];
+
             inventoryAction.Enable();
             pauseAction.Enable();
             backAction.Enable();
         }
     }
 
-    private void OnDisable()
-    {
-        inventoryAction.Disable();
-        pauseAction.Disable();
-        backAction.Disable();
-    }
-
     void Update()
     {
+        if (inventoryAction.WasPressedThisFrame())
+        {
+            ToggleInventory();
+        }
+
         if (pauseAction.WasPressedThisFrame())
         {
             if (pausePanel != null && pausePanel.activeSelf)
@@ -83,11 +92,6 @@ public class GameManager : MonoBehaviour
                     pausePanel.SetActive(true);
                 PauseGame();
             }
-        }
-
-        if (inventoryAction.WasPressedThisFrame())
-        {
-            ToggleInventory();
         }
 
         if (backAction.WasPressedThisFrame() && isPaused)

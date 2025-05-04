@@ -4,35 +4,107 @@ using TMPro;
 
 public class DeletePoster : MonoBehaviour
 {
-    [SerializeField]
-    Inventory Inv;
     public Slider slider;
-    public TextMeshProUGUI ammountText;
+    public TextMeshProUGUI quantityText;
+    public Button confirmButton;
+    public Button cancelButton;
+    public GameObject deletePanel;
+    public GameObject selectedItem;
+    public Transform originalParent;
+    public int itemAmountToRemove;
 
-    private void Start()
+    public Sprite emptySlotSprite;
+
+    private Item selectedItemComponent;
+
+    private void Awake()
     {
-       Inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+        deletePanel.SetActive(false);
+
+        confirmButton.onClick.AddListener(ConfirmarEliminacion);
+        cancelButton.onClick.AddListener(CancelarEliminacion);
     }
 
-    private void Update()
+    public void EnableDeletePanel()
     {
-        if (this.gameObject.activeInHierarchy)
+        if (selectedItem == null)
         {
-            slider.maxValue = Inv.OSC;
-            ammountText.text = slider.value.ToString();
+            return;
+        }
+
+        selectedItemComponent = selectedItem.GetComponent<Item>();
+        itemAmountToRemove = selectedItemComponent.itemAmount;  // Asignamos el valor del inventario al itemAmountToRemove
+
+        deletePanel.SetActive(true);
+        selectedItem.GetComponent<Item>().DisableItem();
+
+        // Establecemos el maxValue del slider según la cantidad de ítems en el inventario
+        slider.maxValue = itemAmountToRemove;
+        slider.value = 1;  // Inicializa el valor del slider a 1 (puede ajustarse según el comportamiento deseado)
+
+        // Actualiza el texto con la cantidad inicial
+        quantityText.text = $"{slider.value}/{itemAmountToRemove}";
+
+        // Escuchar cambios en el slider para actualizar el texto
+        slider.onValueChanged.AddListener((value) => UpdateQuantityText());
+
+        if (selectedItem != null)
+        {
+            selectedItemComponent = selectedItem.GetComponent<Item>();
         }
     }
 
-    public void Aceptar()
+    private void ConfirmarEliminacion()
     {
-        Inv.DeleteItem(Inv.OSID, Mathf.RoundToInt(slider.value));
-        slider.value = 1;
-        this.gameObject.SetActive(false);
+        if (selectedItemComponent != null)
+        {
+            int cantidadEliminada = Mathf.RoundToInt(slider.value);
+
+            selectedItemComponent.itemAmount -= cantidadEliminada;
+
+            if (selectedItemComponent.itemAmount <= 0)
+            {
+                // Si el ítem se destruye, actualizamos el sprite del slot vacío
+                if (originalParent != null)
+                {
+                    Image slotImage = originalParent.GetComponent<Image>();
+                    if (slotImage != null)
+                    {
+                        // Usamos el emptySlotSprite del Inventory
+                        slotImage.sprite = emptySlotSprite;  // Usamos el sprite vacío del Inventory
+                    }
+                }
+
+                // Destruimos el objeto del ítem
+                Destroy(selectedItemComponent.gameObject);
+            }
+
+            CloseDeletePanel();
+        }
     }
 
-    public void Cancelar()
+    private void CancelarEliminacion()
     {
-        slider.value = 1;
-        this.gameObject.SetActive(false);
+        CloseDeletePanel();
+    }
+
+    private void CloseDeletePanel()
+    {
+        deletePanel.SetActive(false);
+
+        if (selectedItem != null && originalParent != null)
+        {
+            selectedItem.transform.SetParent(originalParent);
+            selectedItem.transform.localPosition = Vector3.zero;
+            selectedItem.GetComponent<Item>().EnableItem();
+        }
+    }
+
+    public void UpdateQuantityText()
+    {
+        if (slider != null && quantityText != null)
+        {
+            quantityText.text = $"{Mathf.RoundToInt(slider.value)}/{itemAmountToRemove}";
+        }
     }
 }

@@ -21,6 +21,8 @@ public class Item : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public Vector3 offset;
     public ItemsDataBase ItemDB;
 
+    private CanvasGroup canvasGroup;
+
     private void Start()
     {
         if (ItemDB == null)
@@ -35,7 +37,15 @@ public class Item : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         acumulable = ItemDB.ObjectsDataBase[ID].acumulable;
 
         Button = GetComponent<Button>();
-        _description = Inventory.Description;
+
+        if (Inventory.Description != null)
+        {
+            _description = Inventory.Description;
+        }
+        else
+        {
+            return;
+        }
 
         if (_description == null)
         {
@@ -57,6 +67,12 @@ public class Item : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             _description.GetComponent<Image>().enabled = true;
             Nombre_.enabled = true;
             Dato_.enabled = true;
+        }
+
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
         }
     }
 
@@ -86,6 +102,28 @@ public class Item : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             {
                 _description.SetActive(false);
             }
+        }
+    }
+
+    public void DisableItem()
+    {
+        CanvasGroup cg = GetComponent<CanvasGroup>();
+        if (cg != null)
+        {
+            cg.alpha = 0f;
+            cg.blocksRaycasts = false;
+            cg.interactable = false;
+        }
+    }
+
+    public void EnableItem()
+    {
+        CanvasGroup cg = GetComponent<CanvasGroup>();
+        if (cg != null)
+        {
+            cg.alpha = 1f;
+            cg.blocksRaycasts = true;
+            cg.interactable = true;
         }
     }
 
