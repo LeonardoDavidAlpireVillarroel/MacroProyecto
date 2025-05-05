@@ -1,11 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OpenShop : MonoBehaviour
 {
     [Header("UI Panels")]
     public GameObject proximityPanel;
-    public GameObject shopPanel;
     public GameObject lockedPanel;
+
+    [Header("Canvas Groups")]
+    public CanvasGroup shopCanvasGroup;
 
     [Header("Settings")]
     public bool storeLocked = false;
@@ -13,14 +16,18 @@ public class OpenShop : MonoBehaviour
     private bool isPlayerInside = false;
     public PlayerController playerController;
 
+    public GameManager gameManager;
+
     private void Start()
     {
         proximityPanel.SetActive(false);
-        shopPanel.SetActive(false);
         lockedPanel.SetActive(false);
+        DisableCanvasGroup(shopCanvasGroup);
 
         GameObject playerObject = GameObject.FindWithTag("Player");
         playerController = playerObject.GetComponent<PlayerController>();
+
+        gameManager = GameManager.Instance;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,6 +36,7 @@ public class OpenShop : MonoBehaviour
         {
             isPlayerInside = true;
             proximityPanel.SetActive(true);
+            lockedPanel.SetActive(false);
         }
     }
 
@@ -37,7 +45,7 @@ public class OpenShop : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerInside = false;
-            OnExitPanel();
+            proximityPanel.SetActive(false);
         }
     }
 
@@ -63,36 +71,50 @@ public class OpenShop : MonoBehaviour
         }
     }
 
-    private void OnExitPanel()
+    private void OpenInteractionPanel()
     {
-        if (shopPanel.activeSelf || lockedPanel.activeSelf)
+        proximityPanel.SetActive(false);
+        lockedPanel.SetActive(false);
+        EnableCanvasGroup(shopCanvasGroup);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        if (gameManager.isInventoryOpen)
         {
-            CloseAllPanels();
+            gameManager.inventory.ToggleInventory();
         }
     }
 
-    private void OpenInteractionPanel()
+    private void EnableCanvasGroup(CanvasGroup cg)
     {
-        shopPanel.SetActive(true);
-        Time.timeScale = 0f;
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
+        cg.alpha = 1f;
+        cg.interactable = true;
+        cg.blocksRaycasts = true;
+    }
+
+    private void DisableCanvasGroup(CanvasGroup cg)
+    {
+        cg.alpha = 0f;
+        cg.interactable = false;
+        cg.blocksRaycasts = false;
     }
 
     private void OpenLockedPanel()
     {
         proximityPanel.SetActive(false);
+        DisableCanvasGroup(shopCanvasGroup);
         lockedPanel.SetActive(true);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
-    private void CloseAllPanels()
+    public void CloseAllPanels()
     {
-        shopPanel.SetActive(false);
         lockedPanel.SetActive(false);
         proximityPanel.SetActive(false);
-        Time.timeScale = 1f;
+        DisableCanvasGroup(shopCanvasGroup);
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }

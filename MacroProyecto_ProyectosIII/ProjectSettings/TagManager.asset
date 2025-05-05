@@ -11,6 +11,7 @@ TagManager:
   - Item
   - Eliminar
   - Shop
+  - Inventory
   layers:
   - Default
   - TransparentFX

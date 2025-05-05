@@ -4,8 +4,7 @@ using UnityEngine.InputSystem;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-
-    // Referencias a los paneles
+    [Header("Paneles")]
     public GameObject pausePanel;
     public GameObject pauseMenuPanel;
     public GameObject buttonOptionsPanel;
@@ -15,7 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject levelPanel;
     public GameObject interactionText;
 
-    public bool isPaused = false;
+    [HideInInspector] public bool isPaused = false;
 
     [SerializeField] public PlayerController playerController;
 
@@ -27,21 +26,24 @@ public class GameManager : MonoBehaviour
     public int fuerza = 10;
     public int points = 0;
 
-    // Referencia al Inventario
+    [Header("Inventario")]
     public Inventory inventory;
     public GameObject inventoryUIPanel;
-    public bool isOpen;
+    [HideInInspector] public bool isInventoryOpen;
+
+    [Header("Tiendas")]
+    public OpenShop shopScript;
 
     // Input Actions
-    private PlayerInput playerInput;
-    public InputAction inventoryAction;
-    private InputAction pauseAction;
-    private InputAction backAction;
+    [HideInInspector] private PlayerInput playerInput;
+    [HideInInspector] public InputAction inventoryAction;
+    [HideInInspector] private InputAction pauseAction;
+    [HideInInspector] private InputAction backAction;
 
     // Shoot/Aim Inputs
-    public InputAction aimAction;
-    public InputAction shootAction;
-    public InputAction pointerPositionAction;
+    [HideInInspector] public InputAction aimAction;
+    [HideInInspector] public InputAction shootAction;
+    [HideInInspector] public InputAction pointerPositionAction;
 
     private void Awake()
     {
@@ -49,6 +51,9 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         GameObject playerObject = GameObject.FindWithTag("Player");
         if (playerObject != null)
@@ -70,6 +75,8 @@ public class GameManager : MonoBehaviour
             pauseAction.Enable();
             backAction.Enable();
         }
+
+        inventory = GameObject.FindWithTag("Inventory").GetComponent<Inventory>();
     }
 
     void Update()
@@ -94,9 +101,22 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (backAction.WasPressedThisFrame() && isPaused)
+        if (backAction.WasPressedThisFrame())
         {
-            ResumeGame();
+            if (inventory.isInventoryOpen == true)
+            {
+                ToggleInventory();
+            }
+            else if (shopScript.shopCanvasGroup.alpha == 1f)
+            {
+                shopScript.CloseAllPanels();
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else if (isPaused)
+            {
+                ResumeGame();
+            }
         }
     }
 

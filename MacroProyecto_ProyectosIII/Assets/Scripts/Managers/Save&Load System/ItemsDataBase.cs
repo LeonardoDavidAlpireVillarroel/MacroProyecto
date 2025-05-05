@@ -16,6 +16,7 @@ public class ItemsDataBase : ScriptableObject
         public bool acumulable;
         public string description;
         public string Void;
+        public int cantidadInicialTienda;
     }
 
     public enum Clase
