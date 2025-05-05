@@ -33,19 +33,16 @@ public class DeletePoster : MonoBehaviour
         }
 
         selectedItemComponent = selectedItem.GetComponent<Item>();
-        itemAmountToRemove = selectedItemComponent.itemAmount;  // Asignamos el valor del inventario al itemAmountToRemove
+        itemAmountToRemove = selectedItemComponent.itemAmount;
 
         deletePanel.SetActive(true);
         selectedItem.GetComponent<Item>().DisableItem();
 
-        // Establecemos el maxValue del slider según la cantidad de ítems en el inventario
         slider.maxValue = itemAmountToRemove;
-        slider.value = 1;  // Inicializa el valor del slider a 1 (puede ajustarse según el comportamiento deseado)
+        slider.value = 1;
 
-        // Actualiza el texto con la cantidad inicial
         quantityText.text = $"{slider.value}/{itemAmountToRemove}";
 
-        // Escuchar cambios en el slider para actualizar el texto
         slider.onValueChanged.AddListener((value) => UpdateQuantityText());
 
         if (selectedItem != null)
@@ -60,23 +57,32 @@ public class DeletePoster : MonoBehaviour
         {
             int cantidadEliminada = Mathf.RoundToInt(slider.value);
 
+            Inventory inventory = GameManager.Instance.inventoryUIPanel.GetComponent<Inventory>();
+            if (inventory != null)
+            {
+                inventory.DeleteItem(selectedItemComponent.ID, cantidadEliminada);
+            }
+
             selectedItemComponent.itemAmount -= cantidadEliminada;
 
             if (selectedItemComponent.itemAmount <= 0)
             {
-                // Si el ítem se destruye, actualizamos el sprite del slot vacío
                 if (originalParent != null)
                 {
                     Image slotImage = originalParent.GetComponent<Image>();
                     if (slotImage != null)
                     {
-                        // Usamos el emptySlotSprite del Inventory
-                        slotImage.sprite = emptySlotSprite;  // Usamos el sprite vacío del Inventory
+                        slotImage.sprite = emptySlotSprite;
                     }
                 }
 
-                // Destruimos el objeto del ítem
                 Destroy(selectedItemComponent.gameObject);
+            }
+            else
+            {
+                selectedItemComponent.EnableItem();
+                selectedItem.transform.SetParent(originalParent);
+                selectedItem.transform.localPosition = Vector3.zero;
             }
 
             CloseDeletePanel();

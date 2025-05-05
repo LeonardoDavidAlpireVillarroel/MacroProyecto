@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 
 public class Inventory : MonoBehaviour
 {
-    public bool isOpen;
+    public bool isInventoryOpen;
     private CanvasGroup cg;
 
     [System.Serializable]
@@ -44,8 +44,8 @@ public class Inventory : MonoBehaviour
     [Header("Prefs y Items")]
     public static GameObject Description;
     public DeletePoster deletePoster;
-    public int OSC;
-    public int OSID;
+    public int selectedObjectCantidad;
+    public int selectedObjectID;
 
     public Transform Contenido;
     public Item item;
@@ -110,13 +110,10 @@ public class Inventory : MonoBehaviour
 
     public void ToggleInventory()
     {
-        isOpen = !isOpen;
+        isInventoryOpen = !isInventoryOpen;
 
-        if (isOpen)
+        if (isInventoryOpen)
         {
-            GameManager.Instance.shootAction.Disable();
-            GameManager.Instance.aimAction.Disable();
-
             cg.alpha = 1;
             cg.interactable = true;
             cg.blocksRaycasts = true;
@@ -128,23 +125,22 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            GameManager.Instance.shootAction.Enable();
-            GameManager.Instance.aimAction.Enable();
-
             cg.alpha = 0;
             cg.interactable = false;
             cg.blocksRaycasts = false;
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
-            SincronizarInventarioDesdeUI();
+            if (!GameManager.Instance.shopScript.shopCanvasGroup ||
+                GameManager.Instance.shopScript.shopCanvasGroup.alpha == 0f)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
     }
 
     private void Update()
     {
-        if (isOpen) Arrastrar();
+        if (isInventoryOpen == true) Arrastrar();
     }
     void Arrastrar()
     {
@@ -162,8 +158,8 @@ public class Inventory : MonoBehaviour
                 if (itemComponent != null)
                 {
                     selectedObject = raycastResults[0].gameObject;
-                    OSC = itemComponent.itemAmount;
-                    OSID = itemComponent.ID;
+                    selectedObjectCantidad = itemComponent.itemAmount;
+                    selectedObjectID = itemComponent.ID;
 
                     exParent = selectedObject.transform.parent;
                     selectedObject.transform.SetParent(canvas);
@@ -247,23 +243,29 @@ public class Inventory : MonoBehaviour
                             if (result.gameObject == selectedObject)
                                 continue;
 
-                            Item draggedItem = selectedObject.GetComponent<Item>();
-                            Item targetItem = result.gameObject.GetComponent<Item>();
+                            Item resultItem = result.gameObject.GetComponent<Item>();
 
-                            if (draggedItem != null && targetItem != null)
+                            if (resultItem != null)
                             {
-                                if (draggedItem.ID == targetItem.ID && data.ObjectsDataBase[draggedItem.ID].acumulable)
+                                if (resultItem.ID == selectedObjectID && data.ObjectsDataBase[selectedObjectID].acumulable)
                                 {
-                                    targetItem.itemAmount += draggedItem.itemAmount;
+                                    resultItem.itemAmount += selectedObjectCantidad;
+
+                                    if (exParent != null)
+                                    {
+                                        Image exSlotImage = exParent.GetComponent<Image>();
+                                        if (exSlotImage != null)
+                                            exSlotImage.sprite = emptySlotSprite;
+                                    }
 
                                     Destroy(selectedObject);
                                     selectedObject = null;
 
                                     for (int i = 0; i < inventory.Count; i++)
                                     {
-                                        if (Contenido.GetChild(i) == draggedItem.transform.parent)
+                                        if (Contenido.GetChild(i) == exParent)
                                         {
-                                            inventory[i] = new ObjectInventoryID(targetItem.ID, targetItem.itemAmount);
+                                            inventory[i] = new ObjectInventoryID(-1, 0);
                                             break;
                                         }
                                     }
@@ -273,18 +275,24 @@ public class Inventory : MonoBehaviour
                                 }
                                 else
                                 {
-                                    Transform parentA = draggedItem.transform.parent;
-                                    Transform parentB = targetItem.transform.parent;
+                                    Transform parentA = selectedObject.transform.parent;
+                                    Transform parentB = resultItem.transform.parent;
 
-                                    draggedItem.transform.SetParent(parentB);
-                                    draggedItem.transform.localPosition = Vector3.zero;
+                                    selectedObject.transform.SetParent(parentB);
+                                    selectedObject.transform.localPosition = Vector3.zero;
 
-                                    targetItem.transform.SetParent(parentA);
-                                    targetItem.transform.localPosition = Vector3.zero;
+                                    resultItem.transform.SetParent(parentA);
+                                    resultItem.transform.localPosition = Vector3.zero;
 
-                                    selectedObject = null;
+                                    CanvasGroup cgSelected = selectedObject.GetComponent<CanvasGroup>();
+                                    if (cgSelected != null) cgSelected.blocksRaycasts = true;
+
+                                    CanvasGroup cgResult = resultItem.GetComponent<CanvasGroup>();
+                                    if (cgResult != null) cgResult.blocksRaycasts = true;
 
                                     SincronizarInventarioDesdeUI();
+
+                                    selectedObject = null;
                                     return;
                                 }
                             }
@@ -319,6 +327,8 @@ public class Inventory : MonoBehaviour
                             if (selectedObject.GetComponent<Item>().itemAmount >= 2)
                             {
                                 shopManager.comprarMas.SetActive(true);
+                                shopManager.comprarMas.GetComponent<ComprarMasItems>().id = selectedObject.gameObject.GetComponent<Item>().ID;
+                                shopManager.comprarMas.GetComponent<ComprarMasItems>().slider.maxValue = selectedObject.gameObject.GetComponent<Item>().itemAmount;
                                 shopManager.comprarMas.GetComponent<ComprarMasItems>().compra = false;
                             }
                             else
@@ -371,6 +381,18 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(int id, int cantidad)
     {
+        if (id == -1 || cantidad <= 0) return;
+
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i].id == id)
+            {
+                inventory[i] = new ObjectInventoryID(id, inventory[i].cantidadItems + cantidad);
+                InventoryUpdate();
+                return;
+            }
+        }
+
         for (int i = 0; i < inventory.Count; i++)
         {
             if (inventory[i].id == -1 || inventory[i].cantidadItems <= 0)
@@ -380,8 +402,6 @@ public class Inventory : MonoBehaviour
                 return;
             }
         }
-
-        Debug.LogWarning("Inventario lleno. No se pudo añadir el ítem.");
     }
 
     public void DeleteItem(int id, int cantidad)
@@ -394,7 +414,7 @@ public class Inventory : MonoBehaviour
 
                 if (nuevaCantidad <= 0)
                 {
-                    inventory.RemoveAt(i);
+                    inventory[i] = new ObjectInventoryID(-1, 0);
                 }
                 else
                 {
@@ -413,7 +433,6 @@ public class Inventory : MonoBehaviour
         {
             Transform slot = Contenido.GetChild(i);
 
-            // Elimina cualquier hijo visual del slot
             foreach (Transform child in slot)
             {
                 Destroy(child.gameObject);
@@ -463,7 +482,7 @@ public class Inventory : MonoBehaviour
             Transform slot = Contenido.GetChild(i);
             Item itemUI = slot.GetComponentInChildren<Item>();
 
-            if (itemUI != null)
+            if (itemUI != null && itemUI.itemAmount > 0 && itemUI.ID >= 0)
             {
                 inventory[i] = new ObjectInventoryID(itemUI.ID, itemUI.itemAmount);
             }
