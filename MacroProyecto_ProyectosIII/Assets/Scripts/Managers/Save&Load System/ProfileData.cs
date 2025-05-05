@@ -26,6 +26,9 @@ public class ProfileData
     public List<string> inventory;
     public int unlockedLevelCount;
 
+    //Inventario
+
+
     // PlayerPrefs personalizados
     public List<SerializableKeyValue> customPrefs;
 

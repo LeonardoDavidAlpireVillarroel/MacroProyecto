@@ -1,6 +1,8 @@
 using Unity.Cinemachine;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Timeline.DirectorControlPlayable;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,9 +30,15 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private bool jumpPressed;
 
+    //Input Actions
     private InputAction moveAction;
     private InputAction jumpAction;
     public InputAction interactAction;
+
+    // Shoot/Aim Inputs
+    public InputAction aimAction;
+    public InputAction shootAction;
+    public InputAction pointerPositionAction;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -41,22 +49,26 @@ public class PlayerController : MonoBehaviour
     [Header("Water Settings")]
     public LayerMask waterLayer;
     public float waterFloatForce = 5f;
-    private bool isInWater;
-
-    //Player Stats
-    public int health;
-    public int score;
+    private bool isInWater;    
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
         playerInput = GetComponent<PlayerInput>();
+        playerInput.defaultActionMap = "Player";
+
         capibaraSprites = GetComponentInChildren<SpriteRenderer>();
         capibaraAnimator = GetComponentInChildren<Animator>();
 
         moveAction = playerInput.actions["Move"];
         jumpAction = playerInput.actions["Jump"];
+
         interactAction = playerInput.actions["Interact"];
+
+        aimAction = playerInput.actions["Aim"];
+        shootAction = playerInput.actions["Shoot"];
+        pointerPositionAction = playerInput.actions["PointerPosition"];
     }
 
     void Update()

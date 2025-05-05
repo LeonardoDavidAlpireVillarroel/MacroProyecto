@@ -647,6 +647,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1291278137244388960, guid: 89e58c1bf562bb24799b493bf28d8f04, type: 3}
+      propertyPath: m_text
+      value: Big Teeth, Small Tail
+      objectReference: {fileID: 0}
     - target: {fileID: 5414986597717759692, guid: 89e58c1bf562bb24799b493bf28d8f04, type: 3}
       propertyPath: m_Name
       value: MainMenu_Canvas

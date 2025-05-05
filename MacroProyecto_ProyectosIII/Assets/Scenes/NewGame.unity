@@ -860,14 +860,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 828938847}
-    - target: {fileID: 8791879986793794981, guid: 07037beb363464443a90b77e34acc460, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Generate
-      objectReference: {fileID: 0}
-    - target: {fileID: 8791879986793794981, guid: 07037beb363464443a90b77e34acc460, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: NewGame, Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 8942770608554670724, guid: 07037beb363464443a90b77e34acc460, type: 3}
       propertyPath: m_Name
       value: CreateProfile_Canvas

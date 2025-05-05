@@ -3,93 +3,158 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
+    // Referencias a los paneles
     public GameObject pausePanel;
     public GameObject pauseMenuPanel;
     public GameObject buttonOptionsPanel;
     public GameObject controlsPanel;
     public GameObject optionsPanel;
+
+    public GameObject levelPanel;
+    public GameObject interactionText;
+
     public bool isPaused = false;
 
-    [SerializeField] private PlayerController playerController;
+    [SerializeField] public PlayerController playerController;
+
+    // HUD Player
+    public PlayerHUD playerHUD;
+    public int TotalPoints { get; private set; }
+    [Header("Player Stats")]
+    public int health = 3;
+    public int fuerza = 10;
+    public int points = 0;
+
+    // Referencia al Inventario
+    public Inventory inventory;
+    public GameObject inventoryUIPanel;
+    public bool isOpen;
+
+    // Input Actions
+    private PlayerInput playerInput;
+    public InputAction inventoryAction;
+    private InputAction pauseAction;
+    private InputAction backAction;
+
+    // Shoot/Aim Inputs
+    public InputAction aimAction;
+    public InputAction shootAction;
+    public InputAction pointerPositionAction;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+
+        GameObject playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
+        {
+            playerInput = playerObject.GetComponent<PlayerInput>();
+        }
+
+        if (playerInput != null)
+        {
+            inventoryAction = playerInput.actions["Inventory"];
+            pauseAction = playerInput.actions["Pause"];
+            backAction = playerInput.actions["Back"];
+
+            aimAction = playerInput.actions["Aim"];
+            shootAction = playerInput.actions["Shoot"];
+            pointerPositionAction = playerInput.actions["PointerPosition"];
+
+            inventoryAction.Enable();
+            pauseAction.Enable();
+            backAction.Enable();
+        }
+    }
 
     void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (inventoryAction.WasPressedThisFrame())
         {
-            isPaused = !isPaused;
-            PauseGame();
+            ToggleInventory();
+        }
+
+        if (pauseAction.WasPressedThisFrame())
+        {
+            if (pausePanel != null && pausePanel.activeSelf)
+            {
+                ResumeGame();
+            }
+            else
+            {
+                isPaused = !isPaused;
+                if (pausePanel != null)
+                    pausePanel.SetActive(true);
+                PauseGame();
+            }
+        }
+
+        if (backAction.WasPressedThisFrame() && isPaused)
+        {
+            ResumeGame();
         }
     }
 
     public void PauseGame()
     {
-        if (isPaused)
-        {
-            Time.timeScale = 0;
+        Time.timeScale = 0;
 
-            if (pausePanel != null)
-                pausePanel.SetActive(true);
+        playerController.playerInput.SwitchCurrentActionMap("UI");
 
-            if (playerController != null)
-            {
-                if (playerController.playerInput != null)
-                    playerController.playerInput.enabled = false;
-
-                if (playerController.cinemachineBrain != null)
-                    playerController.cinemachineBrain.enabled = false;
-            }
-
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            Time.timeScale = 1;
-
-            if (pausePanel != null)
-            {
-                pauseMenuPanel.SetActive(true);
-                buttonOptionsPanel.SetActive(true);
-                controlsPanel.SetActive(false);
-                optionsPanel.SetActive(false); 
-                pausePanel.SetActive(false);
-            }
-
-            if (playerController != null)
-            {
-                if (playerController.playerInput != null)
-                    playerController.playerInput.enabled = true;
-
-                if (playerController.cinemachineBrain != null)
-                    playerController.cinemachineBrain.enabled = true;
-            }
-
-            Cursor.lockState = CursorLockMode.Locked;
-            isPaused = false;
-        }
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        isPaused = true;
     }
 
     public void ResumeGame()
     {
         Time.timeScale = 1;
 
-        pauseMenuPanel.SetActive(true);
-        buttonOptionsPanel.SetActive(true);
-        controlsPanel.SetActive(false);
-        optionsPanel.SetActive(false);
-        pausePanel.SetActive(false);
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
 
-        if (playerController != null)
-        {
-            if (playerController.playerInput != null)
-                playerController.playerInput.enabled = true;
+        if (levelPanel != null)
+            levelPanel.SetActive(false);
 
-            if (playerController.cinemachineBrain != null)
-                playerController.cinemachineBrain.enabled = true;
-        }
+        playerController.playerInput.SwitchCurrentActionMap("Player");
 
-        isPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        isPaused = false;
+    }
+
+    public void SumarPuntos(int pointsToSumar)
+    {
+        TotalPoints += pointsToSumar;
+        playerHUD.ActualizePoints(TotalPoints);
+    }
+
+    public void LoseLifes()
+    {
+        health -= 1;
+
+        if (health >= 0 && health < playerHUD.vidas.Length)
+        {
+            playerHUD.DesactivateLifes(health);
+        }
+    }
+
+    public void RecoverLifes()
+    {
+        playerHUD.ActivateLife(health);
+        health += 1;
+    }
+
+    private void ToggleInventory()
+    {
+        if (inventory != null)
+        {
+            inventory.ToggleInventory();
+        }
     }
 }

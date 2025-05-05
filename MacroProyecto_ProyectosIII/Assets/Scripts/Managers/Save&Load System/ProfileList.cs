@@ -4,7 +4,6 @@ using UnityEngine.SceneManagement;
 public class ProfileList : MonoBehaviour
 {
     public Transform profileHolder;
-
     public GameObject profileUIBoxPrefab;
 
     private void Start()
@@ -18,12 +17,21 @@ public class ProfileList : MonoBehaviour
 
             uibox.nameLabel.text = profileName;
 
-            uibox.loadButton.onClick.AddListener(() => {
+            uibox.loadButton.onClick.AddListener(() => {                
                 ProfileStorage.LoadProfile(profileName);
-                MapController.Instance.UnlockLevels();
 
-                MusicManager.Instance.PlayMusic("ClaroPacifico");
-                ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
+                if (MapController.Instance != null)
+                {
+                    MapController.Instance.UnlockLevels();
+                }
+                if (MusicManager.Instance != null)
+                {
+                    MusicManager.Instance.PlayMusic("ClaroPacifico");
+                }
+                if (ScenesManager.Instance != null)
+                {
+                    ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
+                }
             });
 
             uibox.deleteButton.onClick.AddListener(() => {

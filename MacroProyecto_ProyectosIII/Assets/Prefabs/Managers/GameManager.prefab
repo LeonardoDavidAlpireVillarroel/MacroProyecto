@@ -45,4 +45,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pausePanel: {fileID: 0}
+  pauseMenuPanel: {fileID: 0}
+  buttonOptionsPanel: {fileID: 0}
+  controlsPanel: {fileID: 0}
+  optionsPanel: {fileID: 0}
+  levelPanel: {fileID: 0}
+  interactionText: {fileID: 0}
   isPaused: 0
+  playerController: {fileID: 0}
+  playerHUD: {fileID: 0}
+  health: 3
+  fuerza: 10
+  points: 100
+  inventory: {fileID: 0}
+  inventoryUIPanel: {fileID: 0}
+  isOpen: 0
+  inventoryAction:
+    m_Name: Inventory
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: c2e5c9bc-87fa-42b5-91d2-235a70be0a32
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  aimAction:
+    m_Name: Aim
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 3e81695d-46e3-4b26-8518-b85dc6357476
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  shootAction:
+    m_Name: Shoot
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: db94fb59-f02e-4466-9fc4-30b956b8202a
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  pointerPositionAction:
+    m_Name: Pointer Position
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: b2251f57-f1d0-42c5-af47-4e893d0e14c8
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0

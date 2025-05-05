@@ -7,6 +7,10 @@ TagManager:
   - Spring
   - FallingObject
   - Ground
+  - Slot
+  - Item
+  - Eliminar
+  - Shop
   layers:
   - Default
   - TransparentFX
