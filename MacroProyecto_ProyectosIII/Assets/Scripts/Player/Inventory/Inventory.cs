@@ -474,31 +474,46 @@ public class Inventory : MonoBehaviour
         InventoryUpdate();
     }
 
-    public void VenderItem(int index, int cantidad)
+    public void VenderItem(int id, int cantidad)
     {
-        if (index < 0 || index >= inventory.Count)
-            return;
+        //if (index < 0 || index >= inventory.Count)
+        //    return;
 
-        var slot = inventory[index];
+        //var slot = inventory[index];
 
-        if (slot.id == -1 || slot.cantidadItems <= 0 || cantidad <= 0)
-            return;
+        //if (slot.id == -1 || slot.cantidadItems <= 0 || cantidad <= 0)
+        //    return;
 
-        int actualCantidad = slot.cantidadItems;
-        int id = slot.id;
+        //int actualCantidad = slot.cantidadItems;
+        //int id = slot.id;
 
-        if (cantidad < actualCantidad)
+        //if (cantidad < actualCantidad)
+        //{
+        //    inventory[index] = new ObjectInventoryID(id, actualCantidad - cantidad);
+        //}
+        //else
+        //{
+        //    inventory[index] = new ObjectInventoryID(-1, 0);
+        //}
+
+        //int puntosAGanar = data.ObjectsDataBase[id].precioVenta * cantidad;
+        //GameManager.Instance.points += puntosAGanar;
+        //InventoryUpdate();
+
+        for (int i = 0; i < inventory.Count; i++)
         {
-            inventory[index] = new ObjectInventoryID(id, actualCantidad - cantidad);
+            if (inventory[i].id == id)
+            {
+                inventory[i] = new ObjectInventoryID(inventory[i].id, inventory[i].cantidadItems - cantidad);
+                if (inventory[i].cantidadItems <= 0)
+                {
+                    inventory.Remove(inventory[i]);
+                    InventoryUpdate();
+                    break;
+                }
+            }
+            InventoryUpdate();
         }
-        else
-        {
-            inventory[index] = new ObjectInventoryID(-1, 0);
-        }
-
-        int puntosAGanar = data.ObjectsDataBase[id].precioVenta * cantidad;
-        GameManager.Instance.points += puntosAGanar;
-        InventoryUpdate();
     }
 
     public void DeleteItem(int index, int cantidad)
