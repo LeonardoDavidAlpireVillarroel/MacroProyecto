@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-
 
 public class ConfirmarCompra : MonoBehaviour
 {
@@ -15,10 +13,7 @@ public class ConfirmarCompra : MonoBehaviour
     public int cantidad;
     public bool compra = true;
 
-    void Start()
-    {
-        
-    }
+    public int slotIndex = -1;
 
     void Update()
     {
@@ -40,9 +35,17 @@ public class ConfirmarCompra : MonoBehaviour
         }
         else
         {
-            SM.VenderItem(id, cantidad);
+            if (slotIndex != -1)
+            {
+                SM.VenderItemDesdeSlot(slotIndex, cantidad);
+            }
+            else
+            {
+                Debug.LogWarning("Índice de slot no asignado para la venta.");
+            }
         }
-        SM.GetComponentInChildren<ConfirmarCompra>().gameObject.SetActive(false);
+
+        gameObject.SetActive(false);
     }
 
     public void Cancelar()

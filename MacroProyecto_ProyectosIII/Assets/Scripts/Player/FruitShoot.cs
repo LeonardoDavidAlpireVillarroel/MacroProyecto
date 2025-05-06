@@ -48,7 +48,7 @@ public class FruitShoot : MonoBehaviour
 
         if (isAiming)
         {
-            Cursor.visible = true;
+            Cursor.visible = false;
             Cursor.lockState = CursorLockMode.None;
 
             if (!arrowInstance.activeSelf)

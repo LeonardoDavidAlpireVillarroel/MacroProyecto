@@ -73,6 +73,7 @@ public class OpenShop : MonoBehaviour
 
     private void OpenInteractionPanel()
     {
+        playerController.moveAction.Disable();
         proximityPanel.SetActive(false);
         lockedPanel.SetActive(false);
         EnableCanvasGroup(shopCanvasGroup);

@@ -1,12 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using TMPro;
-using Unity.VisualScripting;
-using System.Reflection;
 using UnityEngine.InputSystem;
 
 public class Inventory : MonoBehaviour
@@ -150,7 +145,6 @@ public class Inventory : MonoBehaviour
         if (raycastResults == null)
             raycastResults = new List<RaycastResult>();
 
-        // Detectar cuando el botón izquierdo del ratón es presionado
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             pointerData.position = Input.mousePosition;
@@ -161,17 +155,14 @@ public class Inventory : MonoBehaviour
                 Item itemComponent = raycastResults[0].gameObject.GetComponent<Item>();
                 if (itemComponent != null)
                 {
-                    // Seleccionar el objeto para moverlo
                     selectedObject = raycastResults[0].gameObject;
                     selectedObjectCantidad = itemComponent.itemAmount;
                     selectedObjectID = itemComponent.ID;
 
-                    // Guardar el parent original del objeto
                     exParent = selectedObject.transform.parent;
                     selectedObject.transform.SetParent(canvas);
                     selectedObject.transform.SetAsLastSibling();
 
-                    // Desactivar la interacción con el objeto mientras se arrastra
                     var cg = selectedObject.GetComponent<CanvasGroup>();
                     if (cg == null)
                         cg = selectedObject.AddComponent<CanvasGroup>();
@@ -181,13 +172,11 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        // Mover el objeto con el cursor
         if (selectedObject != null)
         {
             selectedObject.GetComponent<RectTransform>().localPosition = CanvasScreen(Input.mousePosition);
         }
 
-        // Verificar la interacción con los objetos en el área de arrastre
         if (selectedObject != null)
         {
             pointerData.position = Input.mousePosition;
@@ -196,7 +185,6 @@ public class Inventory : MonoBehaviour
 
             bool hoveringOverEliminar = false;
 
-            // Verificar si estamos sobre el área de eliminación
             foreach (var result in raycastResults)
             {
                 if (result.gameObject.CompareTag("Eliminar"))
@@ -206,7 +194,6 @@ public class Inventory : MonoBehaviour
                 }
             }
 
-            // Actualizar la visibilidad de la UI de eliminación
             if (deletePoster != null)
             {
                 CanvasGroup dpCg = deletePoster.GetComponent<CanvasGroup>();
@@ -222,14 +209,12 @@ public class Inventory : MonoBehaviour
                 }
             }
 
-            // Si el botón izquierdo es liberado
             if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 pointerData.position = Input.mousePosition;
                 raycastResults.Clear();
                 graphRay.Raycast(pointerData, raycastResults);
 
-                // Restaurar el parent original
                 selectedObject.transform.SetParent(exParent);
                 Transform newParent = exParent;
 
@@ -363,6 +348,7 @@ public class Inventory : MonoBehaviour
                         {
                             if (selectedObject.GetComponent<Item>().itemAmount >= 2)
                             {
+                                shopManager.confCompra.GetComponent<ConfirmarCompra>().slotIndex = selectedObject.transform.parent.GetSiblingIndex();
                                 shopManager.comprarMas.SetActive(true);
                                 shopManager.comprarMas.GetComponent<ComprarMasItems>().id = selectedObject.gameObject.GetComponent<Item>().ID;
                                 shopManager.comprarMas.GetComponent<ComprarMasItems>().slider.maxValue = selectedObject.gameObject.GetComponent<Item>().itemAmount;
@@ -370,6 +356,7 @@ public class Inventory : MonoBehaviour
                             }
                             else
                             {
+                                shopManager.confCompra.GetComponent<ConfirmarCompra>().slotIndex = selectedObject.transform.parent.GetSiblingIndex();
                                 shopManager.confCompra.SetActive(true);
                                 shopManager.confCompra.GetComponent<ConfirmarCompra>().id = selectedObject.gameObject.GetComponent<Item>().ID;
                                 shopManager.confCompra.GetComponent<ConfirmarCompra>().cantidad = selectedObject.gameObject.GetComponent<Item>().itemAmount;
@@ -464,9 +451,32 @@ public class Inventory : MonoBehaviour
                     InventoryUpdate();
                     break;
                 }
+                InventoryUpdate();
             }
-            InventoryUpdate();
         }
+    }
+
+    public void VenderItemEnSlot(int slotIndex, int cantidad)
+    {
+        if (slotIndex < 0 || slotIndex >= inventory.Count)
+            return;
+
+        var slot = inventory[slotIndex];
+
+        if (slot.id == -1 || slot.cantidadItems < cantidad)
+        {
+            Debug.LogWarning("Cantidad inválida para vender.");
+            return;
+        }
+
+        inventory[slotIndex] = new ObjectInventoryID(slot.id, slot.cantidadItems - cantidad);
+
+        if (inventory[slotIndex].cantidadItems <= 0)
+        {
+            inventory[slotIndex] = new ObjectInventoryID(-1, 0);
+        }
+
+        InventoryUpdate();
     }
 
     public void DeleteItem(int index, int cantidad)
@@ -497,6 +507,7 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < inventory.Count && i < Contenido.childCount; i++)
         {
             Transform slot = Contenido.GetChild(i);
+            Image slotImage = slot.GetComponent<Image>();
 
             foreach (Transform child in slot)
             {
@@ -512,6 +523,13 @@ public class Inventory : MonoBehaviour
                 itemUI.transform.localPosition = Vector3.zero;
                 itemUI.transform.localScale = Vector3.one;
                 itemUI.gameObject.SetActive(true);
+            }
+            else
+            {
+                if (slotImage != null)
+                {
+                    slotImage.sprite = emptySlotSprite;
+                }
             }
         }
     }

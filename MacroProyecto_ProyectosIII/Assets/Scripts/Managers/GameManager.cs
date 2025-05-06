@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour
             else if (shopScript.shopCanvasGroup.alpha == 1f)
             {
                 shopScript.CloseAllPanels();
+                playerController.playerInput.SwitchCurrentActionMap("Player");
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;                
             }

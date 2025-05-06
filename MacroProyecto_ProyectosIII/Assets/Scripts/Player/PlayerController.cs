@@ -31,14 +31,14 @@ public class PlayerController : MonoBehaviour
     private bool jumpPressed;
 
     //Input Actions
-    private InputAction moveAction;
-    private InputAction jumpAction;
-    public InputAction interactAction;
+    [HideInInspector] public InputAction moveAction;
+    [HideInInspector] private InputAction jumpAction;
+    [HideInInspector] public InputAction interactAction;
 
     // Shoot/Aim Inputs
-    public InputAction aimAction;
-    public InputAction shootAction;
-    public InputAction pointerPositionAction;
+    [HideInInspector] public InputAction aimAction;
+    [HideInInspector] public InputAction shootAction;
+    [HideInInspector] public InputAction pointerPositionAction;
 
     [Header("Ground Check")]
     public Transform groundCheck;

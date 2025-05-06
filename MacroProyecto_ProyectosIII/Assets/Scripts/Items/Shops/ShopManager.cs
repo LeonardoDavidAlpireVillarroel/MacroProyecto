@@ -1,11 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting;
-using System;
-using Unity.VisualScripting.Dependencies.NCalc;
 
 public class ShopManager : MonoBehaviour
 {
@@ -84,51 +79,30 @@ public class ShopManager : MonoBehaviour
         {
             insuficientesPuntos.SetActive(true);
         }
-
-
-        //if (GameManager.GetComponent<GameManager>().points >= ItemCompra[ItemID].precio * cantidad)
-        //{
-        //    GameManager.GetComponent<GameManager>().points -= ItemCompra[ItemID].precio * cantidad;
-        //    if (ItemCompra[ItemID].acumulable)
-        //    {
-        //        Inv.GetComponent<Inventory>().AddItem(ItemID, cantidad);
-        //    }
-        //    else
-        //    {
-        //        for (int item = 0; item < cantidad; item++)
-        //        {
-        //            Inv.GetComponent<Inventory>().AddItem(ItemID, 1);
-        //        }
-        //    }
-        //    ItemCompra[ItemID].cantidad -= cantidad;
-        //}
-        //else
-        //{
-        //    insuficientesPuntos.SetActive(true);
-        //}
     }
 
     public void VenderItem(int index, int cantidad)
     {
-        for (int i = 0; i < ItemCompra.Count; i++)
+        GameManager.GetComponent<GameManager>().points += DB.ObjectsDataBase[index].precioVenta * cantidad;
+
+        Inv.GetComponent<Inventory>().VenderItem(index, cantidad);
+    }
+
+    public void VenderItemDesdeSlot(int slotIndex, int cantidad)
+    {
+        Inventory inv = Inv.GetComponent<Inventory>();
+        var item = inv.inventory[slotIndex];
+
+        if (item.id == -1 || item.cantidadItems < cantidad)
         {
-            if (ItemCompra[i].ID >= index && ItemCompra[i].acumulable)
-            {
-                GameManager.GetComponent<GameManager>().points += DB.ObjectsDataBase[index].precioVenta * cantidad;
-                Inv.GetComponent<Inventory>().VenderItem(index, cantidad);
-                return;
-            }
-            if (!ItemCompra[i].gameObject.activeInHierarchy)
-            {
-                ItemCompra[i].ID = index;
-                ItemCompra[i].cantidad = cantidad;
-                ItemCompra[i].gameObject.SetActive(true);
-                ItemCompra[i].ActualizarItem();
-                GameManager.GetComponent<GameManager>().points += DB.ObjectsDataBase[index].precioVenta * cantidad;
-                Inv.GetComponent<Inventory>().VenderItem(index, cantidad);
-                break;
-            }
+            Debug.LogWarning("Slot vacío o cantidad inválida");
+            return;
         }
+
+        int ganancia = DB.ObjectsDataBase[item.id].precioVenta * cantidad;
+        GameManager.GetComponent<GameManager>().points += ganancia;
+
+        inv.VenderItemEnSlot(slotIndex, cantidad);
     }
 
     public void EsconderItems(int caso)

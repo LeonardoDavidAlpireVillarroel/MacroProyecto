@@ -11003,8 +11003,8 @@ GameObject:
   - component: {fileID: 1399441447}
   - component: {fileID: 1399441449}
   - component: {fileID: 1399441448}
-  - component: {fileID: 1399441450}
   - component: {fileID: 1399441451}
+  - component: {fileID: 1399441450}
   m_Layer: 5
   m_Name: Shop
   m_TagString: Untagged
@@ -12230,6 +12230,7 @@ MonoBehaviour:
   id: 0
   cantidad: 0
   compra: 0
+  slotIndex: -1
 --- !u!1 &1526378992
 GameObject:
   m_ObjectHideFlags: 0
