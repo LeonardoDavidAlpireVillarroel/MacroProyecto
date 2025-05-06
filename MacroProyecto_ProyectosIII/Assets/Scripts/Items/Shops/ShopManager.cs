@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 using System;
+using Unity.VisualScripting.Dependencies.NCalc;
 
 public class ShopManager : MonoBehaviour
 {
@@ -61,8 +62,8 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-   public void ComprarItem(int ItemID, int cantidad)
-   {
+    public void ComprarItem(int ItemID, int cantidad)
+    {
         ItemShop itemASerComprado = ItemCompra.Find(item => item.ID == ItemID);
 
         if (itemASerComprado == null) return;
@@ -84,12 +85,50 @@ public class ShopManager : MonoBehaviour
             insuficientesPuntos.SetActive(true);
         }
 
-        //Inv.GetComponent<Inventory>().InventoryUpdate();
+
+        //if (GameManager.GetComponent<GameManager>().points >= ItemCompra[ItemID].precio * cantidad)
+        //{
+        //    GameManager.GetComponent<GameManager>().points -= ItemCompra[ItemID].precio * cantidad;
+        //    if (ItemCompra[ItemID].acumulable)
+        //    {
+        //        Inv.GetComponent<Inventory>().AddItem(ItemID, cantidad);
+        //    }
+        //    else
+        //    {
+        //        for (int item = 0; item < cantidad; item++)
+        //        {
+        //            Inv.GetComponent<Inventory>().AddItem(ItemID, 1);
+        //        }
+        //    }
+        //    ItemCompra[ItemID].cantidad -= cantidad;
+        //}
+        //else
+        //{
+        //    insuficientesPuntos.SetActive(true);
+        //}
     }
 
     public void VenderItem(int index, int cantidad)
     {
-        Inv.GetComponent<Inventory>().VenderItem(index, cantidad);
+        for (int i = 0; i < ItemCompra.Count; i++)
+        {
+            if (ItemCompra[i].ID >= index && ItemCompra[i].acumulable)
+            {
+                GameManager.GetComponent<GameManager>().points += DB.ObjectsDataBase[index].precioVenta * cantidad;
+                Inv.GetComponent<Inventory>().VenderItem(index, cantidad);
+                return;
+            }
+            if (!ItemCompra[i].gameObject.activeInHierarchy)
+            {
+                ItemCompra[i].ID = index;
+                ItemCompra[i].cantidad = cantidad;
+                ItemCompra[i].gameObject.SetActive(true);
+                ItemCompra[i].ActualizarItem();
+                GameManager.GetComponent<GameManager>().points += DB.ObjectsDataBase[index].precioVenta * cantidad;
+                Inv.GetComponent<Inventory>().VenderItem(index, cantidad);
+                break;
+            }
+        }
     }
 
     public void EsconderItems(int caso)
