@@ -21,8 +21,6 @@ public class FruitShoot : MonoBehaviour
 
     void Start()
     {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
         if (arrowInstance != null)
         {
             arrowInstance.SetActive(false);
@@ -35,37 +33,6 @@ public class FruitShoot : MonoBehaviour
     {
         unpausedTimer = unpausedCooldownTime;
     }
-
-    //void Update()
-    //{
-    //    if (arrowInstance == null) return;
-
-    //    if (unpausedTimer > 0f)
-    //    {
-    //        unpausedTimer -= Time.unscaledDeltaTime;
-    //        return;
-    //    }
-
-    //    isAiming = playerController.aimAction.ReadValue<float>() > 0.5f;
-
-    //    if (isAiming)
-    //    {
-    //        if (!arrowInstance.activeSelf)
-    //            arrowInstance.SetActive(true);
-
-    //        UpdateArrowDirection();
-
-    //        if (playerController.shootAction.WasPressedThisFrame())
-    //        {
-    //            ShootFruit();
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (arrowInstance.activeSelf)
-    //            arrowInstance.SetActive(false);
-    //    }
-    //}
 
     void Update()
     {
@@ -94,10 +61,14 @@ public class FruitShoot : MonoBehaviour
                 ShootFruit();
             }
         }
+
         else
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            if (!GameManager.Instance.isPaused)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
 
             if (arrowInstance.activeSelf)
                 arrowInstance.SetActive(false);
@@ -108,12 +79,12 @@ public class FruitShoot : MonoBehaviour
     void UpdateArrowDirection()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane plane = new Plane(Vector3.up, new Vector3(0, transform.position.y, 0)); // plano XZ a la altura del personaje
+        Plane plane = new Plane(Vector3.up, new Vector3(0, transform.position.y, 0)); 
 
         if (plane.Raycast(ray, out float distance))
         {
             Vector3 hitPoint = ray.GetPoint(distance);
-            hitPoint.y = transform.position.y; // mantiene altura del personaje
+            hitPoint.y = transform.position.y; 
 
             Vector3 direction = (hitPoint - transform.position).normalized;
 

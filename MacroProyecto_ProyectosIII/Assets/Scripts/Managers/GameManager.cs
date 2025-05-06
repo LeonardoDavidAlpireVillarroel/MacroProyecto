@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] private PlayerInput playerInput;
     [HideInInspector] public InputAction inventoryAction;
     [HideInInspector] private InputAction pauseAction;
-    [HideInInspector] private InputAction backAction;
+    [HideInInspector] public InputAction backAction;
 
     // Shoot/Aim Inputs
     [HideInInspector] public InputAction aimAction;
@@ -140,6 +140,8 @@ public class GameManager : MonoBehaviour
 
         if (levelPanel != null)
             levelPanel.SetActive(false);
+
+        playerController.enabled = true;
 
         playerController.playerInput.SwitchCurrentActionMap("Player");
 

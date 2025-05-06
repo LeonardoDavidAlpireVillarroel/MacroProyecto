@@ -104,8 +104,17 @@ public class MapController : MonoBehaviour
                 levelPanel.SetActive(true);
 
                 gameManager.PauseGame();
-
                 playerController.enabled = false;
+
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            if (levelPanel != null && levelPanel.activeSelf && gameManager.backAction.WasPressedThisFrame())
+            {
+                levelPanel.SetActive(false);
+                playerController.enabled = true;
+
+                gameManager.ResumeGame();
             }
         }
     }
