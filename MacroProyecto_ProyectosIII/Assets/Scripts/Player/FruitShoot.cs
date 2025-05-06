@@ -21,6 +21,8 @@ public class FruitShoot : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         if (arrowInstance != null)
         {
             arrowInstance.SetActive(false);
@@ -33,6 +35,37 @@ public class FruitShoot : MonoBehaviour
     {
         unpausedTimer = unpausedCooldownTime;
     }
+
+    //void Update()
+    //{
+    //    if (arrowInstance == null) return;
+
+    //    if (unpausedTimer > 0f)
+    //    {
+    //        unpausedTimer -= Time.unscaledDeltaTime;
+    //        return;
+    //    }
+
+    //    isAiming = playerController.aimAction.ReadValue<float>() > 0.5f;
+
+    //    if (isAiming)
+    //    {
+    //        if (!arrowInstance.activeSelf)
+    //            arrowInstance.SetActive(true);
+
+    //        UpdateArrowDirection();
+
+    //        if (playerController.shootAction.WasPressedThisFrame())
+    //        {
+    //            ShootFruit();
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (arrowInstance.activeSelf)
+    //            arrowInstance.SetActive(false);
+    //    }
+    //}
 
     void Update()
     {
@@ -48,6 +81,9 @@ public class FruitShoot : MonoBehaviour
 
         if (isAiming)
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             if (!arrowInstance.activeSelf)
                 arrowInstance.SetActive(true);
 
@@ -60,27 +96,35 @@ public class FruitShoot : MonoBehaviour
         }
         else
         {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+
             if (arrowInstance.activeSelf)
                 arrowInstance.SetActive(false);
         }
     }
 
+
     void UpdateArrowDirection()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, transform.position);
+        Plane plane = new Plane(Vector3.up, new Vector3(0, transform.position.y, 0)); // plano XZ a la altura del personaje
 
-        if (groundPlane.Raycast(ray, out float distance))
+        if (plane.Raycast(ray, out float distance))
         {
-            Vector3 targetPoint = ray.GetPoint(distance);
-            targetPoint.y = transform.position.y;
+            Vector3 hitPoint = ray.GetPoint(distance);
+            hitPoint.y = transform.position.y; // mantiene altura del personaje
 
-            Vector3 direction = (targetPoint - transform.position).normalized;
+            Vector3 direction = (hitPoint - transform.position).normalized;
 
-            arrowInstance.transform.forward = direction;
-            currentAimDirection = direction;
+            if (direction != Vector3.zero)
+            {
+                arrowInstance.transform.forward = direction;
+                currentAimDirection = direction;
+            }
         }
     }
+
 
     public Vector3 GetAimDirection()
     {
@@ -89,38 +133,31 @@ public class FruitShoot : MonoBehaviour
 
     void ShootFruit()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        GameObject newFruit = Instantiate(fruitPrefab, spawnPoint.position, Quaternion.identity);
 
-        if (groundPlane.Raycast(ray, out float distance))
+        Rigidbody rb = newFruit.GetComponent<Rigidbody>();
+        if (rb == null)
         {
-            Vector3 targetPoint = ray.GetPoint(distance);
-            Vector3 shootDirection = (targetPoint - spawnPoint.position).normalized;
-
-            GameObject newFruit = Instantiate(fruitPrefab, spawnPoint.position, Quaternion.identity);
-
-            Rigidbody rb = newFruit.GetComponent<Rigidbody>();
-            if (rb == null)
-            {
-                rb = newFruit.AddComponent<Rigidbody>();
-            }
-            rb.useGravity = false;
-            rb.linearVelocity = shootDirection * shootSpeed;
-
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                Collider fruitCollider = newFruit.GetComponent<Collider>();
-                Collider playerCollider = player.GetComponent<Collider>();
-
-                if (fruitCollider != null && playerCollider != null)
-                {
-                    Physics.IgnoreCollision(fruitCollider, playerCollider);
-                }
-            }
-
-            Destroy(newFruit, fruitLifetime);
-            hasShot = true;
+            rb = newFruit.AddComponent<Rigidbody>();
         }
+
+        rb.useGravity = false;
+        rb.linearVelocity = currentAimDirection * shootSpeed;
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            Collider fruitCollider = newFruit.GetComponent<Collider>();
+            Collider playerCollider = player.GetComponent<Collider>();
+
+            if (fruitCollider != null && playerCollider != null)
+            {
+                Physics.IgnoreCollision(fruitCollider, playerCollider);
+            }
+        }
+
+        Destroy(newFruit, fruitLifetime);
+        hasShot = true;
     }
+
 }
