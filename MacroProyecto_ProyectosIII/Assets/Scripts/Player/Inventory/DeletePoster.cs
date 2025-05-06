@@ -21,6 +21,7 @@ public class DeletePoster : MonoBehaviour
     {
         deletePanel.SetActive(false);
 
+        slider.onValueChanged.AddListener((value) => UpdateQuantityText());
         confirmButton.onClick.AddListener(ConfirmarEliminacion);
         cancelButton.onClick.AddListener(CancelarEliminacion);
     }
@@ -34,17 +35,11 @@ public class DeletePoster : MonoBehaviour
 
         selectedItemComponent = selectedItem.GetComponent<Item>();
         itemAmountToRemove = selectedItemComponent.itemAmount;
-
         deletePanel.SetActive(true);
         selectedItem.GetComponent<Item>().DisableItem();
-
         slider.maxValue = itemAmountToRemove;
         slider.value = 1;
-
         quantityText.text = $"{slider.value}/{itemAmountToRemove}";
-
-        slider.onValueChanged.AddListener((value) => UpdateQuantityText());
-
         if (selectedItem != null)
         {
             selectedItemComponent = selectedItem.GetComponent<Item>();
@@ -60,31 +55,10 @@ public class DeletePoster : MonoBehaviour
             Inventory inventory = GameManager.Instance.inventoryUIPanel.GetComponent<Inventory>();
             if (inventory != null)
             {
-                inventory.DeleteItem(selectedItemComponent.ID, cantidadEliminada);
+                int index = originalParent.GetSiblingIndex();
+                inventory.DeleteItem(index, cantidadEliminada);
             }
-
-            selectedItemComponent.itemAmount -= cantidadEliminada;
-
-            if (selectedItemComponent.itemAmount <= 0)
-            {
-                if (originalParent != null)
-                {
-                    Image slotImage = originalParent.GetComponent<Image>();
-                    if (slotImage != null)
-                    {
-                        slotImage.sprite = emptySlotSprite;
-                    }
-                }
-
-                Destroy(selectedItemComponent.gameObject);
-            }
-            else
-            {
-                selectedItemComponent.EnableItem();
-                selectedItem.transform.SetParent(originalParent);
-                selectedItem.transform.localPosition = Vector3.zero;
-            }
-
+            inventory.InventoryUpdate();
             CloseDeletePanel();
         }
     }
@@ -97,7 +71,6 @@ public class DeletePoster : MonoBehaviour
     private void CloseDeletePanel()
     {
         deletePanel.SetActive(false);
-
         if (selectedItem != null && originalParent != null)
         {
             selectedItem.transform.SetParent(originalParent);

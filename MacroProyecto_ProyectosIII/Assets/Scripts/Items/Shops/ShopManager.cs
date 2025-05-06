@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using System;
 
 public class ShopManager : MonoBehaviour
 {
@@ -64,57 +65,31 @@ public class ShopManager : MonoBehaviour
    {
         ItemShop itemASerComprado = ItemCompra.Find(item => item.ID == ItemID);
 
-        if (itemASerComprado == null)
-        {
-            Debug.LogWarning("Item no encontrado en la tienda.");
-            return;
-        }
+        if (itemASerComprado == null) return;
 
-        if (GameManager.GetComponent<GameManager>().points >= itemASerComprado.precio * cantidad)
-        {
-            GameManager.GetComponent<GameManager>().points -= itemASerComprado.precio * cantidad;
+        int precioTotal = itemASerComprado.precio * cantidad;
 
-            if (itemASerComprado.acumulable)
-            {
-                Inv.GetComponent<Inventory>().AddItem(ItemID, cantidad);
-            }
-            else
-            {
-                for (int i = 0; i < cantidad; i++)
-                {
-                    Inv.GetComponent<Inventory>().AddItem(ItemID, 1);
-                }
-            }
+        if (GameManager.GetComponent<GameManager>().points >= precioTotal)
+        {
+            GameManager.GetComponent<GameManager>().points -= precioTotal;
+
+            Inv.GetComponent<Inventory>().AddItem(ItemID, cantidad);
 
             itemASerComprado.cantidad -= cantidad;
+
+            itemASerComprado.ActualizarItem();
         }
         else
         {
             insuficientesPuntos.SetActive(true);
         }
+
+        //Inv.GetComponent<Inventory>().InventoryUpdate();
     }
 
-    public void VenderItem(int ItemID, int cantidad)
+    public void VenderItem(int index, int cantidad)
     {
-        for (int i = 0; i < ItemCompra.Count; i++)
-        {
-            if (ItemCompra[i].ID == ItemID)
-            {
-                GameManager.GetComponent<GameManager>().points += DB.ObjectsDataBase[ItemID].precioVenta * cantidad;
-
-                Inv.GetComponent<Inventory>().DeleteItem(ItemID, cantidad);
-
-                ItemCompra[i].cantidad -= cantidad;
-
-                if (ItemCompra[i].cantidad <= 0)
-                {
-                    ItemCompra[i].gameObject.SetActive(false);
-                    ItemCompra.RemoveAt(i);
-                }
-
-                break;
-            }
-        }
+        Inv.GetComponent<Inventory>().VenderItem(index, cantidad);
     }
 
     public void EsconderItems(int caso)
