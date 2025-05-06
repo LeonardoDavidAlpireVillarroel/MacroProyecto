@@ -49,16 +49,6 @@ public class Inventory : MonoBehaviour
 
     public Transform Contenido;
     public Item item;
-    //[HideInInspector]
-    //public List<ItemSuelto> itemsSueltos = new List<ItemSuelto>;
-    //[HideInInspector]
-    //public List<ItemSuelto> copiasItemsSueltos = new List<ItemSuelto>;
-    //[Space]
-    //[Header("Items Soltados")]
-    //[Tooltip("Aqui arrastra un GameObject vacío en donde reaparecen los items eliminados del inventario")]
-    //public Transform ItemSueltoRespawn;
-    //[HideInInspector]
-    //public Vector3 originalPos;
 
     public ShopManager shopManager;
 
@@ -142,9 +132,9 @@ public class Inventory : MonoBehaviour
             cg.interactable = false;
             cg.blocksRaycasts = false;
 
-            if (!GameManager.Instance.shopScript.shopCanvasGroup ||
-                GameManager.Instance.shopScript.shopCanvasGroup.alpha == 0f)
+            if (!GameManager.Instance.shopScript.shopCanvasGroup || GameManager.Instance.shopScript.shopCanvasGroup.alpha == 0f)
             {
+                playerController.GetComponent<FruitShoot>().enabled = true;
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
@@ -250,7 +240,6 @@ public class Inventory : MonoBehaviour
                         if (result.gameObject == selectedObject)
                             continue;
 
-                        // Verificar si el objeto está siendo soltado sobre un slot vacío
                         if (result.gameObject.CompareTag("Slot"))
                         {
                             if (result.gameObject.GetComponentInChildren<Item>() == null)
@@ -259,7 +248,6 @@ public class Inventory : MonoBehaviour
                             }
                         }
 
-                        // Verificar si el objeto está siendo soltado sobre otro ítem
                         if (result.gameObject.CompareTag("Item"))
                         {
                             if (result.gameObject == selectedObject)
@@ -276,13 +264,11 @@ public class Inventory : MonoBehaviour
 
                                     if (totalAmount <= stackLimit)
                                     {
-                                        // Si no se excede el límite, combinar ítems
                                         resultItem.itemAmount = totalAmount;
 
                                         int resultIndex = resultItem.transform.parent.GetSiblingIndex();
                                         inventory[resultIndex] = new ObjectInventoryID(selectedObjectID, totalAmount);
 
-                                        // Limpiar el slot original
                                         if (exParent != null)
                                         {
                                             Image exSlotImage = exParent.GetComponent<Image>();
@@ -305,10 +291,8 @@ public class Inventory : MonoBehaviour
 
                                         if (availableSpace > 0)
                                         {
-                                            // Llenar espacio disponible en el slot
                                             resultItem.itemAmount += availableSpace;
 
-                                            // Actualizar el inventario
                                             int resultIndex = resultItem.transform.parent.GetSiblingIndex();
                                             inventory[resultIndex] = new ObjectInventoryID(selectedObjectID, resultItem.itemAmount);
 
@@ -318,7 +302,7 @@ public class Inventory : MonoBehaviour
                                             if (availableSpace >= selectedSlot.cantidadItems)
                                             {
                                                 inventory[selectedIndex] = new ObjectInventoryID(-1, 0);
-                                                Destroy(selectedObject); // Eliminar el objeto visual
+                                                Destroy(selectedObject);
                                             }
                                             else
                                             {
@@ -331,7 +315,6 @@ public class Inventory : MonoBehaviour
                                         }
                                         else
                                         {
-                                            // Si no hay espacio, devolver al slot original
                                             selectedObject.transform.SetParent(exParent);
                                             selectedObject.transform.localPosition = Vector3.zero;
 
@@ -347,7 +330,6 @@ public class Inventory : MonoBehaviour
                                 }
                                 else
                                 {
-                                    // Si no son iguales, intercambiar los ítems
                                     IntercambiarItems(selectedObject.GetComponent<Item>(), resultItem);
 
                                     int slot1 = selectedObject.transform.parent.GetSiblingIndex();
@@ -364,7 +346,6 @@ public class Inventory : MonoBehaviour
                             }
                         }
 
-                        // Verificar si el objeto está siendo soltado sobre el área de eliminación
                         if (result.gameObject.CompareTag("Eliminar"))
                         {
                             Item selectedItem = selectedObject.GetComponent<Item>();
@@ -378,7 +359,6 @@ public class Inventory : MonoBehaviour
                             }
                         }
 
-                        // Verificar si el objeto está siendo soltado sobre la tienda
                         if (result.gameObject.CompareTag("Shop"))
                         {
                             if (selectedObject.GetComponent<Item>().itemAmount >= 2)
@@ -399,7 +379,6 @@ public class Inventory : MonoBehaviour
                     }
                 }
 
-                // Si no se realizó ninguna acción, devolver al slot original
                 if (selectedObject != null)
                 {
                     var cg = selectedObject.GetComponent<CanvasGroup>();
@@ -420,8 +399,6 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
-
-        // Limpiar los resultados del raycast
         raycastResults.Clear();
     }
 
@@ -476,30 +453,6 @@ public class Inventory : MonoBehaviour
 
     public void VenderItem(int id, int cantidad)
     {
-        //if (index < 0 || index >= inventory.Count)
-        //    return;
-
-        //var slot = inventory[index];
-
-        //if (slot.id == -1 || slot.cantidadItems <= 0 || cantidad <= 0)
-        //    return;
-
-        //int actualCantidad = slot.cantidadItems;
-        //int id = slot.id;
-
-        //if (cantidad < actualCantidad)
-        //{
-        //    inventory[index] = new ObjectInventoryID(id, actualCantidad - cantidad);
-        //}
-        //else
-        //{
-        //    inventory[index] = new ObjectInventoryID(-1, 0);
-        //}
-
-        //int puntosAGanar = data.ObjectsDataBase[id].precioVenta * cantidad;
-        //GameManager.Instance.points += puntosAGanar;
-        //InventoryUpdate();
-
         for (int i = 0; i < inventory.Count; i++)
         {
             if (inventory[i].id == id)

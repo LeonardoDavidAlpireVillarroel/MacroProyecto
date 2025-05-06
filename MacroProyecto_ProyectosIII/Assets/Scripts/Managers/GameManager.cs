@@ -78,11 +78,13 @@ public class GameManager : MonoBehaviour
 
         inventory = GameObject.FindWithTag("Inventory").GetComponent<Inventory>();
     }
-
+    
     void Update()
     {
         if (inventoryAction.WasPressedThisFrame())
         {
+            playerController.GetComponent<FruitShoot>().enabled = false;
+            isInventoryOpen = true;
             ToggleInventory();
         }
 
@@ -111,11 +113,11 @@ public class GameManager : MonoBehaviour
             {
                 shopScript.CloseAllPanels();
                 Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.lockState = CursorLockMode.Locked;                
             }
             else if (isPaused)
             {
-                ResumeGame();
+                ResumeGame();                
             }
         }
     }
@@ -128,6 +130,8 @@ public class GameManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        playerController.GetComponent<FruitShoot>().enabled = false;
         isPaused = true;
     }
 
@@ -147,6 +151,7 @@ public class GameManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        playerController.GetComponent<FruitShoot>().enabled = true;
         isPaused = false;
     }
 
