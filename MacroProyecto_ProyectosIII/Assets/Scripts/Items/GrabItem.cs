@@ -24,12 +24,6 @@ public class GrabItem : MonoBehaviour
         {
             if (inv != null)
             {
-                if (!inv.TieneEspacioEnInventario(ID, cantidad))
-                {
-                    inv.ShowMessage();
-                    return;
-                }
-
                 pickedUp = true;
                 inv.AddItem(ID, cantidad);
                 Destroy(gameObject);

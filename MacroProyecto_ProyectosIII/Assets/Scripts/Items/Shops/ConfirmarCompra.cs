@@ -31,41 +31,6 @@ public class ConfirmarCompra : MonoBehaviour
     {
         if (compra)
         {
-            Inventory inventory = GameManager.Instance.inventory;
-            ItemsDataBase.InventoryObject itemData = db.ObjectsDataBase[id];
-
-            int cantidadDisponible = cantidad;
-
-            if (itemData.acumulable)
-            {
-                for (int i = 0; i < inventory.inventory.Count && cantidadDisponible > 0; i++)
-                {
-                    var slot = inventory.inventory[i];
-                    if (slot.id == id && slot.cantidadItems < itemData.stackLimit)
-                    {
-                        int espacio = itemData.stackLimit - slot.cantidadItems;
-                        cantidadDisponible -= Mathf.Min(espacio, cantidadDisponible);
-                    }
-                }
-            }
-
-            for (int i = 0; i < inventory.inventory.Count && cantidadDisponible > 0; i++)
-            {
-                var slot = inventory.inventory[i];
-                if (slot.id == -1 || slot.cantidadItems == 0)
-                {
-                    int espacio = itemData.stackLimit;
-                    cantidadDisponible -= Mathf.Min(espacio, cantidadDisponible);
-                }
-            }
-
-            if (cantidadDisponible > 0)
-            {
-                inventory.ShowMessage();
-                gameObject.SetActive(false);
-                return;
-            }
-
             SM.ComprarItem(id, cantidad);
         }
         else
@@ -73,6 +38,10 @@ public class ConfirmarCompra : MonoBehaviour
             if (slotIndex != -1)
             {
                 SM.VenderItemDesdeSlot(slotIndex, cantidad);
+            }
+            else
+            {
+                Debug.LogWarning("Índice de slot no asignado para la venta.");
             }
         }
 
