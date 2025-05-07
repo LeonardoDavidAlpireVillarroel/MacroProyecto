@@ -22,7 +22,7 @@ public class ShopManager : MonoBehaviour
 
     [Header("Actualize Shop")]
     public TextMeshProUGUI tiendaTimerText;
-    private float tiempoParaActualizar = 25f;
+    private float tiempoParaActualizar = 10f;
     private float temporizador = 0f;
 
     void Start()
@@ -93,12 +93,6 @@ public class ShopManager : MonoBehaviour
         Inventory inv = Inv.GetComponent<Inventory>();
         var item = inv.inventory[slotIndex];
 
-        if (item.id == -1 || item.cantidadItems < cantidad)
-        {
-            Debug.LogWarning("Slot vacío o cantidad inválida");
-            return;
-        }
-
         int ganancia = DB.ObjectsDataBase[item.id].precioVenta * cantidad;
         GameManager.GetComponent<GameManager>().points += ganancia;
 
@@ -107,17 +101,56 @@ public class ShopManager : MonoBehaviour
 
     public void EsconderItems(int caso)
     {
-
+        for (int i = 0; i < ItemCompra.Count; i++)
+        {
+            if (caso == 0)
+            {
+                itActivar.Clear();
+                itActivar = ItemCompra.FindAll(x => x.ID != 3);
+                foreach (ItemShop itemA in itActivar)
+                {
+                    itemA.gameObject.SetActive(true);
+                }
+                return;
+            }
+            else
+            {
+                if (caso == 3)
+                {
+                    DesactivacionItems(caso);
+                    foreach (ItemShop itemVendido in itemsVendidos)
+                    {
+                        itemVendido.gameObject.SetActive(true);
+                    }
+                    return;
+                }
+            }
+            DesactivacionItems(caso);
+            ActivacionItems(caso);
+        }
     }
 
     void ActivacionItems(int numero)
     {
-        
+        itActivar.Clear();
+        itActivar = ItemCompra.FindAll(x => x.clase ==  numero);
+        foreach (ItemShop itemA in itActivar)
+        {
+            itemA.gameObject.SetActive(true);
+        }
     }
 
     void DesactivacionItems(int numero)
     {
-
+        itDesactivar.Clear();
+        itDesactivar = ItemCompra.FindAll(x => x.clase != numero);
+        foreach (ItemShop item in itDesactivar)
+        {
+            if (item.gameObject.activeInHierarchy)
+            {
+                item.gameObject.SetActive(false);
+            }
+        }
     }
 
     private void ActualizarTienda()

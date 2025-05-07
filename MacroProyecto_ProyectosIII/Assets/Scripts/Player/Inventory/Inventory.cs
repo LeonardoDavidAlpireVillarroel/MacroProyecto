@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class Inventory : MonoBehaviour
 {
@@ -42,6 +43,14 @@ public class Inventory : MonoBehaviour
     public int selectedObjectCantidad;
     public int selectedObjectID;
 
+    [Header("PopUp Inventario lleno")]
+    public CanvasGroup messagePanel;
+    public float showDuration = 2f;
+    public float fadeDuration = 0.5f;
+
+    private Coroutine currentRoutine;
+
+    [Header("Contenido Inventario")]
     public Transform Contenido;
     public Item item;
 
@@ -432,10 +441,39 @@ public class Inventory : MonoBehaviour
 
         if (cantidad > 0)
         {
-            Debug.LogWarning("Inventario lleno o sin espacio suficiente para más items.");
+            FindFirstObjectByType<InventoryFullMessage>().ShowMessage();
         }
 
         InventoryUpdate();
+    }
+
+    public void ShowMessage()
+    {
+        if (currentRoutine != null)
+            StopCoroutine(currentRoutine);
+
+        currentRoutine = StartCoroutine(ShowAndFade());
+    }
+
+    private IEnumerator ShowAndFade()
+    {
+        yield return StartCoroutine(FadeCanvasGroup(messagePanel, 0, 1, fadeDuration));
+
+        yield return new WaitForSeconds(showDuration);
+
+        yield return StartCoroutine(FadeCanvasGroup(messagePanel, 1, 0, fadeDuration));
+    }
+
+    private IEnumerator FadeCanvasGroup(CanvasGroup cg, float start, float end, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            cg.alpha = Mathf.Lerp(start, end, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        cg.alpha = end;
     }
 
     public void VenderItem(int id, int cantidad)
@@ -561,5 +599,40 @@ public class Inventory : MonoBehaviour
     {
         GameManager.Instance.fuerza += 1;
         DeleteItem(1, 1);
+    }
+
+    public bool TieneEspacioEnInventario(int id, int cantidad)
+    {
+        var itemData = data.ObjectsDataBase[id];
+        int cantidadDisponible = cantidad;
+
+        if (itemData.acumulable)
+        {
+            for (int i = 0; i < inventory.Count; i++)
+            {
+                if (inventory[i].id == id && inventory[i].cantidadItems < itemData.stackLimit)
+                {
+                    int espacio = itemData.stackLimit - inventory[i].cantidadItems;
+                    cantidadDisponible -= espacio;
+
+                    if (cantidadDisponible <= 0)
+                        return true;
+                }
+            }
+        }
+
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i].id == -1 || inventory[i].cantidadItems == 0)
+            {
+                int espacioSlot = itemData.stackLimit;
+                cantidadDisponible -= espacioSlot;
+
+                if (cantidadDisponible <= 0)
+                    return true;
+            }
+        }
+
+        return false;
     }
 }
