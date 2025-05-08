@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
-using System.Linq;
 
 public class Inventory : MonoBehaviour
 {
@@ -644,26 +643,5 @@ public class Inventory : MonoBehaviour
         }
 
         return false;
-    }
-
-    public string GetInventoryAsString()
-    {
-        return JsonUtility.ToJson(new InventoryWrapper { items = inventory });
-    }
-
-    [System.Serializable]
-    public class InventoryWrapper
-    {
-        public List<Inventory.ObjectInventoryID> items;
-    }
-
-    public void SetInventoryFromString(string json)
-    {
-        InventoryWrapper wrapper = JsonUtility.FromJson<InventoryWrapper>(json);
-        if (wrapper != null && wrapper.items != null)
-        {
-            inventory = wrapper.items;
-            InventoryUpdate();
-        }
     }
 }

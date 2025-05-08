@@ -28,21 +28,39 @@ public class MapController : MonoBehaviour
 
     void Start()
     {
-        //if (ProfileStorage.s_currentProfile == null)
-        //{
-        //    var profileIndex = ProfileStorage.GetProfileIndex();
+        if (ProfileStorage.s_currentProfile == null)
+        {
+            var profileIndex = ProfileStorage.GetProfileIndex();
 
-        //    if (profileIndex.ProfileFileNames.Count > 0)
-        //    {
-        //        ProfileStorage.LoadProfile(profileIndex.ProfileFileNames[0]);
-        //    }
-        //}
+            if (profileIndex.ProfileFileNames.Count > 0)
+            {
+                ProfileStorage.LoadProfile(profileIndex.ProfileFileNames[0]);
+            }
+        }
 
-        //unlockLevel = ProfileStorage.s_currentProfile != null ? ProfileStorage.s_currentProfile.unlockedLevelCount : 2;
+        if (UnlockLevelData.sharedUnlockLevel > 0)
+        {
+            unlockLevel = UnlockLevelData.sharedUnlockLevel;
+            if (ProfileStorage.s_currentProfile != null &&
+                unlockLevel > ProfileStorage.s_currentProfile.unlockedLevelCount)
+            {
+                ProfileStorage.s_currentProfile.unlockedLevelCount = unlockLevel;
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                if (player != null)
+                {
+                    ProfileStorage.StorePlayerProfile(player);
+                }
+            }
+            UnlockLevelData.sharedUnlockLevel = -1;
+        }
+        else
+        {
+            unlockLevel = Mathf.Max(ProfileStorage.s_currentProfile.unlockedLevelCount, 2);
+        }
 
         if (gameManager == null)
         {
-            gameManager = GameManager.Instance;
+            gameManager = FindFirstObjectByType<GameManager>();
         }
 
         if (levelButtons.Length > 0)
@@ -104,16 +122,18 @@ public class MapController : MonoBehaviour
                 levelPanel.SetActive(true);
 
                 gameManager.PauseGame();
+                playerController.enabled = false;
 
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
             }
-        }
+            if (levelPanel != null && levelPanel.activeSelf && gameManager.backAction.WasPressedThisFrame())
+            {
+                levelPanel.SetActive(false);
+                playerController.enabled = true;
 
-        if (levelPanel != null && levelPanel.activeSelf && gameManager.backAction.WasPressedThisFrame())
-        {
-            levelPanel.SetActive(false);
-            gameManager.ResumeGame();
+                gameManager.ResumeGame();
+            }
         }
     }
 

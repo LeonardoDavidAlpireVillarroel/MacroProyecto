@@ -13,15 +13,7 @@ public class SetUnlockLevel : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (ProfileStorage.s_currentProfile != null && unlockLevel > ProfileStorage.s_currentProfile.unlockedLevelCount)
-            {
-                ProfileStorage.s_currentProfile.unlockedLevelCount = unlockLevel;
-
-                ProfileStorage.StorePlayerProfile(other.gameObject);
-            }
-
             UnlockLevelData.sharedUnlockLevel = unlockLevel;
-
             if (winPanel != null)
             {
                 winPanel.SetActive(true);

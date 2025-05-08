@@ -22,10 +22,12 @@ public class ProfileData
     //Progreso jugador
     public float playerHealth;
     public int playerLevel;
-    public float points;
-    //Inventario
+    public float experience;
     public List<string> inventory;
     public int unlockedLevelCount;
+
+    //Inventario
+
 
     // PlayerPrefs personalizados
     public List<SerializableKeyValue> customPrefs;
@@ -39,7 +41,7 @@ public class ProfileData
 
         this.playerHealth = 3f;
         this.playerLevel = 1;
-        this.points = 0f;
+        this.experience = 0f;
         this.inventory = new List<string>();
         this.unlockedLevelCount = 2;
 
@@ -56,7 +58,7 @@ public class ProfileData
 
         this.playerHealth = 3f;
         this.playerLevel = 1;
-        this.points = 0f;
+        this.experience = 0f;
         this.inventory = new List<string>();
         this.unlockedLevelCount = 2;
 
