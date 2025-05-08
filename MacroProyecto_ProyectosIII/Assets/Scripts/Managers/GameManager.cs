@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class GameManager : MonoBehaviour
     public GameObject levelPanel;
     public GameObject interactionText;
 
-    [HideInInspector] public bool isPaused = false;
+    public bool isPaused = false;
 
     [SerializeField] public PlayerController playerController;
 
@@ -30,7 +31,7 @@ public class GameManager : MonoBehaviour
     [Header("Inventario")]
     public Inventory inventory;
     public GameObject inventoryUIPanel;
-    [HideInInspector] public bool isInventoryOpen;
+    public bool isInventoryOpen;
 
     [Header("Tiendas")]
     public OpenShop shopScript;
@@ -123,7 +124,7 @@ public class GameManager : MonoBehaviour
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;                
             }
-            else if (isPaused)
+            else if (pausePanel != null && pausePanel.activeSelf)
             {
                 ResumeGame();                
             }

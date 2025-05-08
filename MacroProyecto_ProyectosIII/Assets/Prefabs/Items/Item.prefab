@@ -157,7 +157,7 @@ MonoBehaviour:
   _description: {fileID: 0}
   Nombre_: {fileID: 0}
   Dato_: {fileID: 0}
-  offset: {x: -300, y: 0, z: 0}
+  offset: {x: -350, y: 0, z: 0}
   ItemDB: {fileID: 11400000, guid: 4d66ed78f7c45694ab93b29dba19b41f, type: 2}
 --- !u!61 &2438548854804100703
 BoxCollider2D:
