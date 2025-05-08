@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -75,10 +76,16 @@ public class GameManager : MonoBehaviour
             pauseAction.Enable();
             backAction.Enable();
         }
-
-        inventory = GameObject.FindWithTag("Inventory").GetComponent<Inventory>();
     }
-    
+
+    private void Start()
+    {
+        if (inventory == null)
+        {
+            inventory = Inventory.Instance;
+        }
+    }
+
     void Update()
     {
         if (inventoryAction.WasPressedThisFrame())
@@ -109,7 +116,7 @@ public class GameManager : MonoBehaviour
             {
                 ToggleInventory();
             }
-            else if (shopScript.shopCanvasGroup.alpha == 1f)
+            else if (shopScript != null && shopScript.shopCanvasGroup.alpha == 1f)
             {
                 shopScript.CloseAllPanels();
                 playerController.playerInput.SwitchCurrentActionMap("Player");

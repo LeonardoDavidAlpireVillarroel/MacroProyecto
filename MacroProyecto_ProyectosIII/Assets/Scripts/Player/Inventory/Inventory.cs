@@ -7,6 +7,7 @@ using System.Collections;
 
 public class Inventory : MonoBehaviour
 {
+    public static Inventory Instance;
     public bool isInventoryOpen;
     private CanvasGroup cg;
 
@@ -67,6 +68,14 @@ public class Inventory : MonoBehaviour
     private void OnDisable()
     {
         InventoryIsOpen = false;
+    }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
     }
 
     private void Start()
