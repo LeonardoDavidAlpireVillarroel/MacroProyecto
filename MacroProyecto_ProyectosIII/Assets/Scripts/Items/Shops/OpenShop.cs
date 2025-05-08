@@ -30,6 +30,7 @@ public class OpenShop : MonoBehaviour
         gameManager = GameManager.Instance;
     }
 
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

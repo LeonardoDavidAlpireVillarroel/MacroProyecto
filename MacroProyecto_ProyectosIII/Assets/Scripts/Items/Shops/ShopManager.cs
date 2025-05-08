@@ -4,7 +4,6 @@ using TMPro;
 
 public class ShopManager : MonoBehaviour
 {
-    public GameObject GameManager;
     public GameObject Inv;
     [SerializeField]
     private List<ItemShop> ItemCompra;
@@ -25,6 +24,8 @@ public class ShopManager : MonoBehaviour
     private float tiempoParaActualizar = 25f;
     private float temporizador = 0f;
 
+    public static GameManager Instance { get; private set; }
+
     void Start()
     {
         ItemCompra = new List<ItemShop>();
@@ -42,7 +43,7 @@ public class ShopManager : MonoBehaviour
 
     void Update()
     {
-        cartelPuntos.text = "Puntos: " + GameManager.GetComponent<GameManager>().points.ToString();
+        cartelPuntos.text = "Puntos: " + GameManager.Instance.points.ToString();
 
         temporizador += Time.deltaTime;
 
@@ -65,9 +66,9 @@ public class ShopManager : MonoBehaviour
 
         int precioTotal = itemASerComprado.precio * cantidad;
 
-        if (GameManager.GetComponent<GameManager>().points >= precioTotal)
+        if (GameManager.Instance.points >= precioTotal)
         {
-            GameManager.GetComponent<GameManager>().points -= precioTotal;
+            GameManager.Instance.points -= precioTotal;
 
             Inv.GetComponent<Inventory>().AddItem(ItemID, cantidad);
 
@@ -83,7 +84,7 @@ public class ShopManager : MonoBehaviour
 
     public void VenderItem(int index, int cantidad)
     {
-        GameManager.GetComponent<GameManager>().points += DB.ObjectsDataBase[index].precioVenta * cantidad;
+        GameManager.Instance.points += DB.ObjectsDataBase[index].precioVenta * cantidad;
 
         Inv.GetComponent<Inventory>().VenderItem(index, cantidad);
     }
@@ -100,7 +101,7 @@ public class ShopManager : MonoBehaviour
         }
 
         int ganancia = DB.ObjectsDataBase[item.id].precioVenta * cantidad;
-        GameManager.GetComponent<GameManager>().points += ganancia;
+        GameManager.Instance.points         += ganancia;
 
         inv.VenderItemEnSlot(slotIndex, cantidad);
     }

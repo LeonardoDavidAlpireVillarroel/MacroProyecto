@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -76,9 +77,10 @@ public class GameManager : MonoBehaviour
             backAction.Enable();
         }
 
-        inventory = GameObject.FindWithTag("Inventory").GetComponent<Inventory>();
+        inventory = Inventory.Instance;
+
     }
-    
+
     void Update()
     {
         if (inventoryAction.WasPressedThisFrame())
@@ -105,20 +107,20 @@ public class GameManager : MonoBehaviour
 
         if (backAction.WasPressedThisFrame())
         {
-            if (inventory.isInventoryOpen == true)
+            if (inventory != null && inventory.isInventoryOpen)
             {
                 ToggleInventory();
             }
-            else if (shopScript.shopCanvasGroup.alpha == 1f)
+            else if (shopScript != null && shopScript.shopCanvasGroup.alpha == 1f)
             {
                 shopScript.CloseAllPanels();
                 playerController.playerInput.SwitchCurrentActionMap("Player");
                 Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;                
+                Cursor.lockState = CursorLockMode.Locked;
             }
             else if (isPaused)
             {
-                ResumeGame();                
+                ResumeGame();
             }
         }
     }
