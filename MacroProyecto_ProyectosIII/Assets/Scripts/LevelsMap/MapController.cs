@@ -38,7 +38,25 @@ public class MapController : MonoBehaviour
             }
         }
 
-        unlockLevel = Mathf.Max(ProfileStorage.s_currentProfile.unlockedLevelCount, 2);
+        if (UnlockLevelData.sharedUnlockLevel > 0)
+        {
+            unlockLevel = UnlockLevelData.sharedUnlockLevel;
+            if (ProfileStorage.s_currentProfile != null &&
+                unlockLevel > ProfileStorage.s_currentProfile.unlockedLevelCount)
+            {
+                ProfileStorage.s_currentProfile.unlockedLevelCount = unlockLevel;
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                if (player != null)
+                {
+                    ProfileStorage.StorePlayerProfile(player);
+                }
+            }
+            UnlockLevelData.sharedUnlockLevel = -1;
+        }
+        else
+        {
+            unlockLevel = Mathf.Max(ProfileStorage.s_currentProfile.unlockedLevelCount, 2);
+        }
 
         if (gameManager == null)
         {

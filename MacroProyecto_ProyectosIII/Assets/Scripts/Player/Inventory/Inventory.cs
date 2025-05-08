@@ -7,6 +7,7 @@ using System.Collections;
 
 public class Inventory : MonoBehaviour
 {
+    public static Inventory Instance;
     public bool isInventoryOpen;
     private CanvasGroup cg;
 
@@ -57,7 +58,6 @@ public class Inventory : MonoBehaviour
     public ShopManager shopManager;
 
     public List<ObjectInventoryID> inventory = new List<ObjectInventoryID>();
-    public static Inventory Instance { get; private set; }
 
     public static bool InventoryIsOpen { get; private set; }
 
@@ -76,11 +76,8 @@ public class Inventory : MonoBehaviour
         {
             Instance = this;
         }
-        else if (Instance != this)
-        {
-            Destroy(gameObject); // evita duplicados si hay más de uno en escena
-        }
     }
+
     private void Start()
     {
         cg = GameManager.Instance.inventoryUIPanel.GetComponent<CanvasGroup>();

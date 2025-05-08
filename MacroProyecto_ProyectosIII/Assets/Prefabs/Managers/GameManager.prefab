@@ -56,15 +56,25 @@ MonoBehaviour:
   playerHUD: {fileID: 0}
   health: 3
   fuerza: 10
-  points: 100
+  points: 1000
   inventory: {fileID: 0}
   inventoryUIPanel: {fileID: 0}
-  isOpen: 0
+  isInventoryOpen: 0
+  shopScript: {fileID: 0}
   inventoryAction:
     m_Name: Inventory
     m_Type: 0
     m_ExpectedControlType: 
     m_Id: c2e5c9bc-87fa-42b5-91d2-235a70be0a32
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  backAction:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 9867eede-c766-4930-9ebd-c090a6eef21c
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
