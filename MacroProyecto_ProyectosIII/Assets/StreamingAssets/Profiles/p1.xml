@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProfileData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <filename>prueba2.xml</filename>
-  <name>prueba2</name>
+  <filename>p1.xml</filename>
+  <name>p1</name>
   <newGame>false</newGame>
-  <x>4.756576</x>
+  <x>4.61041975</x>
   <y>0.3192305</y>
   <playerHealth>3</playerHealth>
   <playerLevel>1</playerLevel>
-  <experience>0</experience>
+  <points>0</points>
   <inventory />
-  <unlockedLevelCount>5</unlockedLevelCount>
+  <unlockedLevelCount>4</unlockedLevelCount>
   <customPrefs />
 </ProfileData>

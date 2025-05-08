@@ -12,14 +12,13 @@ public static class ProfileStorage
 
     public static void CreateNewGame(string profileName)
     {
-        s_currentProfile = new ProfileData(profileName, true, 0, 0);
+        s_currentProfile =  new ProfileData(profileName, true, 0, 0);        
 
         string path = Application.streamingAssetsPath + "/Profiles/" + s_currentProfile.filename;
         SaveFile<ProfileData>(path, s_currentProfile);
 
         var index = GetProfileIndex();
         index.ProfileFileNames.Add(s_currentProfile.filename);
-
         SaveFile<ProfileIndex>(s_indexPath, index);
     }
 
