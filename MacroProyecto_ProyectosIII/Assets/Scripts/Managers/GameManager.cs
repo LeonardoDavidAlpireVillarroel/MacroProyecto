@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -52,7 +53,6 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -76,9 +76,14 @@ public class GameManager : MonoBehaviour
             pauseAction.Enable();
             backAction.Enable();
         }
+    }
 
-        inventory = Inventory.Instance;
-
+    private void Start()
+    {
+        if (inventory == null)
+        {
+            inventory = Inventory.Instance;
+        }
     }
 
     void Update()
@@ -107,7 +112,7 @@ public class GameManager : MonoBehaviour
 
         if (backAction.WasPressedThisFrame())
         {
-            if (inventory != null && inventory.isInventoryOpen)
+            if (inventory.isInventoryOpen == true)
             {
                 ToggleInventory();
             }
@@ -116,11 +121,11 @@ public class GameManager : MonoBehaviour
                 shopScript.CloseAllPanels();
                 playerController.playerInput.SwitchCurrentActionMap("Player");
                 Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.lockState = CursorLockMode.Locked;                
             }
             else if (isPaused)
             {
-                ResumeGame();
+                ResumeGame();                
             }
         }
     }

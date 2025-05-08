@@ -12,7 +12,7 @@ public class GrabItem : MonoBehaviour
     {
         if (inv == null)
         {
-            inv = FindFirstObjectByType<Inventory>();
+            inv = Inventory.Instance;
         }
     }
 
