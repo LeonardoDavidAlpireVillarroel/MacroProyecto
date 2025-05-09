@@ -4,25 +4,34 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.Linq;
+
+[System.Serializable]
+public class ObjectInventoryID
+{
+    public int id;  // Identificador único del objeto
+    public int cantidadItems;  // La cantidad de este objeto en el inventario
+
+    // Constructor opcional para facilitar la creación de nuevos objetos de inventario
+    public ObjectInventoryID(int id, int cantidadItems)
+    {
+        this.id = id;
+        this.cantidadItems = cantidadItems;
+    }
+}
+
+[System.Serializable]
+public class InventoryWrapper
+{
+    // Lista de objetos del inventario que deseas guardar como JSON
+    public List<ObjectInventoryID> items;
+}
 
 public class Inventory : MonoBehaviour
 {
     public static Inventory Instance;
     public bool isInventoryOpen;
     private CanvasGroup cg;
-
-    [System.Serializable]
-    public struct ObjectInventoryID
-    {
-        public int id;
-        public int cantidadItems;
-
-        public ObjectInventoryID(int id, int cantidadItems)
-        {
-            this.id = id;
-            this.cantidadItems = cantidadItems;
-        }
-    }
 
     public PlayerController playerController;
 
@@ -75,6 +84,23 @@ public class Inventory : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+        }
+    }
+
+    public string GetInventoryAsString()
+    {
+        InventoryWrapper wrapper = new InventoryWrapper { items = inventory };
+        return JsonUtility.ToJson(wrapper);
+    }
+
+    public void SetInventoryFromString(string json)
+    {
+        if (string.IsNullOrEmpty(json)) return;
+
+        InventoryWrapper wrapper = JsonUtility.FromJson<InventoryWrapper>(json);
+        if (wrapper != null && wrapper.items != null)
+        {
+            inventory = wrapper.items;
         }
     }
 
@@ -145,7 +171,7 @@ public class Inventory : MonoBehaviour
             cg.interactable = false;
             cg.blocksRaycasts = false;
 
-            if (!GameManager.Instance.shopScript.shopCanvasGroup || GameManager.Instance.shopScript.shopCanvasGroup.alpha == 0f)
+            if (!GameManager.Instance.shopScript.shopCanvasGroup || GameManager.Instance.shopScript.shopCanvasGroup.alpha == 0f || GameManager.Instance.shopScript != null)
             {
                 playerController.GetComponent<FruitShoot>().enabled = true;
                 Cursor.lockState = CursorLockMode.Locked;

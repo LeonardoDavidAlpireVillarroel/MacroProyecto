@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using System.Xml.Serialization;
 using UnityEditorInternal;
+using DG.Tweening.Core.Easing;
 
 public static class ProfileStorage
 {
@@ -48,13 +49,28 @@ public static class ProfileStorage
         return LoadFile<ProfileIndex>(s_indexPath);
     }
 
-    public static void LoadProfile(string filename)
+    public static void LoadProfile(string filename, GameManager gameManager)
     {
         string path = Path.Combine(s_profilesDir, filename);
-        s_currentProfile = LoadFile<ProfileData>(path);
+        if (File.Exists(path))
+        {
+            s_currentProfile = LoadFile<ProfileData>(path);
+        }
+
+        if (Inventory.Instance != null)
+        {
+            Inventory.Instance.SetInventoryFromString(s_currentProfile.inventoryJson);
+        }
+
+        if (gameManager != null)
+        {
+            gameManager.points = s_currentProfile.points;
+            gameManager.fuerza = s_currentProfile.fuerza;
+            gameManager.health = s_currentProfile.playerHealth;
+        }
     }
 
-    public static void StorePlayerProfile(GameObject player)
+    public static void StorePlayerProfile(GameObject player, GameManager gameManager)
     {
         if (!Directory.Exists(s_profilesDir))
         {
@@ -64,6 +80,12 @@ public static class ProfileStorage
         s_currentProfile.x = player.transform.position.x;
         s_currentProfile.y = player.transform.position.y;
         s_currentProfile.newGame = false;
+
+        s_currentProfile.points = gameManager.points;
+        s_currentProfile.fuerza = gameManager.fuerza;
+        s_currentProfile.playerHealth = gameManager.health;
+
+        s_currentProfile.inventoryJson = Inventory.Instance.GetInventoryAsString();
 
         string path = Path.Combine(s_profilesDir, s_currentProfile.filename);
         SaveFile<ProfileData>(path, s_currentProfile);
@@ -88,8 +110,17 @@ public static class ProfileStorage
 
         var index = LoadFile<ProfileIndex>(s_indexPath);
         index.ProfileFileNames.Remove(filename);
-
         SaveFile<ProfileIndex>(s_indexPath, index);
+
+        if (File.Exists(s_currentProfilePath))
+        {
+            string current = File.ReadAllText(s_currentProfilePath);
+            if (current == filename)
+            {
+                File.Delete(s_currentProfilePath);
+                s_currentProfile = null;
+            }
+        }
     }
 
     static T LoadFile<T>(string path)
