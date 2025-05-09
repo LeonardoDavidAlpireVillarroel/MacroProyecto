@@ -15,7 +15,8 @@ public class ProfileList : MonoBehaviour
             var go = Instantiate(this.profileUIBoxPrefab);
             var uibox = go.GetComponent<ProfileBoxUI>();
 
-            uibox.nameLabel.text = profileName;
+            ProfileStorage.LoadProfile(profileName);
+            uibox.nameLabel.text = ProfileStorage.s_currentProfile.name;
 
             uibox.loadButton.onClick.AddListener(() => {                
                 ProfileStorage.LoadProfile(profileName);

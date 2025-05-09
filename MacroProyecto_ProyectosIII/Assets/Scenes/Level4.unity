@@ -2467,6 +2467,7 @@ GameObject:
   - component: {fileID: 4542976317644068234}
   - component: {fileID: 4238641716114983412}
   - component: {fileID: 7388024554939394444}
+  - component: {fileID: 7388024554939394445}
   m_Layer: 0
   m_Name: LevelController
   m_TagString: Untagged
@@ -2697,6 +2698,18 @@ MonoBehaviour:
   unlockLevel: 5
   playerController: {fileID: 1015408648}
   gameManager: {fileID: 7795884126128415961}
+--- !u!114 &7388024554939394445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4339830639153055684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ddd3ad0e78b6b3429cea8eb04462482, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &7573506962632010382
 CanvasRenderer:
   m_ObjectHideFlags: 0

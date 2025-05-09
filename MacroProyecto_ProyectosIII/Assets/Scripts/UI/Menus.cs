@@ -33,6 +33,7 @@ public class Menus : MonoBehaviour
 
     public void GoToNewGame()
     {
+        ProfileStorage.s_currentProfile = null;
         MusicManager.Instance.PlayMusic("OtherMenus");
         ScenesManager.Instance.LoadScene("NewGame", "CrossFade");
     }

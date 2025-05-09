@@ -13,6 +13,11 @@ public class LoadLevel : MonoBehaviour
 
     public void LoadLago()
     {
+        if (MapController.Instance.unlockLevel < 2)
+        {
+            MapController.Instance.unlockLevel = 2;
+        }
+
         MapController.Instance.UnlockLevels();
         Time.timeScale = 1;
         MusicManager.Instance.PlayMusic("ClaroPacifico");
@@ -21,6 +26,11 @@ public class LoadLevel : MonoBehaviour
 
     public void LoadLevel1()
     {
+        if (MapController.Instance.unlockLevel < 3)
+        {
+            MapController.Instance.unlockLevel = 3;
+        }
+
         MapController.Instance.UnlockLevels();
         Time.timeScale = 1;
         MusicManager.Instance.PlayMusic("Level1");
@@ -29,6 +39,11 @@ public class LoadLevel : MonoBehaviour
 
     public void LoadLevel2()
     {
+        if (MapController.Instance.unlockLevel < 4)
+        {
+            MapController.Instance.unlockLevel = 4;
+        }
+
         MapController.Instance.UnlockLevels();
         Time.timeScale = 1;
         MusicManager.Instance.PlayMusic("Level2");
@@ -36,6 +51,11 @@ public class LoadLevel : MonoBehaviour
     }
     public void LoadLevel3()
     {
+        if (MapController.Instance.unlockLevel < 5)
+        {
+            MapController.Instance.unlockLevel = 5;
+        }
+
         MapController.Instance.UnlockLevels();
         Time.timeScale = 1;
         MusicManager.Instance.PlayMusic("Level3");
@@ -43,6 +63,11 @@ public class LoadLevel : MonoBehaviour
     }
     public void LoadLevel4()
     {
+        if (MapController.Instance.unlockLevel < 5)
+        {
+            MapController.Instance.unlockLevel = 5;
+        }
+
         MapController.Instance.UnlockLevels();
         Time.timeScale = 1;
         MusicManager.Instance.PlayMusic("Level4");
