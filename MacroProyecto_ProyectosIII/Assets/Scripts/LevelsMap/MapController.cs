@@ -34,7 +34,7 @@ public class MapController : MonoBehaviour
             if (!string.IsNullOrEmpty(savedProfile))
             {
                 Debug.Log("Cargando perfil desde PlayerPrefs: " + savedProfile);
-                ProfileStorage.LoadProfile(savedProfile);
+                ProfileStorage.LoadProfile(savedProfile, gameManager);
             }
         }
 
@@ -128,7 +128,7 @@ public class MapController : MonoBehaviour
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
             {
-                ProfileStorage.StorePlayerProfile(player);
+                ProfileStorage.StorePlayerProfile(player, gameManager);
             }
         }
     }

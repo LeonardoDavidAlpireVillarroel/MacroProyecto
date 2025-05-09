@@ -10,16 +10,18 @@ public class ProfileList : MonoBehaviour
     {
         var index = ProfileStorage.GetProfileIndex();
 
+        GameManager gameManager = GameManager.Instance;
+
         foreach (var profileName in index.ProfileFileNames)
         {
             var go = Instantiate(this.profileUIBoxPrefab);
             var uibox = go.GetComponent<ProfileBoxUI>();
 
-            ProfileStorage.LoadProfile(profileName);
+            ProfileStorage.LoadProfile(profileName, gameManager);
             uibox.nameLabel.text = ProfileStorage.s_currentProfile.name;
 
             uibox.loadButton.onClick.AddListener(() => {                
-                ProfileStorage.LoadProfile(profileName);
+                ProfileStorage.LoadProfile(profileName, gameManager);
 
                 if (MapController.Instance != null)
                 {

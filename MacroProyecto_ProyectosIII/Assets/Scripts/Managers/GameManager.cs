@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,9 +25,9 @@ public class GameManager : MonoBehaviour
     public PlayerHUD playerHUD;
     public int TotalPoints { get; private set; }
     [Header("Player Stats")]
-    public int health = 3;
-    public int fuerza = 10;
-    public int points = 0;
+    public int health;
+    public int fuerza;
+    public int points;
 
     [Header("Inventario")]
     public Inventory inventory;
@@ -46,6 +47,21 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public InputAction aimAction;
     [HideInInspector] public InputAction shootAction;
     [HideInInspector] public InputAction pointerPositionAction;
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        LoadGame();
+    }
 
     private void Awake()
     {
@@ -85,6 +101,8 @@ public class GameManager : MonoBehaviour
         {
             inventory = Inventory.Instance;
         }
+
+        LoadGame();
     }
 
     void Update()
@@ -131,6 +149,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SaveGame()
+    {
+        string profileName = ProfileStorage.s_currentProfile.name;  // O el nombre del perfil actual
+
+        ProfileStorage.s_currentProfile.points = points;
+        ProfileStorage.s_currentProfile.fuerza = fuerza;
+        ProfileStorage.s_currentProfile.playerHealth = health;
+
+        ProfileStorage.s_currentProfile.inventoryJson = inventory.GetInventoryAsString();
+
+        ProfileStorage.StorePlayerProfile(GameObject.FindWithTag("Player"), this);
+    }
+
+    public void LoadGame()
+    {
+        if (ProfileStorage.s_currentProfile != null)
+        {
+            points = ProfileStorage.s_currentProfile.points;
+            fuerza = ProfileStorage.s_currentProfile.fuerza;
+            health = ProfileStorage.s_currentProfile.playerHealth;
+
+            inventory.SetInventoryFromString(ProfileStorage.s_currentProfile.inventoryJson);
+
+            playerHUD.ActualizePoints(points);
+        }
+    }
+
     public void PauseGame()
     {
         Time.timeScale = 0;
@@ -142,6 +187,8 @@ public class GameManager : MonoBehaviour
 
         playerController.GetComponent<FruitShoot>().enabled = false;
         isPaused = true;
+
+        SaveGame();
     }
 
     public void ResumeGame()
