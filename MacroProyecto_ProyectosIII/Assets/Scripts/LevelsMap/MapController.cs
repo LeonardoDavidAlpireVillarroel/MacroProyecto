@@ -105,9 +105,6 @@ public class MapController : MonoBehaviour
 
                 gameManager.PauseGame();
                 playerController.enabled = false;
-
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
             }
             if (levelPanel != null && levelPanel.activeSelf && gameManager.backAction.WasPressedThisFrame())
             {
