@@ -9,13 +9,6 @@ public class Menus : MonoBehaviour
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "MainMenu")
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Invoke(nameof(PlayMusic), 0.1f);
-        }
-
         if (musicVolumeSlider != null)
         {
             float savedVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
@@ -54,8 +47,8 @@ public class Menus : MonoBehaviour
     public void GoMainMenu()
     {
         Time.timeScale = 1;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        //Cursor.lockState = CursorLockMode.None;
+        //Cursor.visible = true;
 
         if (ScenesManager.Instance != null)
             ScenesManager.Instance.LoadScene("MainMenu", "CrossFade");

@@ -9,10 +9,9 @@ using System.Linq;
 [System.Serializable]
 public class ObjectInventoryID
 {
-    public int id;  // Identificador único del objeto
-    public int cantidadItems;  // La cantidad de este objeto en el inventario
+    public int id;
+    public int cantidadItems;
 
-    // Constructor opcional para facilitar la creación de nuevos objetos de inventario
     public ObjectInventoryID(int id, int cantidadItems)
     {
         this.id = id;
@@ -23,7 +22,6 @@ public class ObjectInventoryID
 [System.Serializable]
 public class InventoryWrapper
 {
-    // Lista de objetos del inventario que deseas guardar como JSON
     public List<ObjectInventoryID> items;
 }
 
@@ -84,6 +82,10 @@ public class Inventory : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -156,33 +158,28 @@ public class Inventory : MonoBehaviour
 
         if (isInventoryOpen)
         {
+            GameManager.Instance.playerController.playerInput.actions.FindActionMap("UI").Enable();
             cg.alpha = 1;
             cg.interactable = true;
             cg.blocksRaycasts = true;
-
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
 
             InventoryUpdate();
         }
         else
         {
+            GameManager.Instance.playerController.playerInput.actions.FindActionMap("UI").Disable();
             cg.alpha = 0;
             cg.interactable = false;
             cg.blocksRaycasts = false;
-
-            if (!GameManager.Instance.shopScript.shopCanvasGroup || GameManager.Instance.shopScript.shopCanvasGroup.alpha == 0f || GameManager.Instance.shopScript != null)
-            {
-                playerController.GetComponent<FruitShoot>().enabled = true;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
         }
     }
 
     private void Update()
     {
-        if (isInventoryOpen == true) Arrastrar();
+        if (isInventoryOpen)
+        {
+            Arrastrar();
+        }
     }
     void Arrastrar()
     {

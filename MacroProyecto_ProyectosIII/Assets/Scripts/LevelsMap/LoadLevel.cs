@@ -3,12 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class LoadLevel : MonoBehaviour
 {
-    private GameManager gameManager;
-    private PlayerController playerController;
-
     public void ReturnLago()
     {
-        gameManager.ResumeGame();
+        GameManager.Instance.ResumeGame();
     }
 
     public void LoadLago()
