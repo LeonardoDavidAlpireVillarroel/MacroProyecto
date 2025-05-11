@@ -120,6 +120,7 @@ NavMeshSettings:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!1001 &261958889
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -179,6 +180,8 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 73b455053fb7ab145b690992e7c63776, type: 3}
 --- !u!1001 &893673528
 =======
+=======
+>>>>>>> parent of eb0c314 (Props Jungla)
 --- !u!1001 &932025193
 >>>>>>> parent of eb0c314 (Props Jungla)
 PrefabInstance:
@@ -191,7 +194,11 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4c427b3e64d00824e93b1400b36f2e4d, type: 3}
       propertyPath: m_LocalPosition.x
 <<<<<<< HEAD
+<<<<<<< HEAD
       value: 1.1098795
+=======
+      value: -2.3498
+>>>>>>> parent of eb0c314 (Props Jungla)
 =======
       value: -2.3498
 >>>>>>> parent of eb0c314 (Props Jungla)
@@ -203,7 +210,11 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4c427b3e64d00824e93b1400b36f2e4d, type: 3}
       propertyPath: m_LocalPosition.z
 <<<<<<< HEAD
+<<<<<<< HEAD
       value: -11.881054
+=======
+      value: -20.113
+>>>>>>> parent of eb0c314 (Props Jungla)
 =======
       value: -20.113
 >>>>>>> parent of eb0c314 (Props Jungla)
@@ -248,6 +259,9 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 4c427b3e64d00824e93b1400b36f2e4d, type: 3}
 =======
   m_SourcePrefab: {fileID: 100100000, guid: 50580e7a8b1de57409069b6a088a2d4d, type: 3}
+<<<<<<< HEAD
+>>>>>>> parent of eb0c314 (Props Jungla)
+=======
 >>>>>>> parent of eb0c314 (Props Jungla)
 --- !u!1 &1131801997
 GameObject:
@@ -575,6 +589,9 @@ PrefabInstance:
 =======
   m_SourcePrefab: {fileID: 100100000, guid: 4c427b3e64d00824e93b1400b36f2e4d, type: 3}
 --- !u!1001 &1506413633
+<<<<<<< HEAD
+>>>>>>> parent of eb0c314 (Props Jungla)
+=======
 >>>>>>> parent of eb0c314 (Props Jungla)
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -583,6 +600,7 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+<<<<<<< HEAD
 <<<<<<< HEAD
     - target: {fileID: -8679921383154817045, guid: edee64042f30ea24a92ac45c4224e52a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -629,6 +647,8 @@ PrefabInstance:
       value: Plant3
       objectReference: {fileID: 0}
 =======
+=======
+>>>>>>> parent of eb0c314 (Props Jungla)
     - target: {fileID: -8679921383154817045, guid: 9d1f857af1e0e5348bdf4705c14736fe, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.9
@@ -848,6 +868,7 @@ Transform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 <<<<<<< HEAD
+<<<<<<< HEAD
 --- !u!114 &1562803415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1046,6 +1067,8 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 274f8c72c0637a3429edbf2f76bffe2a, type: 3}
 --- !u!1 &1739069438
 =======
+=======
+>>>>>>> parent of eb0c314 (Props Jungla)
 --- !u!1 &1857453370
 >>>>>>> parent of eb0c314 (Props Jungla)
 GameObject:
@@ -1156,6 +1179,9 @@ Transform:
 =======
   m_LocalPosition: {x: 4.0626, y: 9.869719, z: -14.680328}
   m_LocalScale: {x: 3.2009, y: 3.2009, z: 3.2009}
+<<<<<<< HEAD
+>>>>>>> parent of eb0c314 (Props Jungla)
+=======
 >>>>>>> parent of eb0c314 (Props Jungla)
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1172,7 +1198,11 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 572d1d1fe551d1a42a235675befe98c4, type: 3}
       propertyPath: m_LocalPosition.x
 <<<<<<< HEAD
+<<<<<<< HEAD
       value: -3.7368436
+=======
+      value: 9.58
+>>>>>>> parent of eb0c314 (Props Jungla)
 =======
       value: 9.58
 >>>>>>> parent of eb0c314 (Props Jungla)
@@ -1184,11 +1214,19 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 572d1d1fe551d1a42a235675befe98c4, type: 3}
       propertyPath: m_LocalPosition.z
 <<<<<<< HEAD
+<<<<<<< HEAD
       value: -13.291543
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 572d1d1fe551d1a42a235675befe98c4, type: 3}
       propertyPath: m_LocalRotation.w
       value: -0.21050979
+=======
+      value: -20.38
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 572d1d1fe551d1a42a235675befe98c4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.503221
+>>>>>>> parent of eb0c314 (Props Jungla)
 =======
       value: -20.38
       objectReference: {fileID: 0}
@@ -1204,7 +1242,11 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 572d1d1fe551d1a42a235675befe98c4, type: 3}
       propertyPath: m_LocalRotation.y
 <<<<<<< HEAD
+<<<<<<< HEAD
       value: -0
+=======
+      value: 0.8641578
+>>>>>>> parent of eb0c314 (Props Jungla)
 =======
       value: 0.8641578
 >>>>>>> parent of eb0c314 (Props Jungla)
@@ -1220,7 +1262,11 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 572d1d1fe551d1a42a235675befe98c4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
 <<<<<<< HEAD
+<<<<<<< HEAD
       value: 0
+=======
+      value: 119.573
+>>>>>>> parent of eb0c314 (Props Jungla)
 =======
       value: 119.573
 >>>>>>> parent of eb0c314 (Props Jungla)
@@ -1238,6 +1284,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 572d1d1fe551d1a42a235675befe98c4, type: 3}
+<<<<<<< HEAD
 <<<<<<< HEAD
 --- !u!1001 &1961473409
 PrefabInstance:
@@ -1412,6 +1459,8 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: f6f77c4897c2c8f469396d1c176c5075, type: 3}
 =======
 >>>>>>> parent of eb0c314 (Props Jungla)
+=======
+>>>>>>> parent of eb0c314 (Props Jungla)
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1435,4 +1484,7 @@ SceneRoots:
   - {fileID: 1506413633}
   - {fileID: 932025193}
   - {fileID: 2066370046}
+<<<<<<< HEAD
+>>>>>>> parent of eb0c314 (Props Jungla)
+=======
 >>>>>>> parent of eb0c314 (Props Jungla)
