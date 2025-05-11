@@ -2604,10 +2604,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4668714706512621908}
-  - {fileID: 4952304845787967161}
   - {fileID: 8547046153086321185}
   - {fileID: 5791955872116469367}
   - {fileID: 3914296319012830410}
+  - {fileID: 4952304845787967161}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6872442992828699662
@@ -3564,7 +3564,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1aaa48053d40264cb7e1680a1b443c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameManager: {fileID: 0}
   shopingPoints: {fileID: 2371554201704617806}
   vidas:
   - {fileID: 5770568976175944448}
@@ -3897,7 +3896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23bb79cc21e82b742973fde30149b5d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameManager: {fileID: 0}
   Inv: {fileID: 1278656614904795391}
   ItemCompra: []
   DB: {fileID: 11400000, guid: 4d66ed78f7c45694ab93b29dba19b41f, type: 2}

@@ -2767,7 +2767,7 @@ MonoBehaviour:
   levelPanel: {fileID: 6581244213093493480}
   interactionText: {fileID: 6363170827122128532}
   levelButtons: []
-  unlockLevel: 4
+  unlockLevel: 3
   playerController: {fileID: 1015408648}
   gameManager: {fileID: 7795884126128415961}
 --- !u!114 &7388024554939394445

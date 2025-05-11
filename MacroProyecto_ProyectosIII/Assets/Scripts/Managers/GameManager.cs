@@ -149,7 +149,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (SceneManager.GetActiveScene().name == "ClaroPacifico" && (shootAction.WasPressedThisFrame() || aimAction.WasPressedThisFrame()))
+        if (SceneManager.GetActiveScene().name == "ClaroPacifico" && (shootAction.WasPressedThisFrame() || aimAction.WasPressedThisFrame()) 
+            && isPaused == false && Inventory.Instance.isInventoryOpen == false
+            && (shopScript != null && (shopScript.shopCanvasGroup.alpha == 0)))
         {
             if (warningShootPanel != null)
             {
@@ -217,7 +219,6 @@ public class GameManager : MonoBehaviour
         playerController.playerInput.actions.FindActionMap("UI").Enable();
         playerController.playerInput.actions.FindActionMap("Player").Disable();
 
-        playerController.GetComponent<FruitShoot>().enabled = false;
         isPaused = true;
 
         SaveGame();
@@ -238,7 +239,6 @@ public class GameManager : MonoBehaviour
         playerController.playerInput.actions.FindActionMap("UI").Disable();
         playerController.playerInput.actions.FindActionMap("Player").Enable();
 
-        playerController.GetComponent<FruitShoot>().enabled = true;
         isPaused = false;
     }
 
