@@ -30,33 +30,15 @@ public class MapController : MonoBehaviour
     {
         if (ProfileStorage.s_currentProfile == null)
         {
-            var profileIndex = ProfileStorage.GetProfileIndex();
-
-            if (profileIndex.ProfileFileNames.Count > 0)
+            string savedProfile = PlayerPrefs.GetString("CurrentProfile", null);
+            if (!string.IsNullOrEmpty(savedProfile))
             {
-                ProfileStorage.LoadProfile(profileIndex.ProfileFileNames[0]);
+                Debug.Log("Cargando perfil desde PlayerPrefs: " + savedProfile);
+                ProfileStorage.LoadProfile(savedProfile, gameManager);
             }
         }
 
-        if (UnlockLevelData.sharedUnlockLevel > 0)
-        {
-            unlockLevel = UnlockLevelData.sharedUnlockLevel;
-            if (ProfileStorage.s_currentProfile != null &&
-                unlockLevel > ProfileStorage.s_currentProfile.unlockedLevelCount)
-            {
-                ProfileStorage.s_currentProfile.unlockedLevelCount = unlockLevel;
-                GameObject player = GameObject.FindGameObjectWithTag("Player");
-                if (player != null)
-                {
-                    ProfileStorage.StorePlayerProfile(player);
-                }
-            }
-            UnlockLevelData.sharedUnlockLevel = -1;
-        }
-        else
-        {
-            unlockLevel = Mathf.Max(ProfileStorage.s_currentProfile.unlockedLevelCount, 2);
-        }
+        unlockLevel = ProfileStorage.s_currentProfile != null? ProfileStorage.s_currentProfile.unlockedLevelCount : 1;
 
         if (gameManager == null)
         {
@@ -123,9 +105,6 @@ public class MapController : MonoBehaviour
 
                 gameManager.PauseGame();
                 playerController.enabled = false;
-
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
             }
             if (levelPanel != null && levelPanel.activeSelf && gameManager.backAction.WasPressedThisFrame())
             {
@@ -146,7 +125,7 @@ public class MapController : MonoBehaviour
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
             {
-                ProfileStorage.StorePlayerProfile(player);
+                ProfileStorage.StorePlayerProfile(player, gameManager);
             }
         }
     }

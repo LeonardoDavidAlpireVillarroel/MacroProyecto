@@ -8,7 +8,7 @@ public class PlayerHUD : MonoBehaviour
 
     void Update()
     {
-        shopingPoints.text = GameManager.Instance.TotalPoints.ToString();
+        shopingPoints.text = GameManager.Instance.GetComponent<GameManager>().points.ToString();
     }
 
     public void ActualizePoints(int totalPoints)
@@ -20,9 +20,17 @@ public class PlayerHUD : MonoBehaviour
     {
         vidas[index].SetActive(false);
     }
-
+    
     public void ActivateLife(int index)
     {
         vidas[index].SetActive(true);
+    }
+
+    public void UpdateAllLifes(int currentHealth)
+    {
+        for (int i = 0; i < vidas.Length; i++)
+        {
+            vidas[i].SetActive(i < currentHealth);
+        }
     }
 }

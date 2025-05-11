@@ -47,6 +47,7 @@ public class OpenShop : MonoBehaviour
         {
             isPlayerInside = false;
             proximityPanel.SetActive(false);
+            lockedPanel.SetActive(false);
         }
     }
 
@@ -74,13 +75,11 @@ public class OpenShop : MonoBehaviour
 
     private void OpenInteractionPanel()
     {
+        gameManager.playerController.playerInput.actions.FindActionMap("UI").Enable();
         playerController.moveAction.Disable();
         proximityPanel.SetActive(false);
         lockedPanel.SetActive(false);
         EnableCanvasGroup(shopCanvasGroup);
-
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
 
         if (gameManager.isInventoryOpen)
         {
@@ -102,6 +101,7 @@ public class OpenShop : MonoBehaviour
         cg.interactable = false;
         cg.blocksRaycasts = false;
         playerController.GetComponent<FruitShoot>().enabled = true;
+        playerController.moveAction.Enable();
     }
 
     private void OpenLockedPanel()
@@ -109,17 +109,13 @@ public class OpenShop : MonoBehaviour
         proximityPanel.SetActive(false);
         DisableCanvasGroup(shopCanvasGroup);
         lockedPanel.SetActive(true);
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
     }
 
     public void CloseAllPanels()
     {
+        gameManager.playerController.playerInput.actions.FindActionMap("UI").Disable();
         lockedPanel.SetActive(false);
         proximityPanel.SetActive(false);
         DisableCanvasGroup(shopCanvasGroup);
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 }

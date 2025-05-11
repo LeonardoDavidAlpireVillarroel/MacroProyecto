@@ -1,6 +1,11 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +20,7 @@ public class GameManager : MonoBehaviour
     public GameObject levelPanel;
     public GameObject interactionText;
 
-    [HideInInspector] public bool isPaused = false;
+    public bool isPaused = false;
 
     [SerializeField] public PlayerController playerController;
 
@@ -23,14 +28,14 @@ public class GameManager : MonoBehaviour
     public PlayerHUD playerHUD;
     public int TotalPoints { get; private set; }
     [Header("Player Stats")]
-    public int health = 3;
-    public int fuerza = 10;
-    public int points = 0;
+    public int health;
+    public int fuerza;
+    public int points;
 
     [Header("Inventario")]
     public Inventory inventory;
     public GameObject inventoryUIPanel;
-    [HideInInspector] public bool isInventoryOpen;
+    public bool isInventoryOpen;
 
     [Header("Tiendas")]
     public OpenShop shopScript;
@@ -46,15 +51,33 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public InputAction shootAction;
     [HideInInspector] public InputAction pointerPositionAction;
 
+    [Header("UI de Avisos")]
+    public CanvasGroup warningShootPanel;
+    public float warningDuration = 2f;
+    public float fadeDuration = 0.5f;
+
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        LoadGame();
+    }
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
         }
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         GameObject playerObject = GameObject.FindWithTag("Player");
         if (playerObject != null)
@@ -84,14 +107,14 @@ public class GameManager : MonoBehaviour
         {
             inventory = Inventory.Instance;
         }
+
+        LoadGame();
     }
 
     void Update()
     {
         if (inventoryAction.WasPressedThisFrame())
         {
-            playerController.GetComponent<FruitShoot>().enabled = false;
-            isInventoryOpen = true;
             ToggleInventory();
         }
 
@@ -119,13 +142,72 @@ public class GameManager : MonoBehaviour
             else if (shopScript != null && shopScript.shopCanvasGroup.alpha == 1f)
             {
                 shopScript.CloseAllPanels();
-                playerController.playerInput.SwitchCurrentActionMap("Player");
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;                
             }
-            else if (isPaused)
+            else if (pausePanel != null && pausePanel.activeSelf)
             {
                 ResumeGame();                
+            }
+        }
+
+        if (SceneManager.GetActiveScene().name == "ClaroPacifico" && (shootAction.WasPressedThisFrame() || aimAction.WasPressedThisFrame()) 
+            && isPaused == false && Inventory.Instance.isInventoryOpen == false
+            && (shopScript != null && (shopScript.shopCanvasGroup.alpha == 0)))
+        {
+            if (warningShootPanel != null)
+            {
+                StartCoroutine(ShowShootWarningCoroutine());
+            }
+        }
+    }
+
+    public void SaveGame()
+    {
+        string profileName = ProfileStorage.s_currentProfile.name;
+
+        ProfileStorage.s_currentProfile.points = points;
+        ProfileStorage.s_currentProfile.fuerza = fuerza;
+        ProfileStorage.s_currentProfile.playerHealth = health;
+
+        ProfileStorage.s_currentProfile.inventoryJson = inventory.GetInventoryAsString();
+
+        ProfileStorage.StorePlayerProfile(GameObject.FindWithTag("Player"), this);
+    }
+
+    public void LoadGame()
+    {
+        if (ProfileStorage.s_currentProfile != null)
+        {
+            points = ProfileStorage.s_currentProfile.points;
+            fuerza = ProfileStorage.s_currentProfile.fuerza;
+            health = ProfileStorage.s_currentProfile.playerHealth;
+
+            inventory.SetInventoryFromString(ProfileStorage.s_currentProfile.inventoryJson);
+
+            playerHUD.ActualizePoints(points);
+        }
+
+        playerHUD.UpdateAllLifes(health);
+
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        if (playerController != null)
+        {
+            FruitShoot fruitShoot = playerController.GetComponent<FruitShoot>();
+            var playerInput = playerController.playerInput;
+
+            if (fruitShoot != null && playerInput != null)
+            {
+                if (currentScene == "ClaroPacifico")
+                {
+                    fruitShoot.enabled = false;
+                }
+                else
+                {
+                    fruitShoot.enabled = true;
+
+                    playerInput.actions["Shoot"].Enable();
+                    playerInput.actions["Aim"].Enable();
+                }
             }
         }
     }
@@ -134,13 +216,12 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0;
 
-        playerController.playerInput.SwitchCurrentActionMap("UI");
+        playerController.playerInput.actions.FindActionMap("UI").Enable();
+        playerController.playerInput.actions.FindActionMap("Player").Disable();
 
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
-        playerController.GetComponent<FruitShoot>().enabled = false;
         isPaused = true;
+
+        SaveGame();
     }
 
     public void ResumeGame()
@@ -155,11 +236,9 @@ public class GameManager : MonoBehaviour
 
         playerController.enabled = true;
 
-        playerController.playerInput.SwitchCurrentActionMap("Player");
+        playerController.playerInput.actions.FindActionMap("UI").Disable();
+        playerController.playerInput.actions.FindActionMap("Player").Enable();
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        playerController.GetComponent<FruitShoot>().enabled = true;
         isPaused = false;
     }
 
@@ -191,5 +270,53 @@ public class GameManager : MonoBehaviour
         {
             inventory.ToggleInventory();
         }
+    }
+
+    public void UpdateCursorState()
+    {
+        if (Inventory.Instance.isInventoryOpen || isPaused || (shopScript != null && shopScript.shopCanvasGroup.alpha > 0f))
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else if (playerController.GetComponent<FruitShoot>().isAiming)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
+    private IEnumerator ShowShootWarningCoroutine()
+    {
+        if (warningShootPanel == null) yield break;
+
+        warningShootPanel.gameObject.SetActive(true);
+
+        CanvasGroup cg = warningShootPanel.GetComponent<CanvasGroup>();
+        if (cg == null)
+        {
+            cg = warningShootPanel.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        cg.alpha = 1f;
+
+        yield return new WaitForSeconds(warningDuration);
+
+        float elapsed = 0f;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            cg.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            yield return null;
+        }
+
+        cg.alpha = 0f;
+        warningShootPanel.gameObject.SetActive(false);
     }
 }

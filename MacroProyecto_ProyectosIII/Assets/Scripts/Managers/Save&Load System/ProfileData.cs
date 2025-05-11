@@ -20,14 +20,12 @@ public class ProfileData
     public float y;
 
     //Progreso jugador
-    public float playerHealth;
-    public int playerLevel;
-    public float experience;
-    public List<string> inventory;
-    public int unlockedLevelCount;
-
+    public int playerHealth;
+    public int fuerza;
+    public int points;
     //Inventario
-
+    public string inventoryJson;
+    public int unlockedLevelCount;
 
     // PlayerPrefs personalizados
     public List<SerializableKeyValue> customPrefs;
@@ -39,10 +37,10 @@ public class ProfileData
         this.newGame = false;
         this.x = this.y = 0f;
 
-        this.playerHealth = 3f;
-        this.playerLevel = 1;
-        this.experience = 0f;
-        this.inventory = new List<string>();
+        this.playerHealth = 3;
+        this.fuerza = 10;
+        this.points = 50;
+        this.inventoryJson = string.Empty;
         this.unlockedLevelCount = 2;
 
         this.customPrefs = new List<SerializableKeyValue>();
@@ -56,10 +54,10 @@ public class ProfileData
         this.x = x;
         this.y = y;
 
-        this.playerHealth = 3f;
-        this.playerLevel = 1;
-        this.experience = 0f;
-        this.inventory = new List<string>();
+        this.playerHealth = 3;
+        this.fuerza = 10;
+        this.points = 50;
+        this.inventoryJson = string.Empty;
         this.unlockedLevelCount = 2;
 
         this.customPrefs = new List<SerializableKeyValue>();

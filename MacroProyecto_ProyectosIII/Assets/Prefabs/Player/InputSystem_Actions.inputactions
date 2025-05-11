@@ -8,7 +8,7 @@
                 {
                     "name": "Move",
                     "type": "Value",
-                    "id": "11014a12-2c36-431c-9804-ef6cb22fedfe",
+                    "id": "b2fb3c4f-8fc0-4fe7-bf7c-ed1de5da1675",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -138,7 +138,7 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -214,7 +214,7 @@
                     "path": "<Keyboard>/p",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -258,14 +258,14 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Back",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "WASD",
-                    "id": "84050e8e-dcc3-4307-82d4-8c2c2f6b0d98",
+                    "id": "bdedec4e-e4ec-4102-800b-c8e00ed3d281",
                     "path": "Dpad",
                     "interactions": "",
                     "processors": "",
@@ -276,7 +276,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "9687b2c5-35bb-4c82-9763-2373a55c7a8a",
+                    "id": "42376582-bf71-4f7e-aa16-399f92065945",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -287,7 +287,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "bcde3e04-11f3-4bff-a877-b6502dc553d2",
+                    "id": "d024bd5a-2e62-4a2d-b810-87d18c6b6d1d",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
@@ -298,7 +298,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "83ea5111-47e7-49a6-8fba-0e55a2b429e4",
+                    "id": "c4741fd6-8d43-44cc-bb5f-53301eb4ff9a",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
@@ -309,7 +309,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "88c2cddc-a4de-47d1-a94b-9324ec417a84",
+                    "id": "51295e87-cb2f-441d-9ca2-5e225dbb9434",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
@@ -320,7 +320,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "290a96df-1264-4e65-a32e-3bf1b94abc41",
+                    "id": "baae90de-cdb0-4fe1-a2b6-1ea9684edaae",
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
@@ -331,7 +331,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "e078fbcb-369a-4b5e-adcb-04c1763e7161",
+                    "id": "e9fc7606-1251-40a5-9209-8af0feb0ec87",
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
@@ -342,7 +342,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "680df3f2-bd57-4446-8273-13fc5f92ade4",
+                    "id": "c06c202a-903b-4b74-9b06-98ac3bd2fb34",
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
@@ -353,7 +353,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "022c7f94-c9a5-49c8-9846-eb0066073551",
+                    "id": "cbd49242-0236-4a72-9527-35cc8ef74c6a",
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
@@ -478,7 +478,7 @@
                     "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -499,13 +499,22 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "3def367b-3790-4e98-87d0-31f9ae38deee",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Back",
                     "type": "Button",
                     "id": "802f62fb-b627-4d41-874b-4a7bcff57dcb",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Submit",
@@ -759,7 +768,7 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Back",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -1030,11 +1039,22 @@
                 },
                 {
                     "name": "",
+                    "id": "e4f39cff-be98-4a15-bf80-c4387293cb7e",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ce39c6f6-d44a-4c5e-8377-9ef9fc04ef63",
                     "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false

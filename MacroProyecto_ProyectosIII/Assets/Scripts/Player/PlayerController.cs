@@ -6,6 +6,7 @@ using static UnityEngine.Timeline.DirectorControlPlayable;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
     public PlayerInput playerInput;
     public CinemachineBrain cinemachineBrain;
 
@@ -53,6 +54,11 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        if (Instance  == null)
+        {
+            Instance = this;
+        }
+
         rb = GetComponent<Rigidbody>();
 
         playerInput = GetComponent<PlayerInput>();

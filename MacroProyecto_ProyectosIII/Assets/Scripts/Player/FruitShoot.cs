@@ -48,8 +48,8 @@ public class FruitShoot : MonoBehaviour
 
         if (isAiming)
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.None;
+            //Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.None;
 
             if (!arrowInstance.activeSelf)
                 arrowInstance.SetActive(true);
@@ -64,11 +64,11 @@ public class FruitShoot : MonoBehaviour
 
         else
         {
-            if (!GameManager.Instance.isPaused)
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
+            //if (!GameManager.Instance.isPaused)
+            //{
+            //    Cursor.visible = false;
+            //    Cursor.lockState = CursorLockMode.Locked;
+            //}
 
             if (arrowInstance.activeSelf)
                 arrowInstance.SetActive(false);
