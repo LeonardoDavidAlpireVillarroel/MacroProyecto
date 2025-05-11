@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -47,6 +50,12 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public InputAction aimAction;
     [HideInInspector] public InputAction shootAction;
     [HideInInspector] public InputAction pointerPositionAction;
+
+    [Header("UI de Avisos")]
+    public CanvasGroup warningShootPanel;
+    public float warningDuration = 2f;
+    public float fadeDuration = 0.5f;
+
 
     private void OnEnable()
     {
@@ -139,6 +148,16 @@ public class GameManager : MonoBehaviour
                 ResumeGame();                
             }
         }
+
+        if (SceneManager.GetActiveScene().name == "ClaroPacifico" && (shootAction.WasPressedThisFrame() || aimAction.WasPressedThisFrame()) 
+            && isPaused == false && Inventory.Instance.isInventoryOpen == false
+            && (shopScript != null && (shopScript.shopCanvasGroup.alpha == 0)))
+        {
+            if (warningShootPanel != null)
+            {
+                StartCoroutine(ShowShootWarningCoroutine());
+            }
+        }
     }
 
     public void SaveGame()
@@ -168,6 +187,29 @@ public class GameManager : MonoBehaviour
         }
 
         playerHUD.UpdateAllLifes(health);
+
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        if (playerController != null)
+        {
+            FruitShoot fruitShoot = playerController.GetComponent<FruitShoot>();
+            var playerInput = playerController.playerInput;
+
+            if (fruitShoot != null && playerInput != null)
+            {
+                if (currentScene == "ClaroPacifico")
+                {
+                    fruitShoot.enabled = false;
+                }
+                else
+                {
+                    fruitShoot.enabled = true;
+
+                    playerInput.actions["Shoot"].Enable();
+                    playerInput.actions["Aim"].Enable();
+                }
+            }
+        }
     }
 
     public void PauseGame()
@@ -177,7 +219,6 @@ public class GameManager : MonoBehaviour
         playerController.playerInput.actions.FindActionMap("UI").Enable();
         playerController.playerInput.actions.FindActionMap("Player").Disable();
 
-        playerController.GetComponent<FruitShoot>().enabled = false;
         isPaused = true;
 
         SaveGame();
@@ -198,7 +239,6 @@ public class GameManager : MonoBehaviour
         playerController.playerInput.actions.FindActionMap("UI").Disable();
         playerController.playerInput.actions.FindActionMap("Player").Enable();
 
-        playerController.GetComponent<FruitShoot>().enabled = true;
         isPaused = false;
     }
 
@@ -249,5 +289,34 @@ public class GameManager : MonoBehaviour
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
+    }
+
+    private IEnumerator ShowShootWarningCoroutine()
+    {
+        if (warningShootPanel == null) yield break;
+
+        warningShootPanel.gameObject.SetActive(true);
+
+        CanvasGroup cg = warningShootPanel.GetComponent<CanvasGroup>();
+        if (cg == null)
+        {
+            cg = warningShootPanel.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        cg.alpha = 1f;
+
+        yield return new WaitForSeconds(warningDuration);
+
+        float elapsed = 0f;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            cg.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            yield return null;
+        }
+
+        cg.alpha = 0f;
+        warningShootPanel.gameObject.SetActive(false);
     }
 }

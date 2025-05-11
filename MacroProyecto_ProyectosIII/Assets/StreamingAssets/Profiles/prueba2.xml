@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProfileData xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <filename>prueba2.xml</filename>
+  <name>prueba2</name>
+  <newGame>false</newGame>
+  <x>4.64757872</x>
+  <y>0.3192305</y>
+  <playerHealth>3</playerHealth>
+  <playerLevel>1</playerLevel>
+  <experience>0</experience>
+  <inventory />
+  <unlockedLevelCount>3</unlockedLevelCount>
+  <customPrefs />
+</ProfileData>
