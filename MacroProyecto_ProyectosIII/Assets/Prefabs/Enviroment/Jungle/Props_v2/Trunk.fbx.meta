@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: edee64042f30ea24a92ac45c4224e52a
+guid: 5d89fe22b3644c948b17b3f15a182440
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -9,6 +9,16 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: DGreen
     second: {fileID: 2100000, guid: fd1b015b59c41134d98b1bf851847618, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LBrown
+    second: {fileID: 2100000, guid: 18ad656e68371ab4a93a94a0d386e3a7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 5fc3babd385eef14987b77cf6ec32871, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -38,7 +48,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.5
+    globalScale: 50
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -93,7 +103,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.005
+    globalScale: 50
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
