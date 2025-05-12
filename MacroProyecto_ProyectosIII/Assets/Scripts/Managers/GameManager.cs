@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (SceneManager.GetActiveScene().name == "ClaroPacifico" && (shootAction.WasPressedThisFrame() || aimAction.WasPressedThisFrame()) 
+        if (SceneManager.GetActiveScene().name == "ClaroPacifico" && aimAction.WasPressedThisFrame() 
             && isPaused == false && Inventory.Instance.isInventoryOpen == false
             && (shopScript != null && (shopScript.shopCanvasGroup.alpha == 0)))
         {

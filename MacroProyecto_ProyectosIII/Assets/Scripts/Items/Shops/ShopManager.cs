@@ -21,7 +21,7 @@ public class ShopManager : MonoBehaviour
 
     [Header("Actualize Shop")]
     public TextMeshProUGUI tiendaTimerText;
-    private float tiempoParaActualizar = 10f;
+    private float tiempoParaActualizar = 300f;
     private float temporizador = 0f;
 
     public static GameManager Instance { get; private set; }

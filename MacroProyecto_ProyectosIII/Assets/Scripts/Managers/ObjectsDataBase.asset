@@ -53,7 +53,7 @@ MonoBehaviour:
     stackLimit: 3
   - nombre: "Munici\xF3n manzanas"
     ID: 3
-    icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    icon: {fileID: 21300000, guid: 9c6d5881467fae3409f970942ec94625, type: 3}
     precioCompra: 10
     precioVenta: 5
     clase: 1

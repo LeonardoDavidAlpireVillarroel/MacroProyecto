@@ -15,6 +15,8 @@ public class Dash : MonoBehaviour
     private InputAction dashAction;
     private PlayerController playerController;
 
+    private Animator capibaraAnimator;
+
     private bool isDashing = false;
 
     void Start()
@@ -22,6 +24,7 @@ public class Dash : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         playerController = GetComponent<PlayerController>();
+        capibaraAnimator = GetComponent<Animator>();
         dashAction = playerInput.actions["Dash"];
     }
 
@@ -36,6 +39,7 @@ public class Dash : MonoBehaviour
     private IEnumerator DashCoroutine()
     {
         playerController.isDashing = true;
+        capibaraAnimator.SetBool("IsDashing", true);
 
         Vector3 direction = new Vector3(playerController.moveInput.x, 0, playerController.moveInput.y).normalized;
 
@@ -56,5 +60,6 @@ public class Dash : MonoBehaviour
 
         rb.linearVelocity = new Vector3(0, originalVelocity.y, 0);
         playerController.isDashing = false;
+        capibaraAnimator.SetBool("IsDashing", false);
     }
 }
