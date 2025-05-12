@@ -92,7 +92,6 @@ public class OpenShop : MonoBehaviour
         cg.alpha = 1f;
         cg.interactable = true;
         cg.blocksRaycasts = true;
-        playerController.GetComponent<FruitShoot>().enabled = false;
     }
 
     private void DisableCanvasGroup(CanvasGroup cg)
@@ -100,7 +99,6 @@ public class OpenShop : MonoBehaviour
         cg.alpha = 0f;
         cg.interactable = false;
         cg.blocksRaycasts = false;
-        playerController.GetComponent<FruitShoot>().enabled = true;
         playerController.moveAction.Enable();
     }
 

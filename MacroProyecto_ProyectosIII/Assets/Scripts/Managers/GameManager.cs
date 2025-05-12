@@ -204,9 +204,6 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     fruitShoot.enabled = true;
-
-                    playerInput.actions["Shoot"].Enable();
-                    playerInput.actions["Aim"].Enable();
                 }
             }
         }
@@ -217,7 +214,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
 
         playerController.playerInput.actions.FindActionMap("UI").Enable();
-        playerController.playerInput.actions.FindActionMap("Player").Disable();
 
         isPaused = true;
 
@@ -237,7 +233,6 @@ public class GameManager : MonoBehaviour
         playerController.enabled = true;
 
         playerController.playerInput.actions.FindActionMap("UI").Disable();
-        playerController.playerInput.actions.FindActionMap("Player").Enable();
 
         isPaused = false;
     }
