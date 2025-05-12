@@ -1224,7 +1224,7 @@ GameObject:
   - component: {fileID: 1209198164}
   - component: {fileID: 1209198163}
   - component: {fileID: 1209198162}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Terrain_Jungle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1661,7 +1661,7 @@ GameObject:
   - component: {fileID: 1781080019}
   - component: {fileID: 1781080018}
   - component: {fileID: 1781080017}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Terrain_Jungle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
