@@ -33,16 +33,15 @@ public class MapController : MonoBehaviour
             string savedProfile = PlayerPrefs.GetString("CurrentProfile", null);
             if (!string.IsNullOrEmpty(savedProfile))
             {
-                Debug.Log("Cargando perfil desde PlayerPrefs: " + savedProfile);
                 ProfileStorage.LoadProfile(savedProfile, gameManager);
             }
         }
 
-        unlockLevel = ProfileStorage.s_currentProfile != null? ProfileStorage.s_currentProfile.unlockedLevelCount : 1;
+        unlockLevel = ProfileStorage.s_currentProfile != null ? ProfileStorage.s_currentProfile.unlockedLevelCount : 1;
 
-        if (gameManager == null)
+        for (int i = 0; i < levelButtons.Length; i++)
         {
-            gameManager = FindFirstObjectByType<GameManager>();
+            levelButtons[i].interactable = i < unlockLevel;
         }
 
         if (levelButtons.Length > 0)

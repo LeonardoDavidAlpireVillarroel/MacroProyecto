@@ -2,13 +2,25 @@ using UnityEngine;
 
 public class ProfileSaveTrigger : MonoBehaviour
 {
-    private GameManager gameManager;
-    private void Start()
-    {
-        gameManager = GameManager.Instance;
-    }
+    public int levelToUnlock = 2;
+    private bool alreadyTriggered = false;
+
     private void OnTriggerEnter(Collider other)
     {
-        ProfileStorage.StorePlayerProfile(other.gameObject, gameManager);
+        if (alreadyTriggered) return;
+
+        if (other.CompareTag("Player"))
+        {
+            alreadyTriggered = true;
+
+            var profile = ProfileStorage.s_currentProfile;
+
+            if (profile != null && profile.unlockedLevelCount < levelToUnlock)
+            {
+                profile.unlockedLevelCount = levelToUnlock;
+            }
+
+            ProfileStorage.StorePlayerProfile(other.gameObject, GameManager.Instance);
+        }
     }
 }

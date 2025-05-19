@@ -2782,6 +2782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ddd3ad0e78b6b3429cea8eb04462482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelToUnlock: 3
 --- !u!1001 &7795884126128415960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2849,7 +2850,7 @@ PrefabInstance:
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: levelPanel
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6581244213093493480}
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: pausePanel
       value: 
@@ -2873,7 +2874,7 @@ PrefabInstance:
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: interactionText
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6363170827122128532}
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: inventoryUIPanel
       value: 

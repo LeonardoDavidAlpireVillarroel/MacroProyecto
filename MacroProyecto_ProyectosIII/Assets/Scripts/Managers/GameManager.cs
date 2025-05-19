@@ -217,7 +217,7 @@ public class GameManager : MonoBehaviour
 
         isPaused = true;
 
-        SaveGame();
+        //SaveGame();
     }
 
     public void ResumeGame()
