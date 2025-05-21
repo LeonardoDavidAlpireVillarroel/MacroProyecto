@@ -10,6 +10,8 @@ public class LoadLevel : MonoBehaviour
 
     public void LoadLago()
     {
+        GameManager.Instance.RestoreBackupState();
+
         if (MapController.Instance.unlockLevel < 2)
         {
             MapController.Instance.unlockLevel = 2;
@@ -23,6 +25,8 @@ public class LoadLevel : MonoBehaviour
 
     public void LoadLevel1()
     {
+        GameManager.Instance.BackupCurrentState();
+
         if (MapController.Instance.unlockLevel < 3)
         {
             MapController.Instance.unlockLevel = 3;
@@ -36,6 +40,8 @@ public class LoadLevel : MonoBehaviour
 
     public void LoadLevel2()
     {
+        GameManager.Instance.BackupCurrentState();
+
         if (MapController.Instance.unlockLevel < 4)
         {
             MapController.Instance.unlockLevel = 4;
@@ -48,6 +54,8 @@ public class LoadLevel : MonoBehaviour
     }
     public void LoadLevel3()
     {
+        GameManager.Instance.BackupCurrentState();
+
         if (MapController.Instance.unlockLevel < 5)
         {
             MapController.Instance.unlockLevel = 5;
@@ -60,6 +68,8 @@ public class LoadLevel : MonoBehaviour
     }
     public void LoadLevel4()
     {
+        GameManager.Instance.BackupCurrentState();
+
         if (MapController.Instance.unlockLevel < 5)
         {
             MapController.Instance.unlockLevel = 5;
@@ -73,6 +83,8 @@ public class LoadLevel : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        GameManager.Instance.BackupCurrentState();
+
         MapController.Instance.UnlockLevels();
         Time.timeScale = 1;
         MusicManager.Instance.PlayMusic("MainMenu");

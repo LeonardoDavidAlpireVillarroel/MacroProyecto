@@ -38,8 +38,6 @@ public class Menus : MonoBehaviour
 
     public void PlayClaroPacificoScene()
     {
-        MapController.Instance.UnlockLevels();
-
         MusicManager.Instance.PlayMusic("ClaroPacifico");
         ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
     }
@@ -47,9 +45,6 @@ public class Menus : MonoBehaviour
     public void GoMainMenu()
     {
         Time.timeScale = 1;
-        //Cursor.lockState = CursorLockMode.None;
-        //Cursor.visible = true;
-
         if (ScenesManager.Instance != null)
             ScenesManager.Instance.LoadScene("MainMenu", "CrossFade");
 

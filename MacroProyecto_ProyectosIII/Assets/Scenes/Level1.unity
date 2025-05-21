@@ -277,7 +277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2746088166043607327, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.438
+      value: 3.41
       objectReference: {fileID: 0}
     - target: {fileID: 2746088166043607327, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3787,7 +3787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5345235996381441072, guid: c77f1bea31b4cf3479b2056b445ae2ac, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.058
+      value: 11.03
       objectReference: {fileID: 0}
     - target: {fileID: 5345235996381441072, guid: c77f1bea31b4cf3479b2056b445ae2ac, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3966,7 +3966,7 @@ Transform:
   m_GameObject: {fileID: 1327338643}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.15276475, z: -0, w: 0.9882626}
-  m_LocalPosition: {x: 4.5959053, y: -14.596725, z: 4.469696}
+  m_LocalPosition: {x: 4.54, y: -14.596725, z: 4.65}
   m_LocalScale: {x: 0.088630006, y: 0.088630006, z: 0.088630006}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9869,7 +9869,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4542976317644068234}
   - component: {fileID: 4238641716114983412}
-  - component: {fileID: 7388024554939394444}
+  - component: {fileID: 7388024554939394446}
   - component: {fileID: 7388024554939394445}
   m_Layer: 0
   m_Name: LevelController
@@ -9985,7 +9985,7 @@ Transform:
   m_GameObject: {fileID: 4339830639153055684}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.04, y: 0.568, z: 2.63}
+  m_LocalPosition: {x: 5.04, y: 1.42, z: -11.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12125,7 +12125,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7557192941062307406, guid: 43e4ad1283826ab429af76f18104ddfd, type: 3}
---- !u!114 &7388024554939394444
+--- !u!114 &7388024554939394445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4339830639153055684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ddd3ad0e78b6b3429cea8eb04462482, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelToUnlock: 3
+--- !u!114 &7388024554939394446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12143,19 +12156,6 @@ MonoBehaviour:
   unlockLevel: 3
   playerController: {fileID: 1015408648}
   gameManager: {fileID: 7795884126128415961}
---- !u!114 &7388024554939394445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4339830639153055684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ddd3ad0e78b6b3429cea8eb04462482, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelToUnlock: 3
 --- !u!4 &7421131262079687457
 Transform:
   m_ObjectHideFlags: 0

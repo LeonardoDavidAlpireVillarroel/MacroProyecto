@@ -28,6 +28,10 @@ public class MapController : MonoBehaviour
 
     void Start()
     {
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
+        if (currentScene != "ClaroPacifico") return;
+
         if (ProfileStorage.s_currentProfile == null)
         {
             string savedProfile = PlayerPrefs.GetString("CurrentProfile", null);
@@ -117,15 +121,23 @@ public class MapController : MonoBehaviour
 
     public void UnlockLevels()
     {
-        if (unlockLevel > ProfileStorage.s_currentProfile.unlockedLevelCount)
-        {
-            ProfileStorage.s_currentProfile.unlockedLevelCount = unlockLevel;
+        UnlockLevel(1);
+    }
 
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                ProfileStorage.StorePlayerProfile(player, gameManager);
-            }
+    public void UnlockLevel(int levelToUnlock)
+    {
+        if (ProfileStorage.s_currentProfile == null)
+            return;
+
+        if (ProfileStorage.s_currentProfile.unlockedLevelCount >= levelToUnlock)
+            return;
+
+        ProfileStorage.s_currentProfile.unlockedLevelCount = levelToUnlock;
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null && GameManager.Instance != null)
+        {
+            ProfileStorage.StorePlayerProfile(player, GameManager.Instance);
         }
     }
 }

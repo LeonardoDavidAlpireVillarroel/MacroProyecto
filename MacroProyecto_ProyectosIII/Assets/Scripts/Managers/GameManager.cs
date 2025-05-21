@@ -32,6 +32,12 @@ public class GameManager : MonoBehaviour
     public int fuerza;
     public int points;
 
+    private int tempHealth;
+    private int tempPoints;
+    private int tempFuerza;
+    private string tempInventoryJson;
+    //public static ProfileStorage temporaryBackup = null;
+
     [Header("Inventario")]
     public Inventory inventory;
     public GameObject inventoryUIPanel;
@@ -56,6 +62,24 @@ public class GameManager : MonoBehaviour
     public float warningDuration = 2f;
     public float fadeDuration = 0.5f;
 
+    private int lastSavedPoints = -1;
+    private int lastSavedHealth = -1;
+    private string lastSavedInventory = "";
+
+    private bool CheckIfPlayerDataChanged()
+    {
+        bool changed = false;
+
+        if (points != lastSavedPoints || health != lastSavedHealth || inventory.GetInventoryAsString() != lastSavedInventory)
+        {
+            changed = true;
+            lastSavedPoints = points;
+            lastSavedHealth = health;
+            lastSavedInventory = inventory.GetInventoryAsString();
+        }
+
+        return changed;
+    }
 
     private void OnEnable()
     {
@@ -69,7 +93,41 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        LoadGame();
+        string sceneName = scene.name;
+
+        if (sceneName == "ClaroPacifico")
+        {
+            LoadGame();
+        }
+        else
+        {
+            BackupCurrentState();
+            //LoadGame();
+        }
+    }
+
+    public void BackupCurrentState()
+    {
+        tempHealth = health;
+        tempPoints = points;
+        tempFuerza = fuerza;
+        tempInventoryJson = inventory.GetInventoryAsString();
+    }
+
+    public void RestoreBackupState()
+    {
+        health = tempHealth;
+        points = tempPoints;
+        fuerza = tempFuerza;
+        inventory.SetInventoryFromString(tempInventoryJson);
+
+        playerHUD.ActualizePoints(points);
+        playerHUD.UpdateAllLifes(health);
+    }
+
+    public void OnLevelCompleted()
+    {
+        SaveGame();
     }
 
     private void Awake()
@@ -113,6 +171,16 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        string sceneName = SceneManager.GetActiveScene().name;
+
+        if (sceneName == "ClaroPacifico")
+        {
+            if (CheckIfPlayerDataChanged())
+            {
+                SaveGame();
+            }
+        }
+
         if (inventoryAction.WasPressedThisFrame())
         {
             ToggleInventory();
@@ -162,12 +230,11 @@ public class GameManager : MonoBehaviour
 
     public void SaveGame()
     {
-        string profileName = ProfileStorage.s_currentProfile.name;
+        if (ProfileStorage.s_currentProfile == null) return;
 
         ProfileStorage.s_currentProfile.points = points;
         ProfileStorage.s_currentProfile.fuerza = fuerza;
         ProfileStorage.s_currentProfile.playerHealth = health;
-
         ProfileStorage.s_currentProfile.inventoryJson = inventory.GetInventoryAsString();
 
         ProfileStorage.StorePlayerProfile(GameObject.FindWithTag("Player"), this);
@@ -216,8 +283,6 @@ public class GameManager : MonoBehaviour
         playerController.playerInput.actions.FindActionMap("UI").Enable();
 
         isPaused = true;
-
-        //SaveGame();
     }
 
     public void ResumeGame()
