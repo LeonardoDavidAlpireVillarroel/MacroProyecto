@@ -27,6 +27,12 @@ public class GameManager : MonoBehaviour
     // HUD Player
     public PlayerHUD playerHUD;
     public int TotalPoints { get; private set; }
+
+    [Header("UI Vida Máxima")]
+    public CanvasGroup maxLifeMessagePanel;
+    public float maxLifeMessageDuration = 2f;
+    public float maxLifeFadeDuration = 1f;
+
     [Header("Player Stats")]
     public int health;
     public int fuerza;
@@ -36,7 +42,13 @@ public class GameManager : MonoBehaviour
     private int tempPoints;
     private int tempFuerza;
     private string tempInventoryJson;
-    //public static ProfileStorage temporaryBackup = null;
+
+    private int lastSavedPoints = -1;
+    private int lastSavedHealth = -1;
+    private string lastSavedInventory = "";
+
+    [Header("Pantalla Game Over")]
+    public GameObject gameOverPanel;
 
     [Header("Inventario")]
     public Inventory inventory;
@@ -62,9 +74,6 @@ public class GameManager : MonoBehaviour
     public float warningDuration = 2f;
     public float fadeDuration = 0.5f;
 
-    private int lastSavedPoints = -1;
-    private int lastSavedHealth = -1;
-    private string lastSavedInventory = "";
 
     private bool CheckIfPlayerDataChanged()
     {
@@ -102,7 +111,6 @@ public class GameManager : MonoBehaviour
         else
         {
             BackupCurrentState();
-            //LoadGame();
         }
     }
 
@@ -308,6 +316,90 @@ public class GameManager : MonoBehaviour
         playerHUD.ActualizePoints(TotalPoints);
     }
 
+    public void UsarPocionPorID(int id)
+    {
+        var itemData = inventory.data.ObjectsDataBase[id];
+
+        if (itemData.clase != ItemsDataBase.Clase.Pocion || itemData.type != ItemsDataBase.Type.consumable)
+        {
+            return;
+        }
+
+        switch (id)
+        {
+            case 1:
+                int maxHealth = playerHUD.vidas.Length;
+
+                if (health < maxHealth)
+                {
+                    health += 1;
+                    playerHUD.ActivateLife(health - 1);
+
+                    RemoveOnePotionFromInventory(id);
+                }
+                else
+                {
+                    StartCoroutine(ShowMaxLifeMessage());
+                }
+                break;
+
+            case 2:
+                fuerza += 1;
+                RemoveOnePotionFromInventory(id);
+                break;
+
+            default:
+                Debug.Log($"No hay efecto definido para la poción con ID: {id}");
+                break;
+        }
+
+        SaveGame();
+    }
+
+    private void RemoveOnePotionFromInventory(int id)
+    {
+        for (int i = 0; i < inventory.inventory.Count; i++)
+        {
+            if (inventory.inventory[i].id == id && inventory.inventory[i].cantidadItems > 0)
+            {
+                int newAmount = inventory.inventory[i].cantidadItems - 1;
+
+                if (newAmount <= 0)
+                {
+                    inventory.inventory[i] = new ObjectInventoryID(-1, 0);
+                }
+                else
+                {
+                    inventory.inventory[i] = new ObjectInventoryID(id, newAmount);
+                }
+
+                inventory.InventoryUpdate();
+                break;
+            }
+        }
+    }
+
+    public IEnumerator ShowMaxLifeMessage()
+    {
+        if (maxLifeMessagePanel == null) yield break;
+
+        maxLifeMessagePanel.alpha = 1f;
+        maxLifeMessagePanel.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(maxLifeMessageDuration);
+
+        float elapsed = 0f;
+        while (elapsed < maxLifeFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            maxLifeMessagePanel.alpha = Mathf.Lerp(1f, 0f, elapsed / maxLifeFadeDuration);
+            yield return null;
+        }
+
+        maxLifeMessagePanel.alpha = 0f;
+        maxLifeMessagePanel.gameObject.SetActive(false);
+    }
+
     public void LoseLifes()
     {
         health -= 1;
@@ -316,6 +408,40 @@ public class GameManager : MonoBehaviour
         {
             playerHUD.DesactivateLifes(health);
         }
+
+        if (health <= 0)
+        {
+            TriggerGameOver();
+        }
+    }
+
+    public void TriggerGameOver()
+    {
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+            PauseGame();
+        }
+
+        StartCoroutine(ReturnToClaroAfterDelay(2f));
+    }
+
+    private IEnumerator ReturnToClaroAfterDelay(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+
+        RestoreBackupState();
+
+        Time.timeScale = 1f;
+
+        MusicManager.Instance.PlayMusic("ClaroPacifico");
+        ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
+    }
+
+    public void OnGameOverConfirm()
+    {
+        gameOverPanel.SetActive(false);
+        StartCoroutine(ReturnToClaroAfterDelay(0f));
     }
 
     public void RecoverLifes()

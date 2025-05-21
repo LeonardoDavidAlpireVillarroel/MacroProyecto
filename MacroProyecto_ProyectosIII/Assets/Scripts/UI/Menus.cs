@@ -38,8 +38,17 @@ public class Menus : MonoBehaviour
 
     public void PlayClaroPacificoScene()
     {
-        MusicManager.Instance.PlayMusic("ClaroPacifico");
-        ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
+        GameManager.Instance.OnGameOverConfirm();
+    }
+
+    public void GoClaroExitGame()
+    {
+        Time.timeScale = 1;
+        if (ScenesManager.Instance != null)
+            ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.PlayMusic("ClaroPacifico");
     }
 
     public void GoMainMenu()

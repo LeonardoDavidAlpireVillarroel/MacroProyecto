@@ -34,7 +34,7 @@ public class Inventory : MonoBehaviour
     public PlayerController playerController;
 
     [SerializeField]
-    ItemsDataBase data;
+    public ItemsDataBase data;
 
     [Header("Variables del Drag and Drop")]
     public GraphicRaycaster graphRay;
@@ -402,6 +402,20 @@ public class Inventory : MonoBehaviour
                                 shopManager.confCompra.GetComponent<ConfirmarCompra>().id = selectedObject.gameObject.GetComponent<Item>().ID;
                                 shopManager.confCompra.GetComponent<ConfirmarCompra>().cantidad = selectedObject.gameObject.GetComponent<Item>().itemAmount;
                                 shopManager.confCompra.GetComponent<ConfirmarCompra>().compra = false;
+                            }
+                        }
+
+                        if (result.gameObject.CompareTag("TomarPocion"))
+                        {
+                            var itemData = data.ObjectsDataBase[selectedObjectID];
+
+                            if (itemData.clase == ItemsDataBase.Clase.Pocion && itemData.type == ItemsDataBase.Type.consumable)
+                            {
+                                GameManager.Instance.UsarPocionPorID(selectedObjectID);
+
+                                selectedObject = null;
+                                InventoryUpdate();
+                                return;
                             }
                         }
                     }
