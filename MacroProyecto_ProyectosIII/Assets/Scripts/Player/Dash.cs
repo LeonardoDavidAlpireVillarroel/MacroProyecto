@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerInput))]
@@ -28,16 +30,23 @@ public class Dash : MonoBehaviour
         dashAction = playerInput.actions["Dash"];
     }
 
-    private void Update()
+    void Update()
     {
-        if (dashAction.WasPerformedThisFrame() && !isDashing)
+        if (PuedeUsarDash() && dashAction.WasPerformedThisFrame() && !isDashing)
         {
             StartCoroutine(DashCoroutine());
         }
     }
 
+    bool PuedeUsarDash()
+    {
+        return ProfileStorage.s_currentProfile != null &&
+               ProfileStorage.s_currentProfile.GetPrefInt("dashTutorialSeen", 0) == 1;
+    }
+
     private IEnumerator DashCoroutine()
     {
+        isDashing = true;
         playerController.isDashing = true;
         capibaraAnimator.SetBool("IsDashing", true);
 
@@ -53,12 +62,13 @@ public class Dash : MonoBehaviour
 
         while (elapsed < dashDuration)
         {
-            rb.linearVelocity = direction * dashSpeed;
+            rb.linearVelocity = direction * dashSpeed; 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
         rb.linearVelocity = new Vector3(0, originalVelocity.y, 0);
+        isDashing = false;
         playerController.isDashing = false;
         capibaraAnimator.SetBool("IsDashing", false);
     }

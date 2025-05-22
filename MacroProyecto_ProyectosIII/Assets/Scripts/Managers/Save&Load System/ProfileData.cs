@@ -15,6 +15,9 @@ public class ProfileData
     public string name;
     public bool newGame;
 
+    //Tutoriales
+    public bool dashTutorialSeen = false;
+
     //Posicion jugador
     public float x;
     public float y;

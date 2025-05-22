@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 1740043848379678647}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.258, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: 0, y: 0.392, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4110660339080952695}
@@ -96,7 +96,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4110660339080952695}
-  - component: {fileID: 7263927120119550520}
+  - component: {fileID: 1101351650274775446}
   - component: {fileID: 1806884297940518620}
   - component: {fileID: 7003574743850094728}
   - component: {fileID: 3247454405123809589}
@@ -118,13 +118,13 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.85, y: 0.61, z: -1.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5926815926801773873}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7263927120119550520
-BoxCollider:
+--- !u!135 &1101351650274775446
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -142,8 +142,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.65129995, y: 0.583003, z: 0.22796655}
-  m_Center: {x: 0.0009510517, y: 0.27139047, z: 0}
+  m_Radius: 0.4344772
+  m_Center: {x: -0.0012849569, y: 0.41112196, z: 0}
 --- !u!114 &1806884297940518620
 MonoBehaviour:
   m_ObjectHideFlags: 0
