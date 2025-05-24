@@ -74,6 +74,13 @@ public class GameManager : MonoBehaviour
     public float warningDuration = 2f;
     public float fadeDuration = 0.5f;
 
+    [Header("Levels")]
+    public int currentItemsCollected = 0;
+    public int currentEnemiesDefeated = 0;
+    public int tiempoLimite = 0;
+    private int puntosTemporales = 0;
+    [Header("Controlador niveles")]
+    public LevelController levelTimer;
 
     private bool CheckIfPlayerDataChanged()
     {
@@ -131,11 +138,6 @@ public class GameManager : MonoBehaviour
 
         playerHUD.ActualizePoints(points);
         playerHUD.UpdateAllLifes(health);
-    }
-
-    public void OnLevelCompleted()
-    {
-        SaveGame();
     }
 
     private void Awake()
@@ -253,6 +255,8 @@ public class GameManager : MonoBehaviour
         if (ProfileStorage.s_currentProfile != null)
         {
             points = ProfileStorage.s_currentProfile.points;
+            TotalPoints = points;
+            playerHUD.ActualizePoints(points);
             fuerza = ProfileStorage.s_currentProfile.fuerza;
             health = ProfileStorage.s_currentProfile.playerHealth;
 
@@ -312,8 +316,7 @@ public class GameManager : MonoBehaviour
 
     public void SumarPuntos(int pointsToSumar)
     {
-        TotalPoints += pointsToSumar;
-        playerHUD.ActualizePoints(TotalPoints);
+        puntosTemporales += pointsToSumar;
     }
 
     public void UsarPocionPorID(int id)
@@ -504,5 +507,44 @@ public class GameManager : MonoBehaviour
 
         cg.alpha = 0f;
         warningShootPanel.gameObject.SetActive(false);
+    }
+
+    public void AddFruit()
+    {
+        currentItemsCollected++;
+        CheckAndFinishLevelIfObjectivesCompleted();
+    }
+    public void EnemyDefeated()
+    {
+        currentEnemiesDefeated++;
+        CheckAndFinishLevelIfObjectivesCompleted();
+    }
+
+    public void CheckAndFinishLevelIfObjectivesCompleted()
+    {
+        if (levelTimer != null && levelTimer.IsTimerActive() && levelTimer.AreAllObjectivesCompleted())
+        {
+            levelTimer.FinishLevelEarly("¡Objetivos completados!");
+        }
+    }
+
+    public void OnLevelCompleted()
+    {
+        TotalPoints += puntosTemporales;
+        points = TotalPoints;
+        playerHUD.ActualizePoints(TotalPoints);
+        puntosTemporales = 0;
+
+        SaveGame();
+
+        var levelName = SceneManager.GetActiveScene().name;
+        var stats = ProfileStorage.s_currentProfile.GetLevelStats(levelName);
+
+        float tiempoRestante = levelTimer != null ? levelTimer.ObtenerTiempoRestante() : 0f;
+        stats.timeCompleted = tiempoLimite - tiempoRestante;
+        stats.fruitsCollected = currentItemsCollected;
+        stats.enemiesDefeated = currentEnemiesDefeated;
+
+        ProfileStorage.StorePlayerProfile(GameObject.FindWithTag("Player"), this);
     }
 }

@@ -25,6 +25,7 @@ MonoBehaviour:
     Void: 
     cantidadInicialTienda: 0
     stackLimit: 0
+    puntosAlRecoger: 0
   - nombre: "Poci\xF3n de vida"
     ID: 1
     icon: {fileID: 78354932, guid: b2a8ecb89dd549c4e867f25daba4cf57, type: 3}
@@ -38,6 +39,7 @@ MonoBehaviour:
     Void: PocionVida
     cantidadInicialTienda: 1
     stackLimit: 3
+    puntosAlRecoger: 30
   - nombre: "Poci\xF3n de fuerza"
     ID: 2
     icon: {fileID: -2037039459, guid: f9ab15f3a3e4dec4b8c36e90c15eabed, type: 3}
@@ -51,6 +53,7 @@ MonoBehaviour:
     Void: PocionFuerza
     cantidadInicialTienda: 1
     stackLimit: 3
+    puntosAlRecoger: 35
   - nombre: "Munici\xF3n manzanas"
     ID: 3
     icon: {fileID: 21300000, guid: 9c6d5881467fae3409f970942ec94625, type: 3}
@@ -63,3 +66,4 @@ MonoBehaviour:
     Void: MunicionManzanas
     cantidadInicialTienda: 5
     stackLimit: 5
+    puntosAlRecoger: 15

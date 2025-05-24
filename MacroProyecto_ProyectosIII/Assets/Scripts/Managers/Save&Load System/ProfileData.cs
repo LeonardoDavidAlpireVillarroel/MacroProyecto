@@ -33,6 +33,34 @@ public class ProfileData
     // PlayerPrefs personalizados
     public List<SerializableKeyValue> customPrefs;
 
+    [System.Serializable]
+    public class LevelStats
+    {
+        public string levelName;
+        public float timeCompleted;
+        public int fruitsCollected;
+        public int enemiesDefeated;
+    }
+
+    public List<LevelStats> levelsStats = new List<LevelStats>();
+
+    public LevelStats GetLevelStats(string levelName)
+    {
+        var stats = levelsStats.Find(l => l.levelName == levelName);
+        if (stats == null)
+        {
+            stats = new LevelStats
+            {
+                levelName = levelName,
+                timeCompleted = 0f,
+                fruitsCollected = 0,
+                enemiesDefeated = 0
+            };
+            levelsStats.Add(stats);
+        }
+        return stats;
+    }
+
     public ProfileData()
     {
         this.filename = "None.xml";
@@ -47,6 +75,7 @@ public class ProfileData
         this.unlockedLevelCount = 2;
 
         this.customPrefs = new List<SerializableKeyValue>();
+        this.levelsStats = new List<LevelStats>();
     }
 
     public ProfileData(string name, bool newGame, float x, float y)
@@ -64,6 +93,7 @@ public class ProfileData
         this.unlockedLevelCount = 2;
 
         this.customPrefs = new List<SerializableKeyValue>();
+        this.levelsStats = new List<LevelStats>();
     }
 
     public void SetPref(string key, string value)
