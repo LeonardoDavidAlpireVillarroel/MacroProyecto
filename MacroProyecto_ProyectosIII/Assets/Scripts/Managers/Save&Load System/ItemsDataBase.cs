@@ -18,6 +18,7 @@ public class ItemsDataBase : ScriptableObject
         public string Void;
         public int cantidadInicialTienda;
         public int stackLimit;
+        public int puntosAlRecoger;
     }
 
     public enum Clase

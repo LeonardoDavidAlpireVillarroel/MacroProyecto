@@ -48,9 +48,6 @@ public class FruitShoot : MonoBehaviour
 
         if (isAiming)
         {
-            //Cursor.visible = false;
-            //Cursor.lockState = CursorLockMode.None;
-
             if (!arrowInstance.activeSelf)
                 arrowInstance.SetActive(true);
 
@@ -64,12 +61,6 @@ public class FruitShoot : MonoBehaviour
 
         else
         {
-            //if (!GameManager.Instance.isPaused)
-            //{
-            //    Cursor.visible = false;
-            //    Cursor.lockState = CursorLockMode.Locked;
-            //}
-
             if (arrowInstance.activeSelf)
                 arrowInstance.SetActive(false);
         }
@@ -113,6 +104,7 @@ public class FruitShoot : MonoBehaviour
         }
 
         rb.useGravity = false;
+        rb.isKinematic = false;
         rb.linearVelocity = currentAimDirection * shootSpeed;
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
