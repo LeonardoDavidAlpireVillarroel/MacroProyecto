@@ -51,7 +51,7 @@ public class GrabItem : MonoBehaviour
             LevelController nivel = FindFirstObjectByType<LevelController>();
             if (nivel != null)
             {
-                nivel.IncrementarItemsRecolectados();
+                nivel.IncrementarItemsRecolectados(ID);
             }
 
             Destroy(gameObject);

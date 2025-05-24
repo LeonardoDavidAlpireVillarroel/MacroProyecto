@@ -17,6 +17,8 @@ public class MapController : MonoBehaviour
     [SerializeField] private GameManager gameManager;
 
     private bool playerInRange = false;
+    private bool mostrarLevelPanelAutomaticamente = false;
+    private bool permitirCerrarMapa = false;
 
     private void Awake()
     {
@@ -30,7 +32,15 @@ public class MapController : MonoBehaviour
     {
         string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
-        if (currentScene != "ClaroPacifico") return;
+        if (currentScene == "ClaroPacifico")
+        {
+            permitirCerrarMapa = true;
+        }
+        else
+        {
+            mostrarLevelPanelAutomaticamente = true;
+            permitirCerrarMapa = false;
+        }
 
         if (ProfileStorage.s_currentProfile == null)
         {
@@ -62,20 +72,17 @@ public class MapController : MonoBehaviour
         }
 
         if (levelPanel != null)
-        {
             levelPanel.SetActive(false);
-        }
+
         if (interactionText != null)
-        {
             interactionText.SetActive(false);
-        }
 
         Time.timeScale = 1f;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !mostrarLevelPanelAutomaticamente)
         {
             playerInRange = true;
             if (interactionText != null)
@@ -87,7 +94,7 @@ public class MapController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !mostrarLevelPanelAutomaticamente)
         {
             playerInRange = false;
             if (interactionText != null)
@@ -99,6 +106,8 @@ public class MapController : MonoBehaviour
 
     void Update()
     {
+        if (mostrarLevelPanelAutomaticamente) return;
+
         if (playerInRange && playerController.interactAction.WasPressedThisFrame())
         {
             if (levelPanel != null)
@@ -109,11 +118,14 @@ public class MapController : MonoBehaviour
                 gameManager.PauseGame();
                 playerController.enabled = false;
             }
-            if (levelPanel != null && levelPanel.activeSelf && gameManager.backAction.WasPressedThisFrame())
+        }
+
+        if (levelPanel != null && levelPanel.activeSelf && gameManager.backAction.WasPressedThisFrame())
+        {
+            if (permitirCerrarMapa)
             {
                 levelPanel.SetActive(false);
                 playerController.enabled = true;
-
                 gameManager.ResumeGame();
             }
         }
@@ -139,5 +151,22 @@ public class MapController : MonoBehaviour
         {
             ProfileStorage.StorePlayerProfile(player, GameManager.Instance);
         }
+    }
+
+    public void MostrarPanelMapaAutomaticamente()
+    {
+        mostrarLevelPanelAutomaticamente = true;
+
+        if (levelPanel != null)
+            levelPanel.SetActive(true);
+
+        if (interactionText != null)
+            interactionText.SetActive(false);
+
+        if (gameManager != null)
+            gameManager.PauseGame();
+
+        if (playerController != null)
+            playerController.enabled = false;
     }
 }

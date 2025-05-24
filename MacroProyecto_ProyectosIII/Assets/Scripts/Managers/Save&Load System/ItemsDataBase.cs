@@ -35,4 +35,14 @@ public class ItemsDataBase : ScriptableObject
     }
 
     public InventoryObject[] ObjectsDataBase;
+
+    public InventoryObject? GetItemByID(int id)
+    {
+        foreach (var item in ObjectsDataBase)
+        {
+            if (item.ID == id)
+                return item;
+        }
+        return null;
+    }
 }
