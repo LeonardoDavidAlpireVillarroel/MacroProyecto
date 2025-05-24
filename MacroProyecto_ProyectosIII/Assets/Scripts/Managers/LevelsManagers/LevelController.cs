@@ -7,6 +7,10 @@ using UnityEngine.Events;
 
 public class LevelController : MonoBehaviour
 {
+    [Header("Base de datos de ítems")]
+    public ItemsDataBase itemsDataBase;
+    private List<int> itemIDsRecolectados = new List<int>();
+
     [Header("CanvasGroup para fade")]
     public CanvasGroup resultadosCanvasGroup;
 
@@ -24,14 +28,15 @@ public class LevelController : MonoBehaviour
     private int totalItemsEnNivel;
 
     private int enemigosDerrotados = 0;
-    private int frutasRecolectadas = 0;
+    private int itemsRecolectados = 0;
 
     [Header("Intro")]
     public GameObject introPanel;
+    public CanvasGroup introCanvasGroup;
     public Button botonContinuar;
 
     [Header("Temporizador")]
-    public float tiempoLimite = 120f; // 2 minutos
+    public float tiempoLimite = 121f; // 2 minutos (120) y un poco mas
     private float tiempoRestante;
     private bool temporizadorActivo = false;
 
@@ -45,7 +50,7 @@ public class LevelController : MonoBehaviour
     public TextMeshProUGUI textoEnemigos;
     public TextMeshProUGUI textoPuntosItems;
     public TextMeshProUGUI textoPuntosEnemigos;
-    public TextMeshProUGUI textoPuntosTiempo;    // Nuevo TMP para puntos por tiempo
+    public TextMeshProUGUI textoPuntosTiempo;
     public TextMeshProUGUI textoPuntosTotales;
 
     private bool nivelFinalizado = false;
@@ -61,10 +66,16 @@ public class LevelController : MonoBehaviour
         if (introPanel != null)
             introPanel.SetActive(true);
 
+        if (introCanvasGroup != null)
+        {
+            introCanvasGroup.alpha = 0f;
+            introCanvasGroup.interactable = false;
+            introCanvasGroup.blocksRaycasts = false;
+            StartCoroutine(EsperarYCargarIntro());
+        }
+
         if (botonContinuar != null)
             botonContinuar.onClick.AddListener(IniciarNivel);
-
-        StartCoroutine(PausarConRetraso());
 
         if (panelResultados != null)
         {
@@ -84,19 +95,65 @@ public class LevelController : MonoBehaviour
         }
     }
 
-    IEnumerator PausarConRetraso()
+    IEnumerator EsperarYCargarIntro()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(1f);
         GameManager.Instance.PauseGame();
+        StartCoroutine(FadeInIntroPanel());
+    }
+
+    IEnumerator FadeInIntroPanel()
+    {
+        GameManager.Instance.PauseGame();
+
+        float duracion = 1f;
+        float tiempo = 0f;
+
+        while (tiempo < duracion)
+        {
+            tiempo += Time.unscaledDeltaTime;
+            introCanvasGroup.alpha = Mathf.Lerp(0f, 1f, tiempo / duracion);
+            yield return null;
+        }
+
+        introCanvasGroup.alpha = 1f;
+        introCanvasGroup.interactable = true;
+        introCanvasGroup.blocksRaycasts = true;
     }
 
     void IniciarNivel()
     {
+        if (introCanvasGroup != null)
+        {
+            StartCoroutine(FadeOutIntroPanel());
+        }
+    }
+
+    IEnumerator FadeOutIntroPanel()
+    {
+        isFading = true;
+        float duracion = 1f;
+        float tiempo = 0f;
+
+        introCanvasGroup.interactable = false;
+        introCanvasGroup.blocksRaycasts = false;
+
+        while (tiempo < duracion)
+        {
+            tiempo += Time.unscaledDeltaTime;
+            introCanvasGroup.alpha = Mathf.Lerp(1f, 0f, tiempo / duracion);
+            yield return null;
+        }
+
+        introCanvasGroup.alpha = 0f;
+
         if (introPanel != null)
             introPanel.SetActive(false);
 
-        GameManager.Instance.ResumeGame();
+        isFading = false;
+
         temporizadorActivo = true;
+        GameManager.Instance.ResumeGame();
     }
 
     void Update()
@@ -121,9 +178,10 @@ public class LevelController : MonoBehaviour
         }
     }
 
-    public void IncrementarItemsRecolectados()
+    public void IncrementarItemsRecolectados(int itemID)
     {
-        frutasRecolectadas++;
+        itemsRecolectados++;
+        itemIDsRecolectados.Add(itemID);
     }
 
     public void IncrementarEnemigosDerrotados()
@@ -133,7 +191,7 @@ public class LevelController : MonoBehaviour
 
     bool TodosLosObjetivosCompletados()
     {
-        return frutasRecolectadas >= totalItemsEnNivel && enemigosDerrotados >= totalEnemigosEnNivel;
+        return itemsRecolectados >= totalItemsEnNivel && enemigosDerrotados >= totalEnemigosEnNivel;
     }
 
     void MostrarTiempoEnPantalla()
@@ -174,12 +232,22 @@ public class LevelController : MonoBehaviour
                 textoTiempo.text = $"{minutos:00}:{segundos:00}";
 
             if (textoItems != null)
-                textoItems.text = $"{frutasRecolectadas} / {totalItemsEnNivel}";
+                textoItems.text = $"{itemsRecolectados} / {totalItemsEnNivel}";
 
             if (textoEnemigos != null)
                 textoEnemigos.text = $"{enemigosDerrotados} / {totalEnemigosEnNivel}";
 
-            int puntosItems = frutasRecolectadas * 10;
+            int puntosItems = 0;
+
+            foreach (int id in itemIDsRecolectados)
+            {
+                var item = itemsDataBase.GetItemByID(id);
+                if (item != null)
+                {
+                    puntosItems += item.Value.puntosAlRecoger;
+                }
+            }
+
             int puntosEnemigos = enemigosDerrotados * 20;
             int puntosTiempo = ((int)(tiempoRestante / 5)) * 5;
 
@@ -229,6 +297,15 @@ public class LevelController : MonoBehaviour
         {
             botonContinuarResultados.gameObject.SetActive(false);
             StartCoroutine(FadeOutResultados());
+
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "ClaroPacifico")
+            {
+                MapController map = FindFirstObjectByType<MapController>();
+                if (map != null)
+                {
+                    map.MostrarPanelMapaAutomaticamente();
+                }
+            }
         }
     }
 
@@ -257,8 +334,7 @@ public class LevelController : MonoBehaviour
         }
 
         isFading = false;
-
-        GameManager.Instance.ResumeGame();
+        Time.timeScale = 1;
     }
 
     public bool AreAllObjectivesCompleted()

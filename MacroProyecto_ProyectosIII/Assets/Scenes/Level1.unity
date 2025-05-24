@@ -2854,13 +2854,14 @@ GameObject:
   - component: {fileID: 683914697}
   - component: {fileID: 683914699}
   - component: {fileID: 683914698}
+  - component: {fileID: 683914700}
   m_Layer: 0
   m_Name: ExplicacionLevel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &683914697
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2920,6 +2921,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 683914696}
   m_CullTransparentMesh: 1
+--- !u!225 &683914700
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 683914696}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &726848385
 GameObject:
   m_ObjectHideFlags: 1
@@ -12373,6 +12386,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b2f481f59cebc147875bb95d7946c7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemsDataBase: {fileID: 11400000, guid: 4d66ed78f7c45694ab93b29dba19b41f, type: 2}
   resultadosCanvasGroup: {fileID: 303912369}
   botonContinuarResultados: {fileID: 1157768667}
   enemigosEnNivel:
@@ -12383,6 +12397,7 @@ MonoBehaviour:
   - {fileID: 932728790992075779}
   - {fileID: 1835495166}
   introPanel: {fileID: 683914696}
+  introCanvasGroup: {fileID: 683914700}
   botonContinuar: {fileID: 1950597406}
   tiempoLimite: 120
   timerText: {fileID: 554335792}
@@ -12654,6 +12669,10 @@ PrefabInstance:
       propertyPath: buttonOptionsPanel
       value: 
       objectReference: {fileID: 2892438951602283562}
+    - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
+      propertyPath: maxLifeMessagePanel
+      value: 
+      objectReference: {fileID: 1072980159}
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: currentItemsCollected
       value: 0
