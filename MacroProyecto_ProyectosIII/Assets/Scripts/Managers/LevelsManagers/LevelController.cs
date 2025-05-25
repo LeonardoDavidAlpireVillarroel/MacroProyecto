@@ -7,9 +7,11 @@ using UnityEngine.Events;
 
 public class LevelController : MonoBehaviour
 {
+    public static LevelController Instance { get; private set; }
+
     [Header("Base de datos de ítems")]
     public ItemsDataBase itemsDataBase;
-    private List<int> itemIDsRecolectados = new List<int>();
+    private Dictionary<int, int> itemIDsRecolectados = new Dictionary<int, int>();
 
     [Header("CanvasGroup para fade")]
     public CanvasGroup resultadosCanvasGroup;
@@ -55,6 +57,17 @@ public class LevelController : MonoBehaviour
 
     private bool nivelFinalizado = false;
 
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -181,7 +194,11 @@ public class LevelController : MonoBehaviour
     public void IncrementarItemsRecolectados(int itemID)
     {
         itemsRecolectados++;
-        itemIDsRecolectados.Add(itemID);
+
+        if (itemIDsRecolectados.ContainsKey(itemID))
+            itemIDsRecolectados[itemID]++;
+        else
+            itemIDsRecolectados[itemID] = 1;
     }
 
     public void IncrementarEnemigosDerrotados()
@@ -212,7 +229,8 @@ public class LevelController : MonoBehaviour
 
         nivelFinalizado = true;
         GameManager.Instance.PauseGame();
-        GameManager.Instance.OnLevelCompleted();
+
+        float tiempoFinal = tiempoRestante;
 
         if (panelResultados != null && resultadosCanvasGroup != null)
         {
@@ -225,7 +243,7 @@ public class LevelController : MonoBehaviour
             if (textoResultado != null)
                 textoResultado.text = mensaje;
 
-            float tiempoEmpleado = tiempoLimite - tiempoRestante;
+            float tiempoEmpleado = tiempoLimite - tiempoFinal;
             int minutos = Mathf.FloorToInt(tiempoEmpleado / 60f);
             int segundos = Mathf.FloorToInt(tiempoEmpleado % 60f);
             if (textoTiempo != null)
@@ -238,18 +256,18 @@ public class LevelController : MonoBehaviour
                 textoEnemigos.text = $"{enemigosDerrotados} / {totalEnemigosEnNivel}";
 
             int puntosItems = 0;
-
-            foreach (int id in itemIDsRecolectados)
+            foreach (var pair in itemIDsRecolectados)
             {
+                int id = pair.Key;
                 var item = itemsDataBase.GetItemByID(id);
                 if (item != null)
                 {
-                    puntosItems += item.Value.puntosAlRecoger;
+                    puntosItems += item.Value.puntosAlRecoger * pair.Value;
                 }
             }
 
             int puntosEnemigos = enemigosDerrotados * 20;
-            int puntosTiempo = ((int)(tiempoRestante / 5)) * 5;
+            int puntosTiempo = Mathf.FloorToInt(tiempoFinal / 5) * 5;
 
             if (textoPuntosItems != null)
                 textoPuntosItems.text = puntosItems.ToString();
@@ -261,6 +279,10 @@ public class LevelController : MonoBehaviour
                 textoPuntosTiempo.text = puntosTiempo.ToString();
 
             int puntosTotales = puntosItems + puntosEnemigos + puntosTiempo;
+
+            GameManager.Instance.SumarPuntos(puntosTotales);
+            GameManager.Instance.OnLevelCompleted();
+
             if (textoPuntosTotales != null)
                 textoPuntosTotales.text = puntosTotales.ToString();
 
@@ -353,6 +375,67 @@ public class LevelController : MonoBehaviour
         {
             temporizadorActivo = false;
             FinalizarNivel(mensaje);
+        }
+    }
+
+    public void EliminarItemsRecolectadosDelInventario()
+    {
+        Inventory inv = Inventory.Instance;
+        if (inv == null) return;
+
+        foreach (var kvp in itemIDsRecolectados)
+        {
+            inv.DeleteItem(kvp.Key, kvp.Value); // ID y cantidad
+        }
+
+        itemIDsRecolectados.Clear();
+    }
+
+    private List<GameObject> collectedItems = new List<GameObject>();
+    private List<GameObject> collectedItemsBackup = new List<GameObject>();
+    private List<int> collectedItemIDs = new List<int>();
+
+    public List<int> GetCollectedItemIDs()
+    {
+        return collectedItemIDs;
+    }
+
+    public void AddCollectedItem(GameObject item)
+    {
+        if (!collectedItems.Contains(item))
+        {
+            collectedItems.Add(item);
+        }
+    }
+
+    public void BackupCollectedItems()
+    {
+        collectedItemsBackup = new List<GameObject>(collectedItems);
+    }
+
+    public void RestoreCollectedItems()
+    {
+        foreach (GameObject item in collectedItems)
+        {
+            if (item != null && !collectedItemsBackup.Contains(item))
+            {
+                item.SetActive(true);
+            }
+        }
+
+        collectedItems = new List<GameObject>(collectedItemsBackup);
+    }
+
+    public void ClearCollectedItems()
+    {
+        collectedItemIDs.Clear();
+    }
+
+    public void IncrementarItemsRecolectados2(int id)
+    {
+        if (!collectedItemIDs.Contains(id))
+        {
+            collectedItemIDs.Add(id);
         }
     }
 }

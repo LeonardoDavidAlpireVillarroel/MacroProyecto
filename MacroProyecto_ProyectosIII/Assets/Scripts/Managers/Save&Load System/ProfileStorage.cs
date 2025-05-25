@@ -20,7 +20,7 @@ public static class ProfileStorage
         string filename = uniqueName + ".xml";
         string path = s_profilesDir + "/" + filename;
 
-        s_currentProfile = new ProfileData(profileName, true, 0, 0);
+        s_currentProfile = new ProfileData(profileName, true, 0, 3);
         s_currentProfile.filename = filename;
 
         SaveFile<ProfileData>(path, s_currentProfile);

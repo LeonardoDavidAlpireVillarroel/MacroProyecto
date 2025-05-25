@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     public float maxLifeMessageDuration = 2f;
     public float maxLifeFadeDuration = 1f;
 
+    [Header("Respawn")]
+    public Transform respawnPoint;
+
     [Header("Player Stats")]
     public int health;
     public int fuerza;
@@ -78,18 +81,27 @@ public class GameManager : MonoBehaviour
     public int currentItemsCollected = 0;
     public int currentEnemiesDefeated = 0;
     public int tiempoLimite = 0;
-    private int puntosTemporales = 0;
+
     [Header("Controlador niveles")]
     public LevelController levelTimer;
+
+
+    public float invulnerableTime = 1.0f;
+
+    //Banderas Bool
+    private bool isInvulnerable = false;
+    private bool isReturningToClaro = false;
+    private bool isProcessingGameOver = false;
+    private bool hasDiedAndNeedsLifeReset = false;
 
     private bool CheckIfPlayerDataChanged()
     {
         bool changed = false;
 
-        if (points != lastSavedPoints || health != lastSavedHealth || inventory.GetInventoryAsString() != lastSavedInventory)
+        if (TotalPoints != lastSavedPoints || health != lastSavedHealth || inventory.GetInventoryAsString() != lastSavedInventory)
         {
             changed = true;
-            lastSavedPoints = points;
+            lastSavedPoints = TotalPoints;
             lastSavedHealth = health;
             lastSavedInventory = inventory.GetInventoryAsString();
         }
@@ -107,20 +119,7 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        string sceneName = scene.name;
-
-        if (sceneName == "ClaroPacifico")
-        {
-            LoadGame();
-        }
-        else
-        {
-            BackupCurrentState();
-        }
-    }
-
+    
     public void BackupCurrentState()
     {
         tempHealth = health;
@@ -223,11 +222,11 @@ public class GameManager : MonoBehaviour
             }
             else if (pausePanel != null && pausePanel.activeSelf)
             {
-                ResumeGame();                
+                ResumeGame();
             }
         }
 
-        if (SceneManager.GetActiveScene().name == "ClaroPacifico" && aimAction.WasPressedThisFrame() 
+        if (SceneManager.GetActiveScene().name == "ClaroPacifico" && aimAction.WasPressedThisFrame()
             && isPaused == false && Inventory.Instance.isInventoryOpen == false
             && (shopScript != null && (shopScript.shopCanvasGroup.alpha == 0)))
         {
@@ -242,7 +241,7 @@ public class GameManager : MonoBehaviour
     {
         if (ProfileStorage.s_currentProfile == null) return;
 
-        ProfileStorage.s_currentProfile.points = points;
+        ProfileStorage.s_currentProfile.points = TotalPoints;
         ProfileStorage.s_currentProfile.fuerza = fuerza;
         ProfileStorage.s_currentProfile.playerHealth = health;
         ProfileStorage.s_currentProfile.inventoryJson = inventory.GetInventoryAsString();
@@ -254,18 +253,24 @@ public class GameManager : MonoBehaviour
     {
         if (ProfileStorage.s_currentProfile != null)
         {
-            points = ProfileStorage.s_currentProfile.points;
-            TotalPoints = points;
-            playerHUD.ActualizePoints(points);
-            fuerza = ProfileStorage.s_currentProfile.fuerza;
             health = ProfileStorage.s_currentProfile.playerHealth;
 
-            inventory.SetInventoryFromString(ProfileStorage.s_currentProfile.inventoryJson);
+            if (health <= 0)
+            {
+                health = 3;
+            }
 
-            playerHUD.ActualizePoints(points);
+            fuerza = ProfileStorage.s_currentProfile.fuerza;
+            TotalPoints = ProfileStorage.s_currentProfile.points;
+            points = TotalPoints;
+
+            Inventory.Instance.SetInventoryFromString(ProfileStorage.s_currentProfile.inventoryJson);
+
+            Vector2 playerPos = new Vector2(ProfileStorage.s_currentProfile.x, ProfileStorage.s_currentProfile.y);
+            transform.position = playerPos;
+
+            playerHUD.UpdateAllLifes(health);
         }
-
-        playerHUD.UpdateAllLifes(health);
 
         string currentScene = SceneManager.GetActiveScene().name;
 
@@ -284,6 +289,41 @@ public class GameManager : MonoBehaviour
                 {
                     fruitShoot.enabled = true;
                 }
+            }
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        string sceneName = scene.name;
+
+        if (sceneName == "ClaroPacifico")
+        {
+            if (hasDiedAndNeedsLifeReset)
+            {
+                health = 3;
+                playerHUD.UpdateAllLifes(health);
+
+                if (ProfileStorage.s_currentProfile != null)
+                {
+                    ProfileStorage.s_currentProfile.playerHealth = health;
+                }
+
+                SaveGame();
+
+                hasDiedAndNeedsLifeReset = false;
+            }
+            else
+            {
+                LoadGame();
+            }
+        }
+        else
+        {
+            BackupCurrentState();
+            if (levelTimer != null)
+            {
+                levelTimer.BackupCollectedItems();
             }
         }
     }
@@ -316,7 +356,9 @@ public class GameManager : MonoBehaviour
 
     public void SumarPuntos(int pointsToSumar)
     {
-        puntosTemporales += pointsToSumar;
+        TotalPoints += pointsToSumar;
+        points = TotalPoints;
+        playerHUD.ActualizePoints(TotalPoints);
     }
 
     public void UsarPocionPorID(int id)
@@ -405,46 +447,30 @@ public class GameManager : MonoBehaviour
 
     public void LoseLifes()
     {
-        health -= 1;
+        if (isInvulnerable || isProcessingGameOver) return;
 
-        if (health >= 0 && health < playerHUD.vidas.Length)
+        if (health > 0)
         {
+            health -= 1;
             playerHUD.DesactivateLifes(health);
+
+            SaveGame();
+
+            StartCoroutine(InvulnerabilityCoroutine());
+
+            if (respawnPoint != null && playerController != null)
+            {
+                playerController.transform.position = respawnPoint.position;
+                playerController.transform.rotation = respawnPoint.rotation;
+            }
+
+            if (health == 0)
+            {
+                TriggerGameOver();
+                if (playerController != null)
+                    playerController.enabled = false;
+            }
         }
-
-        if (health <= 0)
-        {
-            TriggerGameOver();
-        }
-    }
-
-    public void TriggerGameOver()
-    {
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.SetActive(true);
-            PauseGame();
-        }
-
-        StartCoroutine(ReturnToClaroAfterDelay(2f));
-    }
-
-    private IEnumerator ReturnToClaroAfterDelay(float delay)
-    {
-        yield return new WaitForSecondsRealtime(delay);
-
-        RestoreBackupState();
-
-        Time.timeScale = 1f;
-
-        MusicManager.Instance.PlayMusic("ClaroPacifico");
-        ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
-    }
-
-    public void OnGameOverConfirm()
-    {
-        gameOverPanel.SetActive(false);
-        StartCoroutine(ReturnToClaroAfterDelay(0f));
     }
 
     public void RecoverLifes()
@@ -453,6 +479,61 @@ public class GameManager : MonoBehaviour
         health += 1;
     }
 
+
+    public void TriggerGameOver()
+    {
+        if (isProcessingGameOver) return;
+
+        isProcessingGameOver = true;
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+            PauseGame();
+        }
+
+        RestoreBackupState();
+
+        if (levelTimer != null)
+        {
+            levelTimer.ClearCollectedItems();
+        }
+
+        inventory.RemoveItemsCollectedInLevel(); // Aquí debes crear este método
+
+        hasDiedAndNeedsLifeReset = true;
+
+        StartCoroutine(ReturnToClaroAfterDelay(2f));
+    }
+
+    private IEnumerator InvulnerabilityCoroutine()
+    {
+        isInvulnerable = true;
+        yield return new WaitForSeconds(invulnerableTime);
+        isInvulnerable = false;
+    }
+
+    private IEnumerator ReturnToClaroAfterDelay(float delay)
+    {
+        if (isReturningToClaro) yield break;
+        isReturningToClaro = true;
+
+        yield return new WaitForSecondsRealtime(delay);
+
+        Time.timeScale = 1f;
+
+        MusicManager.Instance.PlayMusic("ClaroPacifico");
+        ScenesManager.Instance.LoadScene("ClaroPacifico", "CrossFade");
+
+        isReturningToClaro = false;
+    }
+
+    public void OnGameOverConfirm()
+    {
+        gameOverPanel.SetActive(false);
+        StartCoroutine(ReturnToClaroAfterDelay(0f));
+    }
+    
     private void ToggleInventory()
     {
         if (inventory != null)
@@ -528,14 +609,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private bool levelCompleted = false;
+
     public void OnLevelCompleted()
     {
-        TotalPoints += puntosTemporales;
+        if (levelCompleted) return;
+
+        levelCompleted = true;
+
         points = TotalPoints;
         playerHUD.ActualizePoints(TotalPoints);
-        puntosTemporales = 0;
-
-        SaveGame();
 
         var levelName = SceneManager.GetActiveScene().name;
         var stats = ProfileStorage.s_currentProfile.GetLevelStats(levelName);
@@ -546,5 +629,7 @@ public class GameManager : MonoBehaviour
         stats.enemiesDefeated = currentEnemiesDefeated;
 
         ProfileStorage.StorePlayerProfile(GameObject.FindWithTag("Player"), this);
+
+        SaveGame();
     }
 }
