@@ -42,6 +42,7 @@ public class GrabItem : MonoBehaviour
             if (nivel != null)
             {
                 nivel.IncrementarItemsRecolectados(ID);
+                nivel.IncrementarItemsRecolectados2(ID);
                 nivel.AddCollectedItem(gameObject);
             }
 

@@ -492,14 +492,13 @@ public class GameManager : MonoBehaviour
             PauseGame();
         }
 
-        RestoreBackupState();
-
         if (levelTimer != null)
         {
+            inventory.RemoveItemsCollectedInLevel();
             levelTimer.ClearCollectedItems();
         }
 
-        inventory.RemoveItemsCollectedInLevel(); // Aquí debes crear este método
+        RestoreBackupState();
 
         hasDiedAndNeedsLifeReset = true;
 
