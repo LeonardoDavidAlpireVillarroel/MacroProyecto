@@ -17,6 +17,8 @@ public class EnemiPrueba : MonoBehaviour
     private bool isAttacking = false;
     private bool canAttack = true;
 
+    private bool hasDealtDamage = false;
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -39,10 +41,19 @@ public class EnemiPrueba : MonoBehaviour
     {
         isAttacking = true;
         canAttack = false;
+        hasDealtDamage = false;
 
         animator.SetTrigger("Attack");
 
-        yield return new WaitForSeconds(meleeCooldown);
+        yield return new WaitForSeconds(0.5f);
+
+        if (!hasDealtDamage)
+        {
+            ApplyDamage();
+            hasDealtDamage = true;
+        }
+
+        yield return new WaitForSeconds(meleeCooldown - 0.5f);
 
         isAttacking = false;
         canAttack = true;
@@ -63,6 +74,15 @@ public class EnemiPrueba : MonoBehaviour
     {
         health -= amount;
         if (health <= 0) Die();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("PlayerShoot"))
+        {
+            TakeDamage(1);
+            Destroy(collision.gameObject);
+        }
     }
 
     void Die()

@@ -212,7 +212,8 @@ public class LevelController : MonoBehaviour
 
         nivelFinalizado = true;
         GameManager.Instance.PauseGame();
-        GameManager.Instance.OnLevelCompleted();
+
+        float tiempoFinal = tiempoRestante;
 
         if (panelResultados != null && resultadosCanvasGroup != null)
         {
@@ -225,7 +226,7 @@ public class LevelController : MonoBehaviour
             if (textoResultado != null)
                 textoResultado.text = mensaje;
 
-            float tiempoEmpleado = tiempoLimite - tiempoRestante;
+            float tiempoEmpleado = tiempoLimite - tiempoFinal;
             int minutos = Mathf.FloorToInt(tiempoEmpleado / 60f);
             int segundos = Mathf.FloorToInt(tiempoEmpleado % 60f);
             if (textoTiempo != null)
@@ -238,7 +239,6 @@ public class LevelController : MonoBehaviour
                 textoEnemigos.text = $"{enemigosDerrotados} / {totalEnemigosEnNivel}";
 
             int puntosItems = 0;
-
             foreach (int id in itemIDsRecolectados)
             {
                 var item = itemsDataBase.GetItemByID(id);
@@ -249,7 +249,7 @@ public class LevelController : MonoBehaviour
             }
 
             int puntosEnemigos = enemigosDerrotados * 20;
-            int puntosTiempo = ((int)(tiempoRestante / 5)) * 5;
+            int puntosTiempo = Mathf.FloorToInt(tiempoFinal / 5) * 5;
 
             if (textoPuntosItems != null)
                 textoPuntosItems.text = puntosItems.ToString();
@@ -261,6 +261,10 @@ public class LevelController : MonoBehaviour
                 textoPuntosTiempo.text = puntosTiempo.ToString();
 
             int puntosTotales = puntosItems + puntosEnemigos + puntosTiempo;
+
+            GameManager.Instance.SumarPuntos(puntosTotales);
+            GameManager.Instance.OnLevelCompleted();
+
             if (textoPuntosTotales != null)
                 textoPuntosTotales.text = puntosTotales.ToString();
 

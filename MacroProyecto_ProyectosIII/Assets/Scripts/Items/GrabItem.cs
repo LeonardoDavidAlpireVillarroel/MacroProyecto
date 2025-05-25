@@ -35,18 +35,8 @@ public class GrabItem : MonoBehaviour
             }
 
             pickedUp = true;
-            inv.AddItem(ID, cantidad);
 
-            GameManager gm = FindFirstObjectByType<GameManager>();
-            if (gm != null)
-            {
-                var objeto = System.Array.Find(itemDB.ObjectsDataBase, o => o.ID == ID);
-                if (objeto.ID == ID)
-                {
-                    int puntosGanados = objeto.puntosAlRecoger * cantidad;
-                    gm.SumarPuntos(puntosGanados);
-                }
-            }
+            inv.AddItem(ID, cantidad);
 
             LevelController nivel = FindFirstObjectByType<LevelController>();
             if (nivel != null)
