@@ -42,9 +42,10 @@ public class GrabItem : MonoBehaviour
             if (nivel != null)
             {
                 nivel.IncrementarItemsRecolectados(ID);
+                nivel.AddCollectedItem(gameObject);
             }
 
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

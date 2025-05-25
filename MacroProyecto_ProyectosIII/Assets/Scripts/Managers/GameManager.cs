@@ -321,6 +321,10 @@ public class GameManager : MonoBehaviour
         else
         {
             BackupCurrentState();
+            if (levelTimer != null)
+            {
+                levelTimer.BackupCollectedItems();
+            }
         }
     }
 
@@ -488,9 +492,17 @@ public class GameManager : MonoBehaviour
             PauseGame();
         }
 
-        hasDiedAndNeedsLifeReset = true;
+        RestoreBackupState();
+
+        if (levelTimer != null)
+        {
+            levelTimer.ClearCollectedItems();
+        }
+
+        inventory.RemoveItemsCollectedInLevel(); // Aquí debes crear este método
 
         hasDiedAndNeedsLifeReset = true;
+
         StartCoroutine(ReturnToClaroAfterDelay(2f));
     }
 

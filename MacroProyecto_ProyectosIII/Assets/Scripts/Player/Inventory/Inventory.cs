@@ -563,26 +563,44 @@ public class Inventory : MonoBehaviour
         InventoryUpdate();
     }
 
-    public void DeleteItem(int index, int cantidad)
+    public void DeleteItem(int itemID, int cantidad)
     {
-        if (index < 0 || index >= inventory.Count)
-            return;
-
-        var slot = inventory[index];
-
-        if (slot.id == -1 || slot.cantidadItems <= 0 || cantidad <= 0)
-            return;
-
-        int actualCantidad = slot.cantidadItems;
-
-        if (cantidad >= actualCantidad)
+        for (int i = 0; i < inventory.Count; i++)
         {
-            inventory[index] = new ObjectInventoryID(-1, 0);
+            var slot = inventory[i];
+            if (slot.id == itemID)
+            {
+                if (slot.cantidadItems <= cantidad)
+                {
+                    cantidad -= slot.cantidadItems;
+                    inventory[i] = new ObjectInventoryID(-1, 0);
+                }
+                else
+                {
+                    inventory[i] = new ObjectInventoryID(slot.id, slot.cantidadItems - cantidad);
+                    cantidad = 0;
+                }
+
+                if (cantidad <= 0)
+                    break;
+            }
         }
-        else
+
+        InventoryUpdate();
+    }
+
+    public void RemoveItemsCollectedInLevel()
+    {
+        var collectedIDs = LevelController.Instance.GetCollectedItemIDs();
+
+        for (int i = inventory.Count - 1; i >= 0; i--)
         {
-            inventory[index] = new ObjectInventoryID(slot.id, actualCantidad - cantidad);
+            if (collectedIDs.Contains(inventory[i].id))
+            {
+                inventory.RemoveAt(i);
+            }
         }
+
         InventoryUpdate();
     }
 
