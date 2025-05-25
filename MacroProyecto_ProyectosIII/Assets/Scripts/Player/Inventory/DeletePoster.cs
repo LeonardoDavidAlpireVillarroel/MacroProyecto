@@ -12,6 +12,7 @@ public class DeletePoster : MonoBehaviour
     public GameObject selectedItem;
     public Transform originalParent;
     public int itemAmountToRemove;
+    public int slotIndex;
 
     public Sprite emptySlotSprite;
 
@@ -55,10 +56,11 @@ public class DeletePoster : MonoBehaviour
             Inventory inventory = GameManager.Instance.inventoryUIPanel.GetComponent<Inventory>();
             if (inventory != null)
             {
-                int index = originalParent.GetSiblingIndex();
-                inventory.DeleteItem(index, cantidadEliminada);
+                inventory.DeleteItemAtSlot(slotIndex, cantidadEliminada);
+                inventory.InventoryUpdate();
             }
-            inventory.InventoryUpdate();
+
+            Destroy(selectedItem);
             CloseDeletePanel();
         }
     }

@@ -379,6 +379,7 @@ public class Inventory : MonoBehaviour
                             {
                                 deletePoster.selectedItem = selectedObject;
                                 deletePoster.originalParent = exParent;
+                                deletePoster.slotIndex = exParent.GetSiblingIndex();
                                 deletePoster.EnableDeletePanel();
                                 selectedObject = null;
                                 return;
@@ -589,19 +590,34 @@ public class Inventory : MonoBehaviour
         InventoryUpdate();
     }
 
+    public void DeleteItemAtSlot(int index, int cantidad)
+    {
+        if (index < 0 || index >= inventory.Count)
+            return;
+
+        ObjectInventoryID slot = inventory[index];
+
+        if (slot.id == -1 || slot.cantidadItems <= 0)
+            return;
+
+        if (cantidad >= slot.cantidadItems)
+        {
+            inventory[index] = new ObjectInventoryID(-1, 0);
+        }
+        else
+        {
+            inventory[index] = new ObjectInventoryID(slot.id, slot.cantidadItems - cantidad);
+        }
+    }
+
     public void RemoveItemsCollectedInLevel()
     {
-        var collectedIDs = LevelController.Instance.GetCollectedItemIDs();
+        if (GameManager.Instance == null || GameManager.Instance.levelTimer == null)
+            return;
 
-        for (int i = inventory.Count - 1; i >= 0; i--)
-        {
-            if (collectedIDs.Contains(inventory[i].id))
-            {
-                inventory.RemoveAt(i);
-            }
-        }
+        GameManager.Instance.levelTimer.EliminarItemsRecolectadosDelInventario();
 
-        InventoryUpdate();
+        //InventoryUpdate();
     }
 
     public void InventoryUpdate()
