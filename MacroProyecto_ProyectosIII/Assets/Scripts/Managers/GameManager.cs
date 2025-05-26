@@ -133,7 +133,6 @@ public class GameManager : MonoBehaviour
         health = tempHealth;
         points = tempPoints;
         fuerza = tempFuerza;
-        inventory.SetInventoryFromString(tempInventoryJson);
 
         playerHUD.ActualizePoints(points);
         playerHUD.UpdateAllLifes(health);
@@ -494,9 +493,11 @@ public class GameManager : MonoBehaviour
 
         if (levelTimer != null)
         {
-            inventory.RemoveItemsCollectedInLevel();
+            levelTimer.EliminarItemsRecolectadosDelInventario();
             levelTimer.ClearCollectedItems();
         }
+
+        SaveGame();
 
         RestoreBackupState();
 

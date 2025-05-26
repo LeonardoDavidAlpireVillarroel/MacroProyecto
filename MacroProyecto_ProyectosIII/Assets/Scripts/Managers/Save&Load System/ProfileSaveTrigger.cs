@@ -11,6 +11,13 @@ public class ProfileSaveTrigger : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            var level = LevelController.Instance;
+
+            if (level != null && !level.HasCollectedAllRequiredItems())
+            {
+                return;
+            }
+
             alreadyTriggered = true;
 
             var profile = ProfileStorage.s_currentProfile;

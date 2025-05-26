@@ -3,6 +3,14 @@ using UnityEngine.SceneManagement;
 
 public class LoadLevel : MonoBehaviour
 {
+    public void ReintentarNivelActual()
+    {
+        Time.timeScale = 1f;
+        string nombreNivel = SceneManager.GetActiveScene().name;
+        ScenesManager.Instance.LoadScene(nombreNivel, "CrossFade");
+        MusicManager.Instance.PlayMusic(nombreNivel);
+    }
+
     public void ReturnLago()
     {
         GameManager.Instance.ResumeGame();

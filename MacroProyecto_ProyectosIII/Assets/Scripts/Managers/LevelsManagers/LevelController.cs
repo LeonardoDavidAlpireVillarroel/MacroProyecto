@@ -16,8 +16,12 @@ public class LevelController : MonoBehaviour
     [Header("CanvasGroup para fade")]
     public CanvasGroup resultadosCanvasGroup;
 
-    [Header("Botón continuar")]
+    [Header("Botones")]
     public Button botonContinuarResultados;
+
+    [Header("Paneles de resultado")]
+    public GameObject panelDesbloqueo;
+    public GameObject panelSinDesbloqueo;
 
     private bool isFading = false;
     private Collider triggerToActivate;
@@ -25,6 +29,11 @@ public class LevelController : MonoBehaviour
     [Header("Objetivos del Nivel")]
     public List<GameObject> enemigosEnNivel = new List<GameObject>();
     public List<GameObject> itemsEnNivel = new List<GameObject>();
+
+    [Header("IDs obligatorios para desbloqueo")]
+    public List<GameObject> itemsNecesariosParaDesbloqueo = new List<GameObject>();
+    [Header("UI Progreso Items Necesarios")]
+    public TextMeshProUGUI textoProgresoItemsNecesarios;
 
     private int totalEnemigosEnNivel;
     private int totalItemsEnNivel;
@@ -106,11 +115,13 @@ public class LevelController : MonoBehaviour
         {
             triggerToActivate.enabled = false;
         }
+
+        ActualizarProgresoItemsNecesarios();
     }
 
     IEnumerator EsperarYCargarIntro()
     {
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.5f);
         GameManager.Instance.PauseGame();
         StartCoroutine(FadeInIntroPanel());
     }
@@ -223,6 +234,39 @@ public class LevelController : MonoBehaviour
         return tiempoRestante;
     }
 
+    void ActualizarProgresoItemsNecesarios()
+    {
+        int itemsRecolectadosNecesarios = 0;
+
+        foreach (GameObject itemNecesario in itemsNecesariosParaDesbloqueo)
+        {
+            if (collectedItems.Contains(itemNecesario))
+            {
+                itemsRecolectadosNecesarios++;
+            }
+        }
+
+        int totalItemsNecesarios = itemsNecesariosParaDesbloqueo.Count;
+        int itemsFaltantes = totalItemsNecesarios - itemsRecolectadosNecesarios;
+
+        if (textoProgresoItemsNecesarios != null)
+        {
+            textoProgresoItemsNecesarios.text = $"{itemsRecolectadosNecesarios} / {totalItemsNecesarios}";
+        }
+    }
+
+    public bool HasCollectedAllRequiredItems()
+    {
+        foreach (GameObject itemNecesario in itemsNecesariosParaDesbloqueo)
+        {
+            if (!collectedItems.Contains(itemNecesario))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     void FinalizarNivel(string mensaje)
     {
         if (nivelFinalizado) return;
@@ -232,62 +276,80 @@ public class LevelController : MonoBehaviour
 
         float tiempoFinal = tiempoRestante;
 
-        if (panelResultados != null && resultadosCanvasGroup != null)
+        int puntosItems = 0;
+        foreach (var pair in itemIDsRecolectados)
         {
-            panelResultados.SetActive(true);
-            botonContinuarResultados.gameObject.SetActive(false);
-            resultadosCanvasGroup.alpha = 0f;
-            resultadosCanvasGroup.interactable = false;
-            resultadosCanvasGroup.blocksRaycasts = false;
-
-            if (textoResultado != null)
-                textoResultado.text = mensaje;
-
-            float tiempoEmpleado = tiempoLimite - tiempoFinal;
-            int minutos = Mathf.FloorToInt(tiempoEmpleado / 60f);
-            int segundos = Mathf.FloorToInt(tiempoEmpleado % 60f);
-            if (textoTiempo != null)
-                textoTiempo.text = $"{minutos:00}:{segundos:00}";
-
-            if (textoItems != null)
-                textoItems.text = $"{itemsRecolectados} / {totalItemsEnNivel}";
-
-            if (textoEnemigos != null)
-                textoEnemigos.text = $"{enemigosDerrotados} / {totalEnemigosEnNivel}";
-
-            int puntosItems = 0;
-            foreach (var pair in itemIDsRecolectados)
+            int id = pair.Key;
+            var item = itemsDataBase.GetItemByID(id);
+            if (item != null)
             {
-                int id = pair.Key;
-                var item = itemsDataBase.GetItemByID(id);
-                if (item != null)
+                puntosItems += item.Value.puntosAlRecoger * pair.Value;
+            }
+        }
+
+        int puntosEnemigos = enemigosDerrotados * 20;
+        int puntosTiempo = Mathf.FloorToInt(tiempoFinal / 5) * 5;
+        int puntosTotales = puntosItems + puntosEnemigos + puntosTiempo;
+
+        GameManager.Instance.SumarPuntos(puntosTotales);
+        GameManager.Instance.OnLevelCompleted();
+
+        if (textoResultado != null)
+            textoResultado.text = mensaje;
+
+        if (textoItems != null)
+            textoItems.text = $"{itemsRecolectados}/{totalItemsEnNivel}";
+
+        if (textoEnemigos != null)
+            textoEnemigos.text = $"{enemigosDerrotados}/{totalEnemigosEnNivel}";
+
+        if (textoTiempo != null)
+        {
+            int minutos = Mathf.FloorToInt(tiempoFinal / 60f);
+            int segundos = Mathf.FloorToInt(tiempoFinal % 60f);
+            textoTiempo.text = $"{minutos:00}:{segundos:00}";
+        }
+
+        if (textoPuntosItems != null)
+            textoPuntosItems.text = $"{puntosItems}";
+
+        if (textoPuntosEnemigos != null)
+            textoPuntosEnemigos.text = $"{puntosEnemigos}";
+
+        if (textoPuntosTiempo != null)
+            textoPuntosTiempo.text = $"{puntosTiempo}";
+
+        if (textoPuntosTotales != null)
+            textoPuntosTotales.text = $"{puntosTotales}";
+
+        bool recogioTodo = HasCollectedAllRequiredItems();
+
+        if (panelResultados != null)
+            panelResultados.SetActive(true);
+
+        if (panelDesbloqueo != null) panelDesbloqueo.SetActive(false);
+        if (panelSinDesbloqueo != null) panelSinDesbloqueo.SetActive(false);
+
+        if (recogioTodo)
+        {
+            if (panelDesbloqueo != null)
+            {
+                panelDesbloqueo.SetActive(true);
+            }
+        }
+        else
+        {
+            if (panelSinDesbloqueo != null)
+            {
+                panelSinDesbloqueo.SetActive(true);
+                if (textoResultado != null)
                 {
-                    puntosItems += item.Value.puntosAlRecoger * pair.Value;
+                    textoResultado.text += "\n\nNo recogiste todos los objetos clave.\nDebes reintentar o volver al Claro.";
                 }
             }
-
-            int puntosEnemigos = enemigosDerrotados * 20;
-            int puntosTiempo = Mathf.FloorToInt(tiempoFinal / 5) * 5;
-
-            if (textoPuntosItems != null)
-                textoPuntosItems.text = puntosItems.ToString();
-
-            if (textoPuntosEnemigos != null)
-                textoPuntosEnemigos.text = puntosEnemigos.ToString();
-
-            if (textoPuntosTiempo != null)
-                textoPuntosTiempo.text = puntosTiempo.ToString();
-
-            int puntosTotales = puntosItems + puntosEnemigos + puntosTiempo;
-
-            GameManager.Instance.SumarPuntos(puntosTotales);
-            GameManager.Instance.OnLevelCompleted();
-
-            if (textoPuntosTotales != null)
-                textoPuntosTotales.text = puntosTotales.ToString();
-
-            StartCoroutine(FadeInResultados());
         }
+
+        StartCoroutine(FadeInResultados());
     }
 
     IEnumerator FadeInResultados()
@@ -385,7 +447,7 @@ public class LevelController : MonoBehaviour
 
         foreach (var kvp in itemIDsRecolectados)
         {
-            inv.DeleteItem(kvp.Key, kvp.Value); // ID y cantidad
+            inv.DeleteItem(kvp.Key, kvp.Value);
         }
 
         itemIDsRecolectados.Clear();
@@ -405,6 +467,7 @@ public class LevelController : MonoBehaviour
         if (!collectedItems.Contains(item))
         {
             collectedItems.Add(item);
+            ActualizarProgresoItemsNecesarios();
         }
     }
 
