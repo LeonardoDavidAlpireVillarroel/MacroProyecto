@@ -3100,6 +3100,7 @@ GameObject:
   - component: {fileID: 9150419675370615417}
   - component: {fileID: 3468385661941933053}
   - component: {fileID: 7043501493474525684}
+  - component: {fileID: 5200923492143276635}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -3480,6 +3481,19 @@ MonoBehaviour:
   noAmmoPanel: {fileID: 7926003619763773773}
   noAmmoFadeDuration: 0.5
   noAmmoDisplayTime: 2
+--- !u!114 &5200923492143276635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2492534816086940807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 505de0aad59b52244bca3355c70f2082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph: {fileID: 0}
 --- !u!1 &2501048116241184863
 GameObject:
   m_ObjectHideFlags: 0
