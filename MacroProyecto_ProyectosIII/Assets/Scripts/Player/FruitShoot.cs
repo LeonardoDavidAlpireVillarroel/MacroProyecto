@@ -42,6 +42,16 @@ public class FruitShoot : MonoBehaviour
         unpausedTimer = unpausedCooldownTime;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        SnakeBossAI boss = other.GetComponent<SnakeBossAI>();
+        if (boss != null)
+        {
+            boss.TakeDamage(1);
+            Destroy(gameObject);
+        }
+    }
+
     void Update()
     {
         if (arrowInstance == null) return;

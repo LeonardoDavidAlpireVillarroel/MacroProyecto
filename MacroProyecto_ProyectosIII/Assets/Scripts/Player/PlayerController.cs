@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -45,6 +48,11 @@ public class PlayerController : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
     private bool isGrounded;
+
+    [Header("Impulsos por gameObjects")]
+    private bool isBeingPushed = false;
+    private float pushTimer = 0f;
+    private float pushDuration = 0.5f;
 
     [Header("Water Settings")]
     public LayerMask waterLayer;
@@ -121,6 +129,20 @@ public class PlayerController : MonoBehaviour
     {
         if (isDashing) return;
 
+        if (isBeingPushed)
+        {
+            pushTimer -= Time.fixedDeltaTime;
+            if (pushTimer <= 0)
+            {
+                isBeingPushed = false;
+            }
+            else
+            {
+                // Mientras está siendo empujado, no modificar velocidad horizontal
+                return;
+            }
+        }
+
         Vector3 moveDirection = new Vector3(moveInput.x, 0, moveInput.y).normalized;
 
         if (moveDirection.magnitude >= 0.1f)
@@ -128,13 +150,29 @@ public class PlayerController : MonoBehaviour
             isMoving = true;
             lastMoveDirection = moveInput;
 
-            Vector3 movement = moveDirection * runSpeed;
-            rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z);
+            Vector3 targetVelocity = moveDirection * runSpeed;
+            Vector3 currentVelocity = rb.linearVelocity;
+
+            Vector3 horizontalVelocity = new Vector3(currentVelocity.x, 0, currentVelocity.z);
+
+            if (targetVelocity.magnitude > horizontalVelocity.magnitude)
+            {
+                rb.linearVelocity = new Vector3(targetVelocity.x, currentVelocity.y, targetVelocity.z);
+            }
+            else
+            {
+                rb.linearVelocity = new Vector3(currentVelocity.x, currentVelocity.y, currentVelocity.z);
+            }
         }
         else
         {
             isMoving = false;
-            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            Vector3 currentVelocity = rb.linearVelocity;
+            Vector3 horizontalVelocity = new Vector3(currentVelocity.x, 0, currentVelocity.z);
+            if (horizontalVelocity.magnitude < 0.1f)
+            {
+                rb.linearVelocity = new Vector3(0, currentVelocity.y, 0);
+            }
         }
 
         UpdateVisualDirection();
@@ -276,5 +314,12 @@ public class PlayerController : MonoBehaviour
                 capibaraAnimator.SetBool("Falling", true);
             }
         }
+    }
+
+    public void ApplyPush(Vector3 pushForce)
+    {
+        rb.linearVelocity = pushForce;
+        isBeingPushed = true;
+        pushTimer = pushDuration;
     }
 }
