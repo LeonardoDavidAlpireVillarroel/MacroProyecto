@@ -7,4 +7,9 @@ public class ProfileBoxUI : MonoBehaviour
     public TMP_Text nameLabel;
     public Button deleteButton;
     public Button loadButton;
+
+    public void PlaySFX(string soundName)
+    {
+        SoundManager.Instance?.PlaySound2D(soundName);
+    }
 }

@@ -17,6 +17,8 @@ public class MapController : MonoBehaviour
     [SerializeField] private GameManager gameManager;
 
     private bool playerInRange = false;
+    private bool mostrarLevelPanelAutomaticamente = false;
+    private bool permitirCerrarMapa = false;
 
     private void Awake()
     {
@@ -28,6 +30,7 @@ public class MapController : MonoBehaviour
 
     void Start()
     {
+<<<<<<< HEAD
         if (ProfileStorage.s_currentProfile == null)
         {
             var profileIndex = ProfileStorage.GetProfileIndex();
@@ -61,6 +64,34 @@ public class MapController : MonoBehaviour
         if (gameManager == null)
         {
             gameManager = FindFirstObjectByType<GameManager>();
+=======
+        string currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
+        if (currentScene == "ClaroPacifico")
+        {
+            permitirCerrarMapa = true;
+        }
+        else
+        {
+            mostrarLevelPanelAutomaticamente = true;
+            permitirCerrarMapa = false;
+        }
+
+        if (ProfileStorage.s_currentProfile == null)
+        {
+            string savedProfile = PlayerPrefs.GetString("CurrentProfile", null);
+            if (!string.IsNullOrEmpty(savedProfile))
+            {
+                ProfileStorage.LoadProfile(savedProfile, gameManager);
+            }
+        }
+
+        unlockLevel = ProfileStorage.s_currentProfile != null ? ProfileStorage.s_currentProfile.unlockedLevelCount : 1;
+
+        for (int i = 0; i < levelButtons.Length; i++)
+        {
+            levelButtons[i].interactable = i < unlockLevel;
+>>>>>>> Development
         }
 
         if (levelButtons.Length > 0)
@@ -77,20 +108,17 @@ public class MapController : MonoBehaviour
         }
 
         if (levelPanel != null)
-        {
             levelPanel.SetActive(false);
-        }
+
         if (interactionText != null)
-        {
             interactionText.SetActive(false);
-        }
 
         Time.timeScale = 1f;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !mostrarLevelPanelAutomaticamente)
         {
             playerInRange = true;
             if (interactionText != null)
@@ -102,7 +130,7 @@ public class MapController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !mostrarLevelPanelAutomaticamente)
         {
             playerInRange = false;
             if (interactionText != null)
@@ -114,6 +142,8 @@ public class MapController : MonoBehaviour
 
     void Update()
     {
+        if (mostrarLevelPanelAutomaticamente) return;
+
         if (playerInRange && playerController.interactAction.WasPressedThisFrame())
         {
             if (levelPanel != null)
@@ -123,15 +153,27 @@ public class MapController : MonoBehaviour
 
                 gameManager.PauseGame();
                 playerController.enabled = false;
+<<<<<<< HEAD
 
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
+=======
+>>>>>>> Development
             }
             if (levelPanel != null && levelPanel.activeSelf && gameManager.backAction.WasPressedThisFrame())
             {
                 levelPanel.SetActive(false);
                 playerController.enabled = true;
 
+<<<<<<< HEAD
+=======
+        if (levelPanel != null && levelPanel.activeSelf && gameManager.backAction.WasPressedThisFrame())
+        {
+            if (permitirCerrarMapa)
+            {
+                levelPanel.SetActive(false);
+                playerController.enabled = true;
+>>>>>>> Development
                 gameManager.ResumeGame();
             }
         }
@@ -139,15 +181,40 @@ public class MapController : MonoBehaviour
 
     public void UnlockLevels()
     {
-        if (unlockLevel > ProfileStorage.s_currentProfile.unlockedLevelCount)
-        {
-            ProfileStorage.s_currentProfile.unlockedLevelCount = unlockLevel;
+        UnlockLevel(1);
+    }
 
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                ProfileStorage.StorePlayerProfile(player);
-            }
+    public void UnlockLevel(int levelToUnlock)
+    {
+        if (ProfileStorage.s_currentProfile == null)
+            return;
+
+        if (ProfileStorage.s_currentProfile.unlockedLevelCount >= levelToUnlock)
+            return;
+
+        ProfileStorage.s_currentProfile.unlockedLevelCount = levelToUnlock;
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null && GameManager.Instance != null)
+        {
+            ProfileStorage.StorePlayerProfile(player, GameManager.Instance);
         }
+    }
+
+    public void MostrarPanelMapaAutomaticamente()
+    {
+        mostrarLevelPanelAutomaticamente = true;
+
+        if (levelPanel != null)
+            levelPanel.SetActive(true);
+
+        if (interactionText != null)
+            interactionText.SetActive(false);
+
+        if (gameManager != null)
+            gameManager.PauseGame();
+
+        if (playerController != null)
+            playerController.enabled = false;
     }
 }

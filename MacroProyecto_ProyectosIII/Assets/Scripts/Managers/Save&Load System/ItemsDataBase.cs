@@ -18,6 +18,7 @@ public class ItemsDataBase : ScriptableObject
         public string Void;
         public int cantidadInicialTienda;
         public int stackLimit;
+        public int puntosAlRecoger;
     }
 
     public enum Clase
@@ -34,4 +35,14 @@ public class ItemsDataBase : ScriptableObject
     }
 
     public InventoryObject[] ObjectsDataBase;
+
+    public InventoryObject? GetItemByID(int id)
+    {
+        foreach (var item in ObjectsDataBase)
+        {
+            if (item.ID == id)
+                return item;
+        }
+        return null;
+    }
 }

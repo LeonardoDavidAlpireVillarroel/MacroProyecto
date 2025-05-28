@@ -15,15 +15,26 @@ public class ProfileData
     public string name;
     public bool newGame;
 
+    //Tutoriales
+    public bool dashTutorialSeen = false;
+
     //Posicion jugador
     public float x;
     public float y;
 
     //Progreso jugador
+<<<<<<< HEAD
     public float playerHealth;
     public int playerLevel;
     public float experience;
     public List<string> inventory;
+=======
+    public int playerHealth;
+    public int fuerza;
+    public int points;
+    //Inventario
+    public string inventoryJson;
+>>>>>>> Development
     public int unlockedLevelCount;
 
     //Inventario
@@ -32,6 +43,34 @@ public class ProfileData
     // PlayerPrefs personalizados
     public List<SerializableKeyValue> customPrefs;
 
+    [System.Serializable]
+    public class LevelStats
+    {
+        public string levelName;
+        public float timeCompleted;
+        public int fruitsCollected;
+        public int enemiesDefeated;
+    }
+
+    public List<LevelStats> levelsStats = new List<LevelStats>();
+
+    public LevelStats GetLevelStats(string levelName)
+    {
+        var stats = levelsStats.Find(l => l.levelName == levelName);
+        if (stats == null)
+        {
+            stats = new LevelStats
+            {
+                levelName = levelName,
+                timeCompleted = 0f,
+                fruitsCollected = 0,
+                enemiesDefeated = 0
+            };
+            levelsStats.Add(stats);
+        }
+        return stats;
+    }
+
     public ProfileData()
     {
         this.filename = "None.xml";
@@ -39,13 +78,21 @@ public class ProfileData
         this.newGame = false;
         this.x = this.y = 0f;
 
+<<<<<<< HEAD
         this.playerHealth = 3f;
         this.playerLevel = 1;
         this.experience = 0f;
         this.inventory = new List<string>();
+=======
+        this.playerHealth = 3;
+        this.fuerza = 10;
+        this.points = 50;
+        this.inventoryJson = string.Empty;
+>>>>>>> Development
         this.unlockedLevelCount = 2;
 
         this.customPrefs = new List<SerializableKeyValue>();
+        this.levelsStats = new List<LevelStats>();
     }
 
     public ProfileData(string name, bool newGame, float x, float y)
@@ -56,13 +103,21 @@ public class ProfileData
         this.x = x;
         this.y = y;
 
+<<<<<<< HEAD
         this.playerHealth = 3f;
         this.playerLevel = 1;
         this.experience = 0f;
         this.inventory = new List<string>();
+=======
+        this.playerHealth = 3;
+        this.fuerza = 10;
+        this.points = 50;
+        this.inventoryJson = string.Empty;
+>>>>>>> Development
         this.unlockedLevelCount = 2;
 
         this.customPrefs = new List<SerializableKeyValue>();
+        this.levelsStats = new List<LevelStats>();
     }
 
     public void SetPref(string key, string value)

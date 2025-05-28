@@ -12,6 +12,9 @@ TagManager:
   - Eliminar
   - Shop
   - Inventory
+  - TomarPocion
+  - PlayerShoot
+  - Enemigo
   layers:
   - Default
   - TransparentFX
@@ -19,8 +22,8 @@ TagManager:
   - Floor
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - PlayerShoot
   - 
   - 
   - 

@@ -1,5 +1,4 @@
 using Unity.Cinemachine;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.Timeline.DirectorControlPlayable;
@@ -202,11 +201,30 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z);
 
             isMoving = true;
+            lastMoveDirection = moveInput;
+
+            if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
+            {
+                capibaraAnimator.SetFloat("LookDirection", moveInput.x > 0 ? 0f : 1f);
+            }
+            else
+            {
+                capibaraAnimator.SetFloat("LookDirection", moveInput.y > 0 ? 2f : 3f);
+            }
         }
         else
         {
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
             isMoving = false;
+
+            if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
+            {
+                capibaraAnimator.SetFloat("LookDirection", moveInput.x > 0 ? 0f : 1f);
+            }
+            else
+            {
+                capibaraAnimator.SetFloat("LookDirection", moveInput.y > 0 ? 2f : 3f);
+            }
         }
 
         UpdateVisualDirection();
@@ -215,7 +233,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(Vector3.up * waterFloatForce, ForceMode.Acceleration);
         }
-
         capibaraAnimator.SetBool("IsSwimming", true);
         capibaraAnimator.SetBool("IsRun", isMoving);
         capibaraAnimator.SetBool("IsJump", false);

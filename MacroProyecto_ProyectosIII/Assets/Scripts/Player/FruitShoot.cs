@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,6 +21,11 @@ public class FruitShoot : MonoBehaviour
     private Vector3 currentAimDirection = Vector3.forward;
 
     [SerializeField] private PlayerController playerController;
+
+    [Header("UI sin munición")]
+    public CanvasGroup noAmmoPanel;
+    public float noAmmoFadeDuration = 0.5f;
+    public float noAmmoDisplayTime = 2f;
 
     void Start()
     {
@@ -48,9 +56,6 @@ public class FruitShoot : MonoBehaviour
 
         if (isAiming)
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.None;
-
             if (!arrowInstance.activeSelf)
                 arrowInstance.SetActive(true);
 
@@ -64,12 +69,6 @@ public class FruitShoot : MonoBehaviour
 
         else
         {
-            if (!GameManager.Instance.isPaused)
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-
             if (arrowInstance.activeSelf)
                 arrowInstance.SetActive(false);
         }
@@ -104,15 +103,39 @@ public class FruitShoot : MonoBehaviour
 
     void ShootFruit()
     {
+        bool tieneMunicion = false;
+        int indexMunicion = -1;
+        int idMunicion = -1;
+
+        for (int i = 0; i < Inventory.Instance.inventory.Count; i++)
+        {
+            var item = Inventory.Instance.inventory[i];
+            if (item.id == -1 || item.cantidadItems <= 0) continue;
+
+            var itemData = Inventory.Instance.data.ObjectsDataBase[item.id];
+
+            if (item.id == 3 || itemData.clase == ItemsDataBase.Clase.Municion)
+            {
+                tieneMunicion = true;
+                indexMunicion = i;
+                idMunicion = item.id;
+                break;
+            }
+        }
+
+        if (!tieneMunicion)
+        {
+            StartCoroutine(ShowNoAmmoPanel());
+            return;
+        }
+
         GameObject newFruit = Instantiate(fruitPrefab, spawnPoint.position, Quaternion.identity);
 
         Rigidbody rb = newFruit.GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            rb = newFruit.AddComponent<Rigidbody>();
-        }
+        if (rb == null) rb = newFruit.AddComponent<Rigidbody>();
 
         rb.useGravity = false;
+        rb.isKinematic = false;
         rb.linearVelocity = currentAimDirection * shootSpeed;
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -129,6 +152,50 @@ public class FruitShoot : MonoBehaviour
 
         Destroy(newFruit, fruitLifetime);
         hasShot = true;
+
+        var currentItem = Inventory.Instance.inventory[indexMunicion];
+        int nuevaCantidad = currentItem.cantidadItems - 1;
+
+        if (nuevaCantidad <= 0)
+        {
+            Inventory.Instance.inventory[indexMunicion] = new ObjectInventoryID(-1, 0);
+        }
+        else
+        {
+            Inventory.Instance.inventory[indexMunicion] = new ObjectInventoryID(idMunicion, nuevaCantidad);
+        }
+
+        Inventory.Instance.InventoryUpdate();
+        GameManager.Instance.SaveGame();
     }
 
+    IEnumerator ShowNoAmmoPanel()
+    {
+        if (noAmmoPanel == null) yield break;
+
+        noAmmoPanel.gameObject.SetActive(true);
+
+        float elapsed = 0f;
+        while (elapsed < noAmmoFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            noAmmoPanel.alpha = Mathf.Lerp(0f, 1f, elapsed / noAmmoFadeDuration);
+            yield return null;
+        }
+
+        noAmmoPanel.alpha = 1f;
+
+        yield return new WaitForSeconds(noAmmoDisplayTime);
+
+        elapsed = 0f;
+        while (elapsed < noAmmoFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            noAmmoPanel.alpha = Mathf.Lerp(1f, 0f, elapsed / noAmmoFadeDuration);
+            yield return null;
+        }
+
+        noAmmoPanel.alpha = 0f;
+        noAmmoPanel.gameObject.SetActive(false);
+    }
 }

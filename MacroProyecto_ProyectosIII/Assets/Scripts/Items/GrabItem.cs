@@ -5,6 +5,7 @@ public class GrabItem : MonoBehaviour
     public int cantidad;
     public int ID;
     public Inventory inv;
+    public ItemsDataBase itemDB;
 
     private bool pickedUp = false;
 
@@ -14,6 +15,9 @@ public class GrabItem : MonoBehaviour
         {
             inv = Inventory.Instance;
         }
+
+        if (itemDB == null)
+            itemDB = Resources.Load<ItemsDataBase>("ObjectsDataBase");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,12 +26,27 @@ public class GrabItem : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            if (inv != null)
+            if (inv == null || itemDB == null) return;
+
+            if (!inv.TieneEspacioEnInventario(ID, cantidad))
             {
-                pickedUp = true;
-                inv.AddItem(ID, cantidad);
-                Destroy(gameObject);
+                inv.ShowMessage();
+                return;
             }
+
+            pickedUp = true;
+
+            inv.AddItem(ID, cantidad);
+
+            LevelController nivel = FindFirstObjectByType<LevelController>();
+            if (nivel != null)
+            {
+                nivel.IncrementarItemsRecolectados(ID);
+                nivel.IncrementarItemsRecolectados2(ID);
+                nivel.AddCollectedItem(gameObject);
+            }
+
+            gameObject.SetActive(false);
         }
     }
 }

@@ -5,29 +5,35 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Collections;
 
+[System.Serializable]
+public class ObjectInventoryID
+{
+    public int id;
+    public int cantidadItems;
+
+    public ObjectInventoryID(int id, int cantidadItems)
+    {
+        this.id = id;
+        this.cantidadItems = cantidadItems;
+    }
+}
+
+[System.Serializable]
+public class InventoryWrapper
+{
+    public List<ObjectInventoryID> items;
+}
+
 public class Inventory : MonoBehaviour
 {
     public static Inventory Instance;
     public bool isInventoryOpen;
     private CanvasGroup cg;
 
-    [System.Serializable]
-    public struct ObjectInventoryID
-    {
-        public int id;
-        public int cantidadItems;
-
-        public ObjectInventoryID(int id, int cantidadItems)
-        {
-            this.id = id;
-            this.cantidadItems = cantidadItems;
-        }
-    }
-
     public PlayerController playerController;
 
     [SerializeField]
-    ItemsDataBase data;
+    public ItemsDataBase data;
 
     [Header("Variables del Drag and Drop")]
     public GraphicRaycaster graphRay;
@@ -75,6 +81,27 @@ public class Inventory : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public string GetInventoryAsString()
+    {
+        InventoryWrapper wrapper = new InventoryWrapper { items = inventory };
+        return JsonUtility.ToJson(wrapper);
+    }
+
+    public void SetInventoryFromString(string json)
+    {
+        if (string.IsNullOrEmpty(json)) return;
+
+        InventoryWrapper wrapper = JsonUtility.FromJson<InventoryWrapper>(json);
+        if (wrapper != null && wrapper.items != null)
+        {
+            inventory = wrapper.items;
         }
     }
 
@@ -130,33 +157,28 @@ public class Inventory : MonoBehaviour
 
         if (isInventoryOpen)
         {
+            GameManager.Instance.playerController.playerInput.actions.FindActionMap("UI").Enable();
             cg.alpha = 1;
             cg.interactable = true;
             cg.blocksRaycasts = true;
-
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
 
             InventoryUpdate();
         }
         else
         {
+            GameManager.Instance.playerController.playerInput.actions.FindActionMap("UI").Disable();
             cg.alpha = 0;
             cg.interactable = false;
             cg.blocksRaycasts = false;
-
-            if (!GameManager.Instance.shopScript.shopCanvasGroup || GameManager.Instance.shopScript.shopCanvasGroup.alpha == 0f)
-            {
-                playerController.GetComponent<FruitShoot>().enabled = true;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
         }
     }
 
     private void Update()
     {
-        if (isInventoryOpen == true) Arrastrar();
+        if (isInventoryOpen)
+        {
+            Arrastrar();
+        }
     }
     void Arrastrar()
     {
@@ -356,6 +378,7 @@ public class Inventory : MonoBehaviour
                             {
                                 deletePoster.selectedItem = selectedObject;
                                 deletePoster.originalParent = exParent;
+                                deletePoster.slotIndex = exParent.GetSiblingIndex();
                                 deletePoster.EnableDeletePanel();
                                 selectedObject = null;
                                 return;
@@ -379,6 +402,20 @@ public class Inventory : MonoBehaviour
                                 shopManager.confCompra.GetComponent<ConfirmarCompra>().id = selectedObject.gameObject.GetComponent<Item>().ID;
                                 shopManager.confCompra.GetComponent<ConfirmarCompra>().cantidad = selectedObject.gameObject.GetComponent<Item>().itemAmount;
                                 shopManager.confCompra.GetComponent<ConfirmarCompra>().compra = false;
+                            }
+                        }
+
+                        if (result.gameObject.CompareTag("TomarPocion"))
+                        {
+                            var itemData = data.ObjectsDataBase[selectedObjectID];
+
+                            if (itemData.clase == ItemsDataBase.Clase.Pocion && itemData.type == ItemsDataBase.Type.consumable)
+                            {
+                                GameManager.Instance.UsarPocionPorID(selectedObjectID);
+
+                                selectedObject = null;
+                                InventoryUpdate();
+                                return;
                             }
                         }
                     }
@@ -526,27 +563,60 @@ public class Inventory : MonoBehaviour
         InventoryUpdate();
     }
 
-    public void DeleteItem(int index, int cantidad)
+    public void DeleteItem(int itemID, int cantidad)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            var slot = inventory[i];
+            if (slot.id == itemID)
+            {
+                if (slot.cantidadItems <= cantidad)
+                {
+                    cantidad -= slot.cantidadItems;
+                    inventory[i] = new ObjectInventoryID(-1, 0);
+                }
+                else
+                {
+                    inventory[i] = new ObjectInventoryID(slot.id, slot.cantidadItems - cantidad);
+                    cantidad = 0;
+                }
+
+                if (cantidad <= 0)
+                    break;
+            }
+        }
+
+        InventoryUpdate();
+    }
+
+    public void DeleteItemAtSlot(int index, int cantidad)
     {
         if (index < 0 || index >= inventory.Count)
             return;
 
-        var slot = inventory[index];
+        ObjectInventoryID slot = inventory[index];
 
-        if (slot.id == -1 || slot.cantidadItems <= 0 || cantidad <= 0)
+        if (slot.id == -1 || slot.cantidadItems <= 0)
             return;
 
-        int actualCantidad = slot.cantidadItems;
-
-        if (cantidad >= actualCantidad)
+        if (cantidad >= slot.cantidadItems)
         {
             inventory[index] = new ObjectInventoryID(-1, 0);
         }
         else
         {
-            inventory[index] = new ObjectInventoryID(slot.id, actualCantidad - cantidad);
+            inventory[index] = new ObjectInventoryID(slot.id, slot.cantidadItems - cantidad);
         }
-        InventoryUpdate();
+    }
+
+    public void RemoveItemsCollectedInLevel()
+    {
+        if (GameManager.Instance == null || GameManager.Instance.levelTimer == null)
+            return;
+
+        GameManager.Instance.levelTimer.EliminarItemsRecolectadosDelInventario();
+
+        //InventoryUpdate();
     }
 
     public void InventoryUpdate()

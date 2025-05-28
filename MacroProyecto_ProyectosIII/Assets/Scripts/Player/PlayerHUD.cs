@@ -25,4 +25,12 @@ public class PlayerHUD : MonoBehaviour
     {
         vidas[index].SetActive(true);
     }
+
+    public void UpdateAllLifes(int currentHealth)
+    {
+        for (int i = 0; i < vidas.Length; i++)
+        {
+            vidas[i].SetActive(i < currentHealth);
+        }
+    }
 }
