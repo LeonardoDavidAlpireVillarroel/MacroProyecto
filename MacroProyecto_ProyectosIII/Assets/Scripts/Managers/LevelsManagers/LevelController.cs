@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
@@ -45,6 +46,9 @@ public class LevelController : MonoBehaviour
     public GameObject introPanel;
     public CanvasGroup introCanvasGroup;
     public Button botonContinuar;
+
+    [Header("Dash Tutorial")]
+    public DashTutorialController dashTutorialController;
 
     [Header("Temporizador")]
     public float tiempoLimite = 121f; // 2 minutos (120) y un poco mas
@@ -97,7 +101,20 @@ public class LevelController : MonoBehaviour
         }
 
         if (botonContinuar != null)
-            botonContinuar.onClick.AddListener(IniciarNivel);
+        {
+            botonContinuar.onClick.AddListener(() =>
+            {
+                if (SceneManager.GetActiveScene().name == "Level3" && dashTutorialController != null)
+                {
+                    introPanel.SetActive(false);
+                    dashTutorialController.CheckAndShowDashTutorial();
+                }
+                else
+                {
+                    IniciarNivel();
+                }
+            });
+        }
 
         if (panelResultados != null)
         {
@@ -151,6 +168,11 @@ public class LevelController : MonoBehaviour
         {
             StartCoroutine(FadeOutIntroPanel());
         }
+    }
+
+    public void ForzarInicioNivelDesdeDashTutorial()
+    {
+        StartCoroutine(FadeOutIntroPanel());
     }
 
     IEnumerator FadeOutIntroPanel()
