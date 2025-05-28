@@ -139,8 +139,8 @@ public class LevelController : MonoBehaviour
     IEnumerator EsperarYCargarIntro()
     {
         yield return new WaitForSecondsRealtime(0.5f);
+        yield return StartCoroutine(FadeInIntroPanel());
         GameManager.Instance.PauseGame();
-        StartCoroutine(FadeInIntroPanel());
     }
 
     IEnumerator FadeInIntroPanel()

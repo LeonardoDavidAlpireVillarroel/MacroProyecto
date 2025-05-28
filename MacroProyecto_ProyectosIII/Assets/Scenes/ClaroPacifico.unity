@@ -1500,7 +1500,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1852231465}
         m_TargetAssemblyTypeName: LoadLevel, Assembly-CSharp
-        m_MethodName: LoadLevel2
+        m_MethodName: LoadLevel3
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3066,7 +3066,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1852231465}
         m_TargetAssemblyTypeName: LoadLevel, Assembly-CSharp
-        m_MethodName: LoadLevel2
+        m_MethodName: LoadLevel4
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

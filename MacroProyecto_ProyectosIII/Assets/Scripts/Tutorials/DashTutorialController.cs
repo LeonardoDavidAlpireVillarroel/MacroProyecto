@@ -20,16 +20,6 @@ public class DashTutorialController : MonoBehaviour
 
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "Level2" || SceneManager.GetActiveScene().name == "Level3")
-        {
-            int dashTutorialSeen = ProfileStorage.s_currentProfile.GetPrefInt("dashTutorialSeen", 0);
-
-            if (dashTutorialSeen == 0)
-            {
-                ShowDashTutorial();
-            }
-        }
-
         if (closeButton != null)
         {
             closeButton.onClick.AddListener(CloseDashTutorial);

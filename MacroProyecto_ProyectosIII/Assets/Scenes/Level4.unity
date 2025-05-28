@@ -3265,7 +3265,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 83, y: -105.809814}
+  m_AnchoredPosition: {x: -36, y: -358}
   m_SizeDelta: {x: 681.2832, y: 493.0991}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &511234023
@@ -14425,6 +14425,7 @@ MonoBehaviour:
   introPanel: {fileID: 683914696}
   introCanvasGroup: {fileID: 683914700}
   botonContinuar: {fileID: 1950597406}
+  dashTutorialController: {fileID: 0}
   tiempoLimite: 120
   timerText: {fileID: 554335792}
   panelResultados: {fileID: 303912365}
