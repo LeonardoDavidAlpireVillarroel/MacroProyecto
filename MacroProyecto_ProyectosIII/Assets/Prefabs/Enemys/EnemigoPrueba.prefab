@@ -100,8 +100,6 @@ GameObject:
   - component: {fileID: 6760856628549119720}
   - component: {fileID: -7552058927016599542}
   - component: {fileID: 1806884297940518620}
-  - component: {fileID: 7003574743850094728}
-  - component: {fileID: 3247454405123809589}
   - component: {fileID: 2814757252867784321}
   m_Layer: 0
   m_Name: EnemigoPrueba
@@ -208,36 +206,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59f3670b9875a2b4b90a350e86478832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7003574743850094728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6247227834614391848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e464a682826af746946c7f37f753f24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3247454405123809589
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6247227834614391848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e986be4c8681ec459c931ff734b73a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  maxSpeed: 3
-  maxAcceleration: 1
-  targetRange: 1
-  decelerationRange: 5
-  timeToTarget: 0.1
 --- !u!114 &2814757252867784321
 MonoBehaviour:
   m_ObjectHideFlags: 0
