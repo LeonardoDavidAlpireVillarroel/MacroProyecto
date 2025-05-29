@@ -9352,6 +9352,10 @@ PrefabInstance:
       propertyPath: dynamicTargetTracker
       value: 
       objectReference: {fileID: 1918040482}
+    - target: {fileID: 2814757252867784321, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
+      propertyPath: health
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3247454405123809589, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: target
       value: 
