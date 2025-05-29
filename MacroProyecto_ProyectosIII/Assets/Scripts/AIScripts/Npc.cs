@@ -24,7 +24,7 @@ public class Npc : MonoBehaviour
             new BHT_Task[]
             {
                 new EntityNear(
-                    50.0f,      
+                    4.3f,      
                     entity,    
                     gameObject  
                 ),

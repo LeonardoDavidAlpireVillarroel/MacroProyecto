@@ -8,7 +8,7 @@ public class EnemiPrueba : MonoBehaviour
 {
     public int health = 1;
     [Header("Ataque Melee")]
-    public float meleeRange = 2.5f;
+    public float meleeRange = 0.1f;
     public float meleeCooldown = 2.0f;
     public int meleeDamage = 1;
 
@@ -19,9 +19,14 @@ public class EnemiPrueba : MonoBehaviour
 
     private bool hasDealtDamage = false;
 
+    public CmpPathFollowing cmpPathFollowing;
+
+    private bool isStuned = false;
+
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        cmpPathFollowing = GetComponent<CmpPathFollowing>();
         animator = GetComponent<Animator>();
     }
 
@@ -30,7 +35,7 @@ public class EnemiPrueba : MonoBehaviour
         if (player != null && canAttack && !isAttacking)
         {
             float distance = Vector3.Distance(transform.position, player.position);
-            if (distance <= meleeRange)
+            if (distance <= meleeRange && !isStuned)
             {
                 StartCoroutine(MeleeAttack());
             }
@@ -45,13 +50,9 @@ public class EnemiPrueba : MonoBehaviour
 
         animator.SetTrigger("Attack");
 
+        cmpPathFollowing.maxSpeed = 20f;
         yield return new WaitForSeconds(0.5f);
-
-        if (!hasDealtDamage)
-        {
-            ApplyDamage();
-            hasDealtDamage = true;
-        }
+        cmpPathFollowing.maxSpeed = 1f;
 
         yield return new WaitForSeconds(meleeCooldown - 0.5f);
 
@@ -59,21 +60,24 @@ public class EnemiPrueba : MonoBehaviour
         canAttack = true;
     }
 
-    public void ApplyDamage()
-    {
-        if (player == null) return;
-
-        float distance = Vector3.Distance(transform.position, player.position);
-        if (distance <= meleeRange)
-        {
-            GameManager.Instance.LoseLifes();
-        }
-    }
-
     public void TakeDamage(int amount)
     {
         health -= amount;
+
+        isStuned = true;
+        StartCoroutine(StunEnemy());
+
         if (health <= 0) Die();
+    }
+
+    private IEnumerator StunEnemy()
+    {
+        float originalSpeed = cmpPathFollowing.maxSpeed;
+
+        cmpPathFollowing.maxSpeed = 0;
+        yield return new WaitForSeconds(5f);
+        cmpPathFollowing.maxSpeed = originalSpeed;
+        isStuned = false;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -82,6 +86,11 @@ public class EnemiPrueba : MonoBehaviour
         {
             TakeDamage(1);
             Destroy(collision.gameObject);
+        }
+
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            GameManager.Instance.LoseLifes();
         }
     }
 

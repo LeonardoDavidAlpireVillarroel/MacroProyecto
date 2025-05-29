@@ -9,7 +9,7 @@ namespace AIEngine.Movement.Components.Algorithms
     [RequireComponent(typeof(CmpStatic))]
     public class CmpPathFollowing : MonoBehaviour, ISteeringProvider
     {
-        [SerializeField] private float maxSpeed;
+        [SerializeField] public float maxSpeed;
         [SerializeField] private float thresholdDistance;
         [SerializeField] private float objectivePhase;
 
