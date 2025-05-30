@@ -2290,7 +2290,6 @@ GameObject:
   - component: {fileID: 2148059799195343629}
   - component: {fileID: 2941126560060534095}
   - component: {fileID: 7926003619763773773}
-  - component: {fileID: 5430547370844358590}
   m_Layer: 5
   m_Name: CartelFaltaMunicion
   m_TagString: Untagged
@@ -2368,23 +2367,6 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
---- !u!114 &5430547370844358590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564492651081328956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfde8265360775f45a75db7ca56022aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 7926003619763773773}
-  messageTransform: {fileID: 5600303511441199100}
-  showDuration: 5
-  fadeDuration: 0.5
-  popScale: 20
 --- !u!1 &1749347095221496317
 GameObject:
   m_ObjectHideFlags: 0

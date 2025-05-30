@@ -70,6 +70,13 @@ public class LevelController : MonoBehaviour
 
     private bool nivelFinalizado = false;
 
+    private bool introPanelMostrado = false;
+    private bool introIniciado = false;
+
+    [Header("Configuración Level3")]
+    public bool esLevel3 = false;
+    public int puntosFijosLevel3 = 1000;
+
     void Awake()
     {
         if (Instance == null)
@@ -84,72 +91,83 @@ public class LevelController : MonoBehaviour
 
     void Start()
     {
+        string sceneName = SceneManager.GetActiveScene().name;
+        esLevel3 = (sceneName == "Level3");
+
         totalEnemigosEnNivel = enemigosEnNivel.Count;
         totalItemsEnNivel = itemsEnNivel.Count;
 
-        tiempoRestante = tiempoLimite;
+        if (esLevel3)
+        {
+            if (textoProgresoItemsNecesarios != null)
+                textoProgresoItemsNecesarios.gameObject.SetActive(false);
+            if (timerText != null)
+                timerText.gameObject.SetActive(false);
 
-        if (SceneManager.GetActiveScene().name == "Level2" && dashTutorialController != null)
+            temporizadorActivo = false;
+        }
+        else
+        {
+            tiempoRestante = tiempoLimite;
+            temporizadorActivo = true;
+        }
+
+        if (sceneName == "Level2" && dashTutorialController != null)
         {
             int dashTutorialSeen = ProfileStorage.s_currentProfile.GetPrefInt("dashTutorialSeen", 0);
             if (dashTutorialSeen == 0)
             {
-                // Mostrar dash tutorial
-                dashTutorialController.gameObject.SetActive(true);
                 dashTutorialController.CheckAndShowDashTutorial();
+                Time.timeScale = 0f;
+                temporizadorActivo = false;
 
-                // Pausar tiempo desde el inicio
-                Time.timeScale = 0;
-
-                // Suscribimos evento Close del dashTutorial (debería tener un botón Close)
                 dashTutorialController.closeButton.onClick.RemoveAllListeners();
                 dashTutorialController.closeButton.onClick.AddListener(() =>
                 {
-                    dashTutorialController.gameObject.SetActive(false);
                     ProfileStorage.s_currentProfile.SetPrefInt("dashTutorialSeen", 1);
                     MostrarIntroPanelConTiempoPausado();
                 });
             }
             else
             {
-                // Si ya se vio el tutorial, mostrar intro normal y arrancar tiempo normalmente
-                StartCoroutine(EsperarYCargarIntro());
+                IniciarIntroSiNoEstaActivo();
             }
         }
         else
         {
-            // Otros niveles
-            StartCoroutine(EsperarYCargarIntro());
+            IniciarIntroSiNoEstaActivo();
         }
 
-        // Botón continuar en el intro panel
         if (botonContinuar != null)
         {
             botonContinuar.onClick.RemoveAllListeners();
-            botonContinuar.onClick.AddListener(() =>
-            {
-                CerrarIntroYReanudarTiempo();
-            });
+            botonContinuar.onClick.AddListener(CerrarIntroYReanudarTiempo);
         }
 
         if (panelResultados != null)
-        {
             panelResultados.SetActive(false);
-        }
 
         if (botonContinuarResultados != null)
         {
             botonContinuarResultados.gameObject.SetActive(false);
+            botonContinuarResultados.onClick.RemoveAllListeners();
             botonContinuarResultados.onClick.AddListener(OnClickContinuarResultados);
         }
 
         triggerToActivate = GetComponent<Collider>();
         if (triggerToActivate != null)
-        {
             triggerToActivate.enabled = false;
-        }
 
         ActualizarProgresoItemsNecesarios();
+    }
+
+    void IniciarIntroSiNoEstaActivo()
+    {
+        if (!introIniciado)
+        {
+            introIniciado = true;
+            StartCoroutine(EsperarYCargarIntro());
+        }
     }
 
     public void StartIntroAfterDash()
@@ -159,6 +177,11 @@ public class LevelController : MonoBehaviour
 
     IEnumerator EsperarYCargarIntro()
     {
+        if (introPanelMostrado)
+            yield break;
+
+        introPanelMostrado = true;
+
         yield return new WaitForSecondsRealtime(0.5f);
         yield return StartCoroutine(FadeInIntroPanel());
     }
@@ -218,29 +241,40 @@ public class LevelController : MonoBehaviour
 
         isFading = false;
 
-        temporizadorActivo = true;
         Time.timeScale = 1f;
+        temporizadorActivo = true;
+        introPanelMostrado = false;
     }
 
     void Update()
     {
         if (!temporizadorActivo || nivelFinalizado) return;
 
-        tiempoRestante -= Time.deltaTime;
-
-        if (tiempoRestante <= 0)
+        if (!esLevel3)
         {
-            tiempoRestante = 0;
-            temporizadorActivo = false;
-            FinalizarNivel("¡Se acabó el tiempo!");
+            tiempoRestante -= Time.deltaTime;
+
+            if (tiempoRestante <= 0)
+            {
+                tiempoRestante = 0;
+                temporizadorActivo = false;
+                FinalizarNivel("¡Se acabó el tiempo!");
+            }
+
+            MostrarTiempoEnPantalla();
+
+            if (TodosLosObjetivosCompletados())
+            {
+                temporizadorActivo = false;
+                FinalizarNivel("¡Objetivos completados!");
+            }
         }
-
-        MostrarTiempoEnPantalla();
-
-        if (TodosLosObjetivosCompletados())
+        else
         {
-            temporizadorActivo = false;
-            FinalizarNivel("¡Objetivos completados!");
+            if (enemigosDerrotados >= totalEnemigosEnNivel)
+            {
+                FinalizarNivel("¡Todos los jefes derrotados!");
+            }
         }
     }
 
@@ -261,7 +295,14 @@ public class LevelController : MonoBehaviour
 
     bool TodosLosObjetivosCompletados()
     {
-        return itemsRecolectados >= totalItemsEnNivel && enemigosDerrotados >= totalEnemigosEnNivel;
+        if (esLevel3)
+        {
+            return enemigosDerrotados >= totalEnemigosEnNivel;
+        }
+        else
+        {
+            return itemsRecolectados >= totalItemsEnNivel && enemigosDerrotados >= totalEnemigosEnNivel;
+        }
     }
 
     void MostrarTiempoEnPantalla()
@@ -273,10 +314,17 @@ public class LevelController : MonoBehaviour
 
     private void MostrarIntroPanelConTiempoPausado()
     {
-        introPanel.SetActive(true);
-        introCanvasGroup.alpha = 1f;
-        introCanvasGroup.interactable = true;
-        introCanvasGroup.blocksRaycasts = true;
+        if (introPanel != null)
+        {
+            introPanel.SetActive(true);
+            introCanvasGroup.alpha = 1f;
+            introCanvasGroup.interactable = true;
+            introCanvasGroup.blocksRaycasts = true;
+
+            Time.timeScale = 0f;
+            temporizadorActivo = false;
+            introPanelMostrado = true;
+        }
     }
 
     private void CerrarIntroYReanudarTiempo()
@@ -329,22 +377,33 @@ public class LevelController : MonoBehaviour
         nivelFinalizado = true;
         GameManager.Instance.PauseGame();
 
-        float tiempoFinal = tiempoRestante;
-
         int puntosItems = 0;
-        foreach (var pair in itemIDsRecolectados)
-        {
-            int id = pair.Key;
-            var item = itemsDataBase.GetItemByID(id);
-            if (item != null)
-            {
-                puntosItems += item.Value.puntosAlRecoger * pair.Value;
-            }
-        }
+        int puntosEnemigos = 0;
+        int puntosTiempo = 0;
+        int puntosTotales = 0;
 
-        int puntosEnemigos = enemigosDerrotados * 20;
-        int puntosTiempo = Mathf.FloorToInt(tiempoFinal / 5) * 5;
-        int puntosTotales = puntosItems + puntosEnemigos + puntosTiempo;
+        if (!esLevel3)
+        {
+            float tiempoFinal = tiempoRestante;
+
+            foreach (var pair in itemIDsRecolectados)
+            {
+                int id = pair.Key;
+                var item = itemsDataBase.GetItemByID(id);
+                if (item != null)
+                {
+                    puntosItems += item.Value.puntosAlRecoger * pair.Value;
+                }
+            }
+
+            puntosEnemigos = enemigosDerrotados * 20;
+            puntosTiempo = Mathf.FloorToInt(tiempoFinal / 5) * 5;
+            puntosTotales = puntosItems + puntosEnemigos + puntosTiempo;
+        }
+        else
+        {
+            puntosTotales = puntosFijosLevel3;
+        }
 
         GameManager.Instance.SumarPuntos(puntosTotales);
         GameManager.Instance.OnLevelCompleted();
@@ -352,29 +411,50 @@ public class LevelController : MonoBehaviour
         if (textoResultado != null)
             textoResultado.text = mensaje;
 
-        if (textoItems != null)
-            textoItems.text = $"{itemsRecolectados}/{totalItemsEnNivel}";
-
-        if (textoEnemigos != null)
-            textoEnemigos.text = $"{enemigosDerrotados}/{totalEnemigosEnNivel}";
-
-        if (textoTiempo != null)
+        if (!esLevel3)
         {
-            int minutos = Mathf.FloorToInt(tiempoFinal / 60f);
-            int segundos = Mathf.FloorToInt(tiempoFinal % 60f);
-            textoTiempo.text = $"{minutos:00}:{segundos:00}";
+            if (textoItems != null)
+                textoItems.text = $"{itemsRecolectados}/{totalItemsEnNivel}";
+
+            if (textoEnemigos != null)
+                textoEnemigos.text = $"{enemigosDerrotados}/{totalEnemigosEnNivel}";
+
+            if (textoTiempo != null)
+            {
+                int minutos = Mathf.FloorToInt(tiempoRestante / 60f);
+                int segundos = Mathf.FloorToInt(tiempoRestante % 60f);
+                textoTiempo.text = $"{minutos:00}:{segundos:00}";
+            }
+
+            if (textoPuntosItems != null)
+                textoPuntosItems.text = $"{puntosItems}";
+
+            if (textoPuntosEnemigos != null)
+                textoPuntosEnemigos.text = $"{puntosEnemigos}";
+
+            if (textoPuntosTiempo != null)
+                textoPuntosTiempo.text = $"{puntosTiempo}";
+        }
+        else
+        {
+            if (textoItems != null)
+                textoItems.gameObject.SetActive(false);
+            if (textoEnemigos != null)
+                textoEnemigos.gameObject.SetActive(false);
+            if (textoTiempo != null)
+                textoTiempo.gameObject.SetActive(false);
+            if (textoPuntosItems != null)
+                textoPuntosItems.gameObject.SetActive(false);
+            if (textoPuntosEnemigos != null)
+                textoPuntosEnemigos.gameObject.SetActive(false);
+            if (textoPuntosTiempo != null)
+                textoPuntosTiempo.gameObject.SetActive(false);
+
+            if (textoPuntosTotales != null)
+                textoPuntosTotales.text = $"{puntosTotales}";
         }
 
-        if (textoPuntosItems != null)
-            textoPuntosItems.text = $"{puntosItems}";
-
-        if (textoPuntosEnemigos != null)
-            textoPuntosEnemigos.text = $"{puntosEnemigos}";
-
-        if (textoPuntosTiempo != null)
-            textoPuntosTiempo.text = $"{puntosTiempo}";
-
-        if (textoPuntosTotales != null)
+        if (textoPuntosTotales != null && !esLevel3)
             textoPuntosTotales.text = $"{puntosTotales}";
 
         bool recogioTodo = HasCollectedAllRequiredItems();
@@ -385,21 +465,22 @@ public class LevelController : MonoBehaviour
         if (panelDesbloqueo != null) panelDesbloqueo.SetActive(false);
         if (panelSinDesbloqueo != null) panelSinDesbloqueo.SetActive(false);
 
-        if (recogioTodo)
+        if (!esLevel3)
         {
-            if (panelDesbloqueo != null)
+            if (recogioTodo)
             {
-                panelDesbloqueo.SetActive(true);
+                if (panelDesbloqueo != null)
+                    panelDesbloqueo.SetActive(true);
             }
-        }
-        else
-        {
-            if (panelSinDesbloqueo != null)
+            else
             {
-                panelSinDesbloqueo.SetActive(true);
-                if (textoResultado != null)
+                if (panelSinDesbloqueo != null)
                 {
-                    textoResultado.text += "\n\nNo recogiste todos los objetos clave.\nDebes reintentar o volver al Claro.";
+                    panelSinDesbloqueo.SetActive(true);
+                    if (textoResultado != null)
+                    {
+                        textoResultado.text += "\n\nNo recogiste todos los objetos clave.\nDebes reintentar o volver al Claro.";
+                    }
                 }
             }
         }

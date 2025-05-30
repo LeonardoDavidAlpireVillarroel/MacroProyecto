@@ -20132,9 +20132,9 @@ GameObject:
   - component: {fileID: 225766321}
   - component: {fileID: 225766320}
   - component: {fileID: 225766319}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk (5)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25059,9 +25059,9 @@ GameObject:
   - component: {fileID: 291959732}
   - component: {fileID: 291959731}
   - component: {fileID: 291959730}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk (3)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26492,7 +26492,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 303912365}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -38900,8 +38900,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Tienes 2 minutos.\n\nDerrota enemigos y recoge \xEDtems para ganar capicoins.\n\nRe\xFAne
-    todas las municiones manzana para desbloquear el siguiente nivel.\n\n\xA1Mientras
-    m\xE1s r\xE1pido termines, mas capicoins obtendr\xE1s!"
+    todos los colmillos para desbloquear el siguiente nivel.\n\n\xA1Cuanto menos
+    tardes en conseguir todos los objetivos, mas capicoins obtendr\xE1s!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -53635,9 +53635,9 @@ GameObject:
   - component: {fileID: 641277152}
   - component: {fileID: 641277151}
   - component: {fileID: 641277150}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk (7)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56153,9 +56153,9 @@ GameObject:
   - component: {fileID: 672875884}
   - component: {fileID: 672875883}
   - component: {fileID: 672875882}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk (6)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60865,9 +60865,9 @@ GameObject:
   - component: {fileID: 732521156}
   - component: {fileID: 732521155}
   - component: {fileID: 732521154}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk (4)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76976,9 +76976,9 @@ GameObject:
   - component: {fileID: 928672079}
   - component: {fileID: 928672078}
   - component: {fileID: 928672077}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk (1)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96702,9 +96702,9 @@ GameObject:
   - component: {fileID: 1167606937}
   - component: {fileID: 1167606936}
   - component: {fileID: 1167606935}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk (2)
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99658,7 +99658,7 @@ GameObject:
   - component: {fileID: 1209198162}
   m_Layer: 3
   m_Name: Terrain_Jungle
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -109907,9 +109907,9 @@ GameObject:
   - component: {fileID: 1327338647}
   - component: {fileID: 1327338646}
   - component: {fileID: 1327338645}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Trunk
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -182471,6 +182471,8 @@ MonoBehaviour:
   textoPuntosEnemigos: {fileID: 1685393176}
   textoPuntosTiempo: {fileID: 1272765721}
   textoPuntosTotales: {fileID: 1701429102}
+  esLevel3: 0
+  puntosFijosLevel3: 1000
 --- !u!114 &7388024554939394448
 MonoBehaviour:
   m_ObjectHideFlags: 0

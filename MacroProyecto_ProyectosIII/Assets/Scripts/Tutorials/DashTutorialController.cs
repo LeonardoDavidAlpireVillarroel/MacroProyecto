@@ -45,7 +45,6 @@ public class DashTutorialController : MonoBehaviour
     {
         if (dashTutorialCanvasGroup != null && !dashTutorialShown)
         {
-            gameObject.SetActive(true);
             StartCoroutine(FadeIn());
         }
     }
@@ -55,17 +54,16 @@ public class DashTutorialController : MonoBehaviour
         if (dashTutorialCanvasGroup != null && dashTutorialShown)
         {
             StartCoroutine(FadeOut());
-
-            if (levelController != null)
-            {
-                levelController.StartIntroAfterDash();
-            }
         }
     }
 
     private IEnumerator FadeIn()
     {
         dashTutorialShown = true;
+
+        float delayBeforePause = 1f;
+        yield return new WaitForSecondsRealtime(delayBeforePause);
+
         Time.timeScale = 0f;
 
         dashTutorialCanvasGroup.alpha = 0f;
@@ -124,7 +122,6 @@ public class DashTutorialController : MonoBehaviour
             dashTutorialCanvasGroup.alpha = 0f;
             dashTutorialCanvasGroup.interactable = false;
             dashTutorialCanvasGroup.blocksRaycasts = false;
-            gameObject.SetActive(false);
             dashTutorialShown = false;
         }
     }
