@@ -1,51 +1,67 @@
+//using AIEngine.Decision.BehaviourTree;
+//using AIEngine.Movement.Components.Algorithms;
 //using UnityEngine;
 
-//namespace AIEngine.Decision.BehaviourTree.Tasks
+//public class ChaseObjective : BHT_Task
 //{
-//    public class ChaseObjective : BHT_Task
+//    private readonly PathAssignerToPathFollowingPoints pathAssigner;
+//    private readonly CmpPathFollowing cmpPathFollowing;
+//    private readonly GameObject objective;
+
+//    public ChaseObjective(PathAssignerToPathFollowingPoints pathAssigner, CmpPathFollowing cmpPathFollowing, GameObject objective)
 //    {
-//        private readonly PathAssignerToPathFollowingPoints pathAssigner;
+//        this.pathAssigner = pathAssigner;
+//        this.cmpPathFollowing = cmpPathFollowing;
+//        this.objective = objective;
+//    }
 
-//        public ChaseObjective(PathAssignerToPathFollowingPoints pathAssigner)
-//        {
-//            this.pathAssigner = pathAssigner;
-//        }
+//    public override bool Run()
+//    {
+//        if (pathAssigner == null || cmpPathFollowing == null || objective == null)
+//            return false;
 
-//        public override bool Run()
-//        {
-//            if (pathAssigner == null)
-//            {
-//                Debug.LogWarning("[ChaseObjective] No se asignó el pathAssigner.");
-//                return false;
-//            }
+//        pathAssigner.AssignPath();
+//        cmpPathFollowing.objective = objective.transform;
+//        return true;
+//    }
 
-//            pathAssigner.AssignPath(); // Asigna o actualiza el camino
-//            return true; // Siempre retorna true si se ejecutó correctamente
-//        }
+//    public void Stop()
+//    {
+//        cmpPathFollowing.StopFollowing();
 //    }
 //}
+
 using AIEngine.Decision.BehaviourTree;
 using AIEngine.Movement.Components.Algorithms;
+using UnityEngine;
 
 public class ChaseObjective : BHT_Task
 {
     private readonly PathAssignerToPathFollowingPoints pathAssigner;
     private readonly CmpPathFollowing cmpPathFollowing;
+    private readonly GameObject target;
+    private readonly float chaseDistance;
 
-    public ChaseObjective(PathAssignerToPathFollowingPoints pathAssigner, CmpPathFollowing cmpPathFollowing)
+    public ChaseObjective(PathAssignerToPathFollowingPoints pathAssigner, CmpPathFollowing cmpPathFollowing, GameObject target, float chaseDistance)
     {
         this.pathAssigner = pathAssigner;
         this.cmpPathFollowing = cmpPathFollowing;
+        this.target = target;
+        this.chaseDistance = chaseDistance;
     }
 
     public override bool Run()
     {
-        if (pathAssigner == null || cmpPathFollowing == null)
-        {
+        if (pathAssigner == null || cmpPathFollowing == null || target == null)
             return false;
-        }
+
+        float distance = Vector3.Distance(cmpPathFollowing.transform.position, target.transform.position);
+        if (distance > chaseDistance)
+            return false;
 
         pathAssigner.AssignPath();
+        cmpPathFollowing.objective = target.transform;
+
         return true;
     }
 
@@ -54,4 +70,3 @@ public class ChaseObjective : BHT_Task
         cmpPathFollowing.StopFollowing();
     }
 }
-

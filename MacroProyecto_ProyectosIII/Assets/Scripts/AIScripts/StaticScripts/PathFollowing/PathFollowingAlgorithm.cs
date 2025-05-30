@@ -12,6 +12,8 @@ namespace AIEngine.Movement.Algorithms
         private float objectivePhase;
         private int index;
         private float thresholdDistance;
+        private float maxSpeed;
+
 
         public PathFollowingAlgorithm(float maxSpeed, float thresholdDistance, PathFollowingPoints path, float objectivePhase, int index)
             : base(maxSpeed, thresholdDistance)
@@ -27,24 +29,11 @@ namespace AIEngine.Movement.Algorithms
             this.agent = agent;
             base.SetAgent(agent);
         }
+        public void SetMaxSpeed(float speed)
+        {
+            this.maxSpeed = speed;
 
-        //public override SteeringOutput GetSteering()
-        //{
-        //    if (agent == null || path == null || path.Length == 0)
-        //        return new SteeringOutput();
-
-        //    index = path.GetClosestPoint(agent.position, index);
-
-        //    int targetIndex = System.Math.Clamp(index + (int)objectivePhase, 0, path.Length - 1);
-
-        //    Vector2 targetPos = path.GetPointPosition(targetIndex);
-
-        //    reusableTarget.position = targetPos;
-
-        //    base.SetTarget(reusableTarget);
-
-        //    return base.GetSteering();
-        //}
+        }
 
         public override SteeringOutput GetSteering()
         {

@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
     public float invulnerableTime = 1.0f;
 
     //Banderas Bool
-    private bool isInvulnerable = false;
+    public bool isInvulnerable = false;
     private bool isReturningToClaro = false;
     private bool isProcessingGameOver = false;
     private bool hasDiedAndNeedsLifeReset = false;
@@ -512,6 +512,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(invulnerableTime);
         isInvulnerable = false;
     }
+
 
     private IEnumerator ReturnToClaroAfterDelay(float delay)
     {
