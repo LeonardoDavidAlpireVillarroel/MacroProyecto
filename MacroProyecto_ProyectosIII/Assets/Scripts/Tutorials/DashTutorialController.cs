@@ -10,6 +10,8 @@ public class DashTutorialController : MonoBehaviour
 
     private bool dashTutorialShown = false;
 
+    public LevelController levelController;
+
     void Awake()
     {
         if (closeButton != null)
@@ -53,6 +55,11 @@ public class DashTutorialController : MonoBehaviour
         if (dashTutorialCanvasGroup != null && dashTutorialShown)
         {
             StartCoroutine(FadeOut());
+
+            if (levelController != null)
+            {
+                levelController.StartIntroAfterDash();
+            }
         }
     }
 
@@ -97,12 +104,17 @@ public class DashTutorialController : MonoBehaviour
         }
 
         dashTutorialCanvasGroup.alpha = 0f;
-        gameObject.SetActive(false);
 
         Time.timeScale = 1f;
 
         ProfileStorage.s_currentProfile.SetPrefInt("dashTutorialSeen", 1);
         ProfileStorage.StorePlayerProfile(GameObject.FindWithTag("Player"), GameManager.Instance);
+
+        if (levelController != null)
+        {
+            levelController.StartIntroAfterDash();
+            levelController?.ForzarInicioNivelDesdeDashTutorial();
+        }
     }
 
     private void HideDashTutorialInstant()

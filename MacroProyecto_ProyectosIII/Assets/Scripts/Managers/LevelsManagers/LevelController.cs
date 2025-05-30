@@ -89,30 +89,46 @@ public class LevelController : MonoBehaviour
 
         tiempoRestante = tiempoLimite;
 
-        if (introPanel != null)
-            introPanel.SetActive(true);
-
-        if (introCanvasGroup != null)
+        if (SceneManager.GetActiveScene().name == "Level2" && dashTutorialController != null)
         {
-            introCanvasGroup.alpha = 0f;
-            introCanvasGroup.interactable = false;
-            introCanvasGroup.blocksRaycasts = false;
+            int dashTutorialSeen = ProfileStorage.s_currentProfile.GetPrefInt("dashTutorialSeen", 0);
+            if (dashTutorialSeen == 0)
+            {
+                // Mostrar dash tutorial
+                dashTutorialController.gameObject.SetActive(true);
+                dashTutorialController.CheckAndShowDashTutorial();
+
+                // Pausar tiempo desde el inicio
+                Time.timeScale = 0;
+
+                // Suscribimos evento Close del dashTutorial (debería tener un botón Close)
+                dashTutorialController.closeButton.onClick.RemoveAllListeners();
+                dashTutorialController.closeButton.onClick.AddListener(() =>
+                {
+                    dashTutorialController.gameObject.SetActive(false);
+                    ProfileStorage.s_currentProfile.SetPrefInt("dashTutorialSeen", 1);
+                    MostrarIntroPanelConTiempoPausado();
+                });
+            }
+            else
+            {
+                // Si ya se vio el tutorial, mostrar intro normal y arrancar tiempo normalmente
+                StartCoroutine(EsperarYCargarIntro());
+            }
+        }
+        else
+        {
+            // Otros niveles
             StartCoroutine(EsperarYCargarIntro());
         }
 
+        // Botón continuar en el intro panel
         if (botonContinuar != null)
         {
+            botonContinuar.onClick.RemoveAllListeners();
             botonContinuar.onClick.AddListener(() =>
             {
-                if (SceneManager.GetActiveScene().name == "Level2" && dashTutorialController != null)
-                {
-                    introPanel.SetActive(false);
-                    dashTutorialController.CheckAndShowDashTutorial();
-                }
-                else
-                {
-                    IniciarNivel();
-                }
+                CerrarIntroYReanudarTiempo();
             });
         }
 
@@ -136,16 +152,20 @@ public class LevelController : MonoBehaviour
         ActualizarProgresoItemsNecesarios();
     }
 
+    public void StartIntroAfterDash()
+    {
+        StartCoroutine(EsperarYCargarIntro());
+    }
+
     IEnumerator EsperarYCargarIntro()
     {
         yield return new WaitForSecondsRealtime(0.5f);
         yield return StartCoroutine(FadeInIntroPanel());
-        GameManager.Instance.PauseGame();
     }
 
     IEnumerator FadeInIntroPanel()
     {
-        GameManager.Instance.PauseGame();
+        Time.timeScale = 0;
 
         float duracion = 1f;
         float tiempo = 0f;
@@ -199,7 +219,7 @@ public class LevelController : MonoBehaviour
         isFading = false;
 
         temporizadorActivo = true;
-        GameManager.Instance.ResumeGame();
+        Time.timeScale = 1f;
     }
 
     void Update()
@@ -249,6 +269,19 @@ public class LevelController : MonoBehaviour
         int minutos = Mathf.FloorToInt(tiempoRestante / 60f);
         int segundos = Mathf.FloorToInt(tiempoRestante % 60f);
         timerText.text = string.Format("{0:00}:{1:00}", minutos, segundos);
+    }
+
+    private void MostrarIntroPanelConTiempoPausado()
+    {
+        introPanel.SetActive(true);
+        introCanvasGroup.alpha = 1f;
+        introCanvasGroup.interactable = true;
+        introCanvasGroup.blocksRaycasts = true;
+    }
+
+    private void CerrarIntroYReanudarTiempo()
+    {
+        StartCoroutine(FadeOutIntroPanel());
     }
 
     public float ObtenerTiempoRestante()

@@ -886,7 +886,6 @@ MonoBehaviour:
   - {fileID: 164104681}
   - {fileID: 63974169}
   - {fileID: 852160183}
-  - {fileID: 0}
   unlockLevel: 2
   playerController: {fileID: 9150419675383607180}
   gameManager: {fileID: 522475314}
