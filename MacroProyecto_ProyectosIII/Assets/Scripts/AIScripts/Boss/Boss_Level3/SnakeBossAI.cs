@@ -12,9 +12,11 @@ public class SnakeBossAI : MonoBehaviour
 
     [Header("Attack Settings")]
     public GameObject holePrefab;
+    private GameObject currentHole;
     public GameObject shadowPrefab;
     public float timeBeforeAppear = 2f;
     public float stayDuration = 2f;
+    public float pushForce = 1f;
 
     [Header("References")]
     public Animator animator;
@@ -59,8 +61,8 @@ public class SnakeBossAI : MonoBehaviour
 
         yield return StartCoroutine(ShowShadowAndSpawnHole(spawnPosition));
 
-        GameObject hole = Instantiate(holePrefab, spawnPosition, Quaternion.identity);
-        Collider holeCol = hole.GetComponent<Collider>();
+        currentHole = Instantiate(holePrefab, spawnPosition, Quaternion.identity);
+        Collider holeCol = currentHole.GetComponent<Collider>();
         if (holeCol) holeCol.enabled = false;
 
         transform.position = spawnPosition + new Vector3(0, -0.5f, 0);
@@ -85,12 +87,12 @@ public class SnakeBossAI : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
+
         transform.position = endPos;
 
         animator.SetTrigger("Idle");
         yield return new WaitForSeconds(stayDuration);
 
-        StartCoroutine(DestroyHoleAfterSeconds(hole, stayDuration + 1f));
         isVisible = true;
     }
 
@@ -130,20 +132,44 @@ public class SnakeBossAI : MonoBehaviour
         Destroy(shadow);
     }
 
-    private IEnumerator DestroyHoleAfterSeconds(GameObject holeObj, float delay)
+    private void OnCollisionEnter(Collision collision)
     {
-        yield return new WaitForSeconds(delay);
-        if (holeObj != null)
-            Destroy(holeObj);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("PlayerShoot"))
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            StartCoroutine(PushPlayer(collision.gameObject));
+        }
+        else if (collision.gameObject.CompareTag("PlayerShoot"))
         {
             if (bossSpawner != null)
+            {
                 bossSpawner.DespawnAllBosses();
+                Destroy(collision.gameObject);
+            }
         }
+    }
+
+    private IEnumerator PushPlayer(GameObject player)
+    {
+        Vector3 direction = (player.transform.position - transform.position);
+        direction.y = 0;
+        direction.Normalize();
+
+        float distance = 1f; // cuánta distancia quieres empujar
+        float duration = 0.2f; // cuánto tarda en hacer el empuje
+        float elapsed = 0f;
+
+        Vector3 startPos = player.transform.position;
+        Vector3 endPos = startPos + direction * distance;
+
+        while (elapsed < duration)
+        {
+            player.transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
+            GameManager.Instance.LoseLifes();
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        player.transform.position = endPos;
     }
 
     public void Disappear()
@@ -171,11 +197,18 @@ public class SnakeBossAI : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
+
         transform.position = endPos;
 
         rend.enabled = false;
         col.enabled = false;
         rb.isKinematic = true;
+
+        if (currentHole != null)
+        {
+            Destroy(currentHole);
+            currentHole = null;
+        }
 
         gameObject.SetActive(false);
     }
@@ -201,6 +234,12 @@ public class SnakeBossAI : MonoBehaviour
 
         col.enabled = false;
         rb.isKinematic = true;
+
+        if (currentHole != null)
+        {
+            Destroy(currentHole);
+            currentHole = null;
+        }
 
         Destroy(gameObject, 3f);
     }
