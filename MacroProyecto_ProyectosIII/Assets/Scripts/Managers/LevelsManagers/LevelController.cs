@@ -104,7 +104,7 @@ public class LevelController : MonoBehaviour
         {
             botonContinuar.onClick.AddListener(() =>
             {
-                if (SceneManager.GetActiveScene().name == "Level3" && dashTutorialController != null)
+                if (SceneManager.GetActiveScene().name == "Level2" && dashTutorialController != null)
                 {
                     introPanel.SetActive(false);
                     dashTutorialController.CheckAndShowDashTutorial();
