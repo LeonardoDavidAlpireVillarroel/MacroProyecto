@@ -13,6 +13,11 @@ public class BossSpawner : MonoBehaviour
     public float minDistanceBetweenBosses = 3f;
     public float respawnDelay = 5f;
 
+    public float baseShootInterval = 1.5f;
+    public float shootIntervalDecreasePerDeath = 0.2f;
+    public float shootIntervalReductionPercent = 0.5f;
+    private int deadSnakesCount = 0;
+
     private bool isSpawning = false;
 
     public int totalBossHealth;
@@ -26,6 +31,9 @@ public class BossSpawner : MonoBehaviour
     {
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        deadSnakesCount = 0;
+        UpdateShootIntervals();
 
         StartCoroutine(SpawnBossesRoutine());
     }
@@ -139,7 +147,9 @@ public class BossSpawner : MonoBehaviour
             if (target != null)
             {
                 target.Die();
-                bosses.Remove(target);  // ?? ¡ELIMINADA DE LA LISTA!
+                bosses.Remove(target);
+                deadSnakesCount++;  // Aumentamos el contador de serpientes muertas
+                UpdateShootIntervals();  // Actualizamos intervalos de disparo
             }
             else
             {
@@ -159,6 +169,21 @@ public class BossSpawner : MonoBehaviour
         {
             Debug.Log("You win!");
             DespawnAllBosses();
+        }
+    }
+
+    private void UpdateShootIntervals()
+    {
+        float newInterval = baseShootInterval * Mathf.Pow(1f - shootIntervalReductionPercent, deadSnakesCount);
+
+        newInterval = Mathf.Max(0.2f, newInterval);
+
+        foreach (var boss in bosses)
+        {
+            if (boss != null)
+            {
+                boss.UpdateShootInterval(newInterval);
+            }
         }
     }
 

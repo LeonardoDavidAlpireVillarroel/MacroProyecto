@@ -117,18 +117,31 @@ public class SnakeBossAI : MonoBehaviour
         isVisible = true;
 
         animator.SetTrigger("Idle");
-        yield return new WaitForSeconds(stayDuration);
 
         shootingCoroutine = StartCoroutine(ShootingLoop());
+        yield return new WaitForSeconds(stayDuration);
     }
 
-    private IEnumerator ShootingLoop()
+    public IEnumerator ShootingLoop()
     {
         while (isVisible)
         {
             ShootAtPlayer();
             yield return new WaitForSeconds(shootInterval);
         }
+    }
+
+    public void UpdateShootInterval(float newInterval)
+    {
+        shootInterval = newInterval;
+
+        if (!gameObject.activeInHierarchy) return;
+
+        if (shootingCoroutine != null)
+        {
+            StopCoroutine(shootingCoroutine);
+        }
+        shootingCoroutine = StartCoroutine(ShootingLoop());
     }
 
     private void ShootAtPlayer()
