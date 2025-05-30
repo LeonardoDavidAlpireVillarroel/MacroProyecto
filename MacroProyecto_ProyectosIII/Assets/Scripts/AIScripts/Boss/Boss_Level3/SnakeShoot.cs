@@ -5,6 +5,13 @@ public class SnakeShoot : MonoBehaviour
     public float speed = 10f;
     private Vector3 direction;
 
+    public float lifeTime = 5f;
+
+    private void Start()
+    {
+        Destroy(gameObject, lifeTime);
+    }
+
     public void SetTarget(Vector3 targetPosition)
     {
         direction = (targetPosition - transform.position).normalized;
@@ -15,15 +22,12 @@ public class SnakeShoot : MonoBehaviour
         transform.position += direction * speed * Time.deltaTime;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        // Aquí puedes añadir lógica al colisionar con el jugador, suelo, etc.
-        if (collision.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            Debug.Log("¡Fruta golpeó al jugador!");
-            // Aquí puedes hacer daño o algo más
+            GameManager.Instance.LoseLifes();
+            Destroy(gameObject);
         }
-
-        Destroy(gameObject); // Destruye la fruta al chocar
     }
 }

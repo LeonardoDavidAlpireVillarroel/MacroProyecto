@@ -10,13 +10,21 @@ public class SnakeBossAI : MonoBehaviour
     [SerializeField] private int maxHealth = 100;
     private int currentHealth;
 
-    [Header("Attack Settings")]
+    [Header("Appear Settings")]
     public GameObject holePrefab;
     private GameObject currentHole;
     public GameObject shadowPrefab;
     public float timeBeforeAppear = 2f;
     public float stayDuration = 2f;
     public float pushForce = 1f;
+
+    [Header("Shooting")]
+    public GameObject playerTarget;
+    public GameObject bulletPrefab;
+    public Transform shootPoint;
+    public float shootInterval = 1.5f;
+
+    private Coroutine shootingCoroutine;
 
     [Header("References")]
     public Animator animator;
@@ -94,6 +102,32 @@ public class SnakeBossAI : MonoBehaviour
         yield return new WaitForSeconds(stayDuration);
 
         isVisible = true;
+        shootingCoroutine = StartCoroutine(ShootingLoop());
+    }
+
+    private IEnumerator ShootingLoop()
+    {
+        while (isVisible)
+        {
+            ShootAtPlayer();
+            yield return new WaitForSeconds(shootInterval);
+        }
+    }
+
+    private void ShootAtPlayer()
+    {
+        if (playerTarget == null) return;
+
+        Vector3 playerPos = playerTarget.transform.position;
+
+        Vector3 spawnPos = shootPoint.position;
+
+        GameObject bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
+        SnakeShoot snakeShoot = bullet.GetComponent<SnakeShoot>();
+        if (snakeShoot != null)
+        {
+            snakeShoot.SetTarget(playerPos);
+        }
     }
 
     private IEnumerator ShowShadowAndSpawnHole(Vector3 position)
@@ -154,17 +188,18 @@ public class SnakeBossAI : MonoBehaviour
         direction.y = 0;
         direction.Normalize();
 
-        float distance = 1f; // cuánta distancia quieres empujar
-        float duration = 0.2f; // cuánto tarda en hacer el empuje
+        float distance = 1f;
+        float duration = 0.2f;
         float elapsed = 0f;
 
         Vector3 startPos = player.transform.position;
         Vector3 endPos = startPos + direction * distance;
 
+        GameManager.Instance.LoseLifes();
+
         while (elapsed < duration)
         {
             player.transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
-            GameManager.Instance.LoseLifes();
             elapsed += Time.deltaTime;
             yield return null;
         }
@@ -183,6 +218,12 @@ public class SnakeBossAI : MonoBehaviour
     private IEnumerator DisappearSequence()
     {
         isVisible = false;
+
+        if (shootingCoroutine != null)
+        {
+            StopCoroutine(shootingCoroutine);
+            shootingCoroutine = null;
+        }
 
         animator.SetTrigger("Disappear");
 

@@ -457,12 +457,6 @@ public class GameManager : MonoBehaviour
 
             StartCoroutine(InvulnerabilityCoroutine());
 
-            if (respawnPoint != null && playerController != null)
-            {
-                playerController.transform.position = respawnPoint.position;
-                playerController.transform.rotation = respawnPoint.rotation;
-            }
-
             if (health == 0)
             {
                 TriggerGameOver();
