@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BossSpawner : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class BossSpawner : MonoBehaviour
     public float respawnDelay = 5f;
 
     private bool isSpawning = false;
+
+    public int totalBossHealth;
+    public Slider totalHealthSlider;
+    private int maxTotalBossHealth;
+    private bool totalHealthInitialized = false;
+    private int accumulatedDamage = 0;
+
 
     private void Start()
     {
@@ -37,6 +45,7 @@ public class BossSpawner : MonoBehaviour
 
     void SpawnBossesAtClosestPoints()
     {
+        bosses = bosses.Where(b => b != null && !b.IsDead()).ToList();
         if (bosses.Count == 0 || spawnPoints.Count == 0) return;
 
         List<Transform> orderedPoints = spawnPoints.OrderBy(sp => Vector3.Distance(sp.position, player.position)).ToList();
@@ -66,6 +75,90 @@ public class BossSpawner : MonoBehaviour
                 chosenPos = orderedPoints[0].position;
 
             boss.AppearAtPosition(chosenPos);
+
+            if (!totalHealthInitialized)
+            {
+                boss.currentHealth = boss.maxHealth;  // resetea salud individual solo la primera vez
+            }
+        }
+
+        // Solo calcula y asigna la salud total la primera vez
+        if (!totalHealthInitialized)
+        {
+            totalBossHealth = bosses.Sum(b => b.maxHealth);
+            maxTotalBossHealth = totalBossHealth;
+            totalHealthInitialized = true;
+            UpdateHealthUI();
+        }
+    }
+
+    public void UpdateTotalBossHealth()
+    {
+        int totalHealth = 0;
+        int totalMaxHealth = 0;
+
+        foreach (var boss in bosses)
+        {
+            if (boss != null)
+            {
+                totalHealth += boss.currentHealth;  // Vida actual
+                totalMaxHealth += boss.maxHealth;   // Máxima vida (para el máximo del slider)
+            }
+        }
+        totalBossHealth = totalHealth;
+        maxTotalBossHealth = totalMaxHealth;
+
+        UpdateHealthUI();
+    }
+
+    public void UpdateHealthUI()
+    {
+        if (totalHealthSlider != null && maxTotalBossHealth > 0)
+        {
+            totalHealthSlider.maxValue = maxTotalBossHealth;
+            totalHealthSlider.value = totalBossHealth;
+        }
+    }
+
+    public void ApplyDamageToTotalHealth(int damage)
+    {
+        totalBossHealth -= damage;
+        if (totalBossHealth < 0) totalBossHealth = 0;
+
+        accumulatedDamage += damage;
+        UpdateHealthUI();
+
+        int snakeMaxHealth = bosses.Count > 0 ? bosses[0].maxHealth : 4;
+
+        while (accumulatedDamage >= snakeMaxHealth)
+        {
+            accumulatedDamage -= snakeMaxHealth;
+
+            // Buscar una serpiente activa o apareciendo
+            SnakeBossAI target = bosses.FirstOrDefault(b => b != null && (b.IsVisible() || b.IsAppearing()));
+            if (target != null)
+            {
+                target.Die();
+                bosses.Remove(target);  // ?? ¡ELIMINADA DE LA LISTA!
+            }
+            else
+            {
+                // Si no hay ninguna visible, eliminar una cualquiera muerta
+                SnakeBossAI any = bosses.FirstOrDefault();
+                if (any != null)
+                {
+                    any.ForceDisappear();
+                    bosses.Remove(any);
+                }
+            }
+        }
+
+        DespawnAllBosses();
+
+        if (totalBossHealth <= 0)
+        {
+            Debug.Log("You win!");
+            DespawnAllBosses();
         }
     }
 

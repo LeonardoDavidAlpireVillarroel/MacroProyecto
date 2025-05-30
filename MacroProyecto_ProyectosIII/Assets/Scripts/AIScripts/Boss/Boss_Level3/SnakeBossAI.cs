@@ -7,13 +7,14 @@ using UnityEngine.UIElements;
 public class SnakeBossAI : MonoBehaviour
 {
     [Header("Health")]
-    [SerializeField] private int maxHealth = 100;
-    private int currentHealth;
+    [SerializeField] public int maxHealth = 4;
+    public int currentHealth;
 
     [Header("Appear Settings")]
     public GameObject holePrefab;
     private GameObject currentHole;
     public GameObject shadowPrefab;
+    private GameObject currentShadow;
     public float timeBeforeAppear = 2f;
     public float stayDuration = 2f;
     public float pushForce = 1f;
@@ -39,6 +40,8 @@ public class SnakeBossAI : MonoBehaviour
 
     private bool isDead = false;
     private bool isVisible = false;
+    private bool isAppearing = false;
+
 
     private void Awake()
     {
@@ -62,8 +65,20 @@ public class SnakeBossAI : MonoBehaviour
         StartCoroutine(AppearanceSequence());
     }
 
+    public bool IsVisible()
+    {
+        return isVisible;
+    }
+
+    public bool IsAppearing()
+    {
+        return isAppearing;
+    }
+
     private IEnumerator AppearanceSequence()
     {
+        isAppearing = true;  // Antes de empezar a aparecer
+
         rend.enabled = false;
         col.enabled = false;
 
@@ -98,10 +113,12 @@ public class SnakeBossAI : MonoBehaviour
 
         transform.position = endPos;
 
+        isAppearing = false;  // Terminó la aparición
+        isVisible = true;
+
         animator.SetTrigger("Idle");
         yield return new WaitForSeconds(stayDuration);
 
-        isVisible = true;
         shootingCoroutine = StartCoroutine(ShootingLoop());
     }
 
@@ -132,16 +149,16 @@ public class SnakeBossAI : MonoBehaviour
 
     private IEnumerator ShowShadowAndSpawnHole(Vector3 position)
     {
-        GameObject shadow = Instantiate(shadowPrefab, position + Vector3.up * 0.01f, Quaternion.Euler(-90f, 0f, 0f));
-        Renderer shadowRenderer = shadow.GetComponent<Renderer>();
+        currentShadow = Instantiate(shadowPrefab, position + Vector3.up * 0.01f, Quaternion.Euler(-90f, 0f, 0f));
+        Renderer shadowRenderer = currentShadow.GetComponent<Renderer>();
 
         Color originalColor = shadowRenderer.material.color;
         Color transparentColor = new Color(originalColor.r, originalColor.g, originalColor.b, 0);
 
-        Vector3 originalScale = shadow.transform.localScale;
+        Vector3 originalScale = currentShadow.transform.localScale;
 
         shadowRenderer.material.color = transparentColor;
-        shadow.transform.localScale = Vector3.zero;
+        currentShadow.transform.localScale = Vector3.zero;
 
         float fadeDuration = timeBeforeAppear;
         float elapsed = 0f;
@@ -151,19 +168,26 @@ public class SnakeBossAI : MonoBehaviour
 
         while (elapsed < fadeDuration)
         {
+            if (isDead)  // Si muere, destruye sombra y termina
+            {
+                Destroy(currentShadow);
+                currentShadow = null;
+                yield break;
+            }
+
             float alpha = Mathf.Lerp(0, originalColor.a, elapsed / fadeDuration);
             shadowRenderer.material.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
 
-            shadow.transform.localScale = Vector3.Lerp(Vector3.zero, originalScale, elapsed / fadeDuration);
+            currentShadow.transform.localScale = Vector3.Lerp(Vector3.zero, originalScale, elapsed / fadeDuration);
 
             float xOffset = Mathf.Sin(elapsed * moveSpeed) * moveAmount;
-            shadow.transform.position = position + new Vector3(xOffset, 0.01f, 0);
+            currentShadow.transform.position = position + new Vector3(xOffset, 0.01f, 0);
 
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        Destroy(shadow);
+        Destroy(currentShadow);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -171,14 +195,6 @@ public class SnakeBossAI : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             StartCoroutine(PushPlayer(collision.gameObject));
-        }
-        else if (collision.gameObject.CompareTag("PlayerShoot"))
-        {
-            if (bossSpawner != null)
-            {
-                bossSpawner.DespawnAllBosses();
-                Destroy(collision.gameObject);
-            }
         }
     }
 
@@ -209,10 +225,43 @@ public class SnakeBossAI : MonoBehaviour
 
     public void Disappear()
     {
-        if (!isVisible) return;
+        //if (!isVisible) return;
 
-        StopAllCoroutines();
-        StartCoroutine(DisappearSequence());
+        //StopAllCoroutines();
+        //StartCoroutine(DisappearSequence());
+        if (!isVisible && !isAppearing) return;
+        ForceDisappear();
+    }
+
+
+
+    public void ForceDisappear()
+    {
+        StopAllCoroutines();  // Detiene aparición o disparo
+
+        if (currentShadow != null)
+        {
+            Destroy(currentShadow);
+            currentShadow = null;
+        }
+
+        if (currentHole != null)
+        {
+            Destroy(currentHole);
+            currentHole = null;
+        }
+
+        isVisible = false;
+        isAppearing = false;
+        animator.ResetTrigger("Appear");
+        animator.ResetTrigger("Idle");
+        animator.SetTrigger("Disappear");
+
+        rend.enabled = false;
+        col.enabled = false;
+        rb.isKinematic = true;
+
+        gameObject.SetActive(false);
     }
 
     private IEnumerator DisappearSequence()
@@ -258,6 +307,9 @@ public class SnakeBossAI : MonoBehaviour
     {
         if (isDead) return;
 
+        // Permitir daño si está apareciendo o visible
+        if (!isAppearing && !isVisible) return;
+
         currentHealth -= damageAmount;
 
         if (currentHealth <= 0)
@@ -265,16 +317,23 @@ public class SnakeBossAI : MonoBehaviour
             currentHealth = 0;
             Die();
         }
+
+        if (bossSpawner != null)
+        {
+            bossSpawner.UpdateTotalBossHealth();
+        }
     }
 
-    private void Die()
+    public void Die()
     {
+        if (isDead) return;
         isDead = true;
 
-        animator.SetTrigger("Die");
-
-        col.enabled = false;
-        rb.isKinematic = true;
+        if (currentShadow != null)
+        {
+            Destroy(currentShadow);
+            currentShadow = null;
+        }
 
         if (currentHole != null)
         {
@@ -282,6 +341,18 @@ public class SnakeBossAI : MonoBehaviour
             currentHole = null;
         }
 
-        Destroy(gameObject, 3f);
+        StopAllCoroutines();
+
+        animator.SetTrigger("Die");
+
+        col.enabled = false;
+        rb.isKinematic = true;
+
+        StartCoroutine(DisappearSequence());
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
     }
 }

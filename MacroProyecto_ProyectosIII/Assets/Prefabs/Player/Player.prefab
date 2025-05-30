@@ -3472,7 +3472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d9cf9ed7cb0b7d4c914fbe12350fa7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fruitPrefab: {fileID: 2104970276460936207, guid: b995ecb1cc3a73f46a8eda6f67ea5e3b, type: 3}
+  fruitPrefab: {fileID: 3208384746445566481, guid: 20a419b4deb0fa8458740cf7ff1ccdef, type: 3}
   shootSpeed: 10
   fruitLifetime: 5
   arrowInstance: {fileID: 5075733763350922998}
