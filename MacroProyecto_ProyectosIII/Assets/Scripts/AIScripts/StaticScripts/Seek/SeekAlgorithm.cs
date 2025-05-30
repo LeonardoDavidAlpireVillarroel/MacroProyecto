@@ -32,15 +32,15 @@ namespace AIEngine.Movement.Algorithms
             direction = Vector2.Normalize(direction);
             sOut.linear = direction * maxSpeed;
 
-            float desiredOrientation = ForceOrientation(agent.orientation, sOut.linear);
+            //float desiredOrientation = ForceOrientation(agent.orientation, sOut.linear);
 
-            float rotation = desiredOrientation - agent.orientation;
+            //float rotation = desiredOrientation - agent.orientation;
 
-            sOut.angular = MapToRange(rotation);
+            //sOut.angular = MapToRange(rotation);
 
-            // Limitar velocidad angular
-            sOut.angular = MathF.Max(-maxAngularSpeed, MathF.Min(sOut.angular, maxAngularSpeed));
-            //sOut.angular = 0;
+            //// Limitar velocidad angular
+            //sOut.angular = MathF.Max(-maxAngularSpeed, MathF.Min(sOut.angular, maxAngularSpeed));
+            sOut.angular = 0;
 
             return sOut;
         }

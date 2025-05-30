@@ -211,9 +211,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 2
-  meleeRange: 2.5
+  isStuned: 0
+  meleeRange: 0.5
   meleeCooldown: 2
   meleeDamage: 1
+  animator: {fileID: 339486882271624402}
+  cmpPathFollowing: {fileID: 3496919160137004380}
 --- !u!114 &2243805110101198431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,8 +242,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 1
-  thresholdDistance: 0
+  thresholdDistance: 0.2
   objectivePhase: 1
+  objective: {fileID: 0}
+  stopNearObjectiveDistance: 1
 --- !u!114 &6872408914800836085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +276,7 @@ MonoBehaviour:
   dynamicTargetTracker: {fileID: 0}
   pathFollowing: {fileID: 6872408914800836085}
   autoUpdate: 1
-  updateInterval: 1
+  updateInterval: 0.1
 --- !u!114 &3381716420257219799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,3 +290,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entity: {fileID: 0}
+  meleeDistance: 0.5
+  launchDistance: 3
+  perceptionDistance: 4.3
