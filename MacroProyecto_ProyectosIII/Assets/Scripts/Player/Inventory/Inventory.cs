@@ -491,6 +491,7 @@ public class Inventory : MonoBehaviour
             FindFirstObjectByType<InventoryFullMessage>().ShowMessage();
         }
 
+        FindFirstObjectByType<AmmoUIManager>()?.UpdateAmmoUI();
         InventoryUpdate();
     }
 
@@ -536,6 +537,7 @@ public class Inventory : MonoBehaviour
                     InventoryUpdate();
                     break;
                 }
+                FindFirstObjectByType<AmmoUIManager>()?.UpdateAmmoUI();
                 InventoryUpdate();
             }
         }
@@ -560,7 +562,7 @@ public class Inventory : MonoBehaviour
         {
             inventory[slotIndex] = new ObjectInventoryID(-1, 0);
         }
-
+        FindFirstObjectByType<AmmoUIManager>()?.UpdateAmmoUI();
         InventoryUpdate();
     }
 
@@ -586,7 +588,7 @@ public class Inventory : MonoBehaviour
                     break;
             }
         }
-
+        FindFirstObjectByType<AmmoUIManager>()?.UpdateAmmoUI();
         InventoryUpdate();
     }
 
@@ -616,8 +618,6 @@ public class Inventory : MonoBehaviour
             return;
 
         GameManager.Instance.levelTimer.EliminarItemsRecolectadosDelInventario();
-
-        //InventoryUpdate();
     }
 
     public void InventoryUpdate()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -77,7 +78,6 @@ public class FruitShoot : MonoBehaviour
                 arrowInstance.SetActive(false);
         }
     }
-    
 
     void UpdateArrowDirection()
     {
@@ -195,6 +195,7 @@ public class FruitShoot : MonoBehaviour
         }
 
         Inventory.Instance.InventoryUpdate();
+        FindFirstObjectByType<AmmoUIManager>()?.UpdateAmmoUI();
         GameManager.Instance.SaveGame();
     }
 
