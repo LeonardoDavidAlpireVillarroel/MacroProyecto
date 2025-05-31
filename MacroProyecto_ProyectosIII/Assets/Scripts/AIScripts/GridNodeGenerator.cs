@@ -1,32 +1,29 @@
 using UnityEngine;
-using UnityEditor; // Para MonoScript
-using System;
 
 public class GridNodeGenerator : MonoBehaviour
 {
-    [SerializeField] private MonoScript scriptToAttach; // Arrastra aquí el script que quieres añadir a cada objeto
+    [Header("Grid Settings")]
     public Vector3 startPoint = Vector3.zero;
     public float width = 20f;
     public float depth = 20f;
     public float spacing = 1f;
 
+    [Header("Script Template")]
+    [Tooltip("Arrastra aquí un GameObject con el script que quieras usar como plantilla.")]
+    public MonoBehaviour scriptTemplate; // El componente que quieres clonar
+
     [ContextMenu("Generate Grid")]
     public void GenerateGrid()
     {
-        if (scriptToAttach == null)
+        if (scriptTemplate == null)
         {
-            Debug.LogError("Por favor arrastra un script al campo 'Script To Attach'.");
+            Debug.LogError("Por favor arrastra un GameObject con el script deseado al campo 'Script Template'.");
             return;
         }
 
-        Type scriptType = scriptToAttach.GetClass();
-        if (scriptType == null || !typeof(MonoBehaviour).IsAssignableFrom(scriptType))
-        {
-            Debug.LogError("El script asignado no es un MonoBehaviour válido.");
-            return;
-        }
+        System.Type scriptType = scriptTemplate.GetType();
 
-        // Limpiar objetos anteriores
+        // Limpiar hijos anteriores
         foreach (Transform child in transform)
         {
             DestroyImmediate(child.gameObject);
@@ -44,8 +41,7 @@ public class GridNodeGenerator : MonoBehaviour
                 node.transform.SetParent(transform);
                 node.transform.position = position;
 
-                // Añadir el script seleccionado
-                node.AddComponent(scriptType);
+                node.AddComponent(scriptType); // Añade el tipo seleccionado
             }
         }
     }

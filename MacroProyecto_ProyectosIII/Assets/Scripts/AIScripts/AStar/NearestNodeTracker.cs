@@ -31,7 +31,6 @@ public class NearestNodeTracker : MonoBehaviour
         if (closest != nearestNode)
         {
             nearestNode = closest;
-            Debug.Log($"[NearestNodeTracker] Nodo más cercano actualizado: ID = {nearestNode.nodeId}, Posición = {nearestNode.transform.position}");
         }
     }
 
