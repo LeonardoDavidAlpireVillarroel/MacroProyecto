@@ -5316,6 +5316,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1603437353}
   m_CullTransparentMesh: 1
+--- !u!225 &1605002235 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 7926003619763773773, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+  m_PrefabInstance: {fileID: 13229557}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1609801977
 GameObject:
   m_ObjectHideFlags: 0
@@ -8250,6 +8255,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
+      propertyPath: fuerza
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: points
       value: 0
       objectReference: {fileID: 0}
@@ -8316,7 +8325,7 @@ PrefabInstance:
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: warningShootPanel
       value: 
-      objectReference: {fileID: 1072980159}
+      objectReference: {fileID: 1605002235}
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: buttonOptionsPanel
       value: 

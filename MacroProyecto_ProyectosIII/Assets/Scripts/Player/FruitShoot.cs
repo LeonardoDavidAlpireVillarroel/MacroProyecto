@@ -65,6 +65,10 @@ public class FruitShoot : MonoBehaviour
             {
                 ShootFruit();
             }
+            else if (playerController.meleeAction.WasPressedThisFrame())
+            {
+                PerformMeleeAttack();
+            }
         }
 
         else
@@ -73,7 +77,7 @@ public class FruitShoot : MonoBehaviour
                 arrowInstance.SetActive(false);
         }
     }
-
+    
 
     void UpdateArrowDirection()
     {
@@ -95,6 +99,31 @@ public class FruitShoot : MonoBehaviour
         }
     }
 
+
+    void PerformMeleeAttack()
+    {
+        // Animación, efecto, sonido, etc.
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            float dashMeleeForce = 5f;
+            rb.AddForce(currentAimDirection * dashMeleeForce, ForceMode.Impulse);
+        }
+
+        Collider[] hitEnemies = Physics.OverlapSphere(transform.position + currentAimDirection * 1.5f, 1.0f);
+        foreach (Collider enemy in hitEnemies)
+        {
+            if (enemy.CompareTag("Enemigo"))
+            {
+                EnemiPrueba enemyScript = enemy.GetComponent<EnemiPrueba>();
+                if (enemyScript != null)
+                {
+                    enemyScript.TakeDamage(GameManager.Instance.fuerza);
+                }
+            }
+        }
+    }
 
     public Vector3 GetAimDirection()
     {

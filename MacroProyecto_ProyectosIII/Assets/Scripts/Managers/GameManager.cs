@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
     // Shoot/Aim Inputs
     [HideInInspector] public InputAction aimAction;
     [HideInInspector] public InputAction shootAction;
+    [HideInInspector] public InputAction meleeAction;
     [HideInInspector] public InputAction pointerPositionAction;
 
     [Header("UI de Avisos")]
@@ -159,6 +160,7 @@ public class GameManager : MonoBehaviour
 
             aimAction = playerInput.actions["Aim"];
             shootAction = playerInput.actions["Shoot"];
+            meleeAction = playerInput.actions["Melee"];
             pointerPositionAction = playerInput.actions["PointerPosition"];
 
             inventoryAction.Enable();

@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     // Shoot/Aim Inputs
     [HideInInspector] public InputAction aimAction;
     [HideInInspector] public InputAction shootAction;
+    [HideInInspector] public InputAction meleeAction;
     [HideInInspector] public InputAction pointerPositionAction;
 
     [Header("Ground Check")]
@@ -81,6 +82,7 @@ public class PlayerController : MonoBehaviour
 
         aimAction = playerInput.actions["Aim"];
         shootAction = playerInput.actions["Shoot"];
+        meleeAction = playerInput.actions["Melee"];
         pointerPositionAction = playerInput.actions["PointerPosition"];
     }
 

@@ -12276,6 +12276,8 @@ MonoBehaviour:
   textoPuntosEnemigos: {fileID: 1685393176}
   textoPuntosTiempo: {fileID: 1272765721}
   textoPuntosTotales: {fileID: 1701429102}
+  esLevel3: 0
+  puntosFijosLevel3: 1000
 --- !u!114 &7388024554939394448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12375,7 +12377,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: health
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: points
