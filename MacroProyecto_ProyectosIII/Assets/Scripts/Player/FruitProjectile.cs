@@ -14,5 +14,16 @@ public class FruitProjectile : MonoBehaviour
 
             Destroy(gameObject);
         }
+
+
+        if (collision.gameObject.CompareTag("EnemigoTutorial"))
+        {
+            EnemiTutorial enemigo = collision.gameObject.GetComponent<EnemiTutorial>();
+            if (enemigo != null)
+            {
+                enemigo.TakeDamage(1, TipoAtaque.Disparo);
+            }
+            Destroy(gameObject);
+        }
     }
 }

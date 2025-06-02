@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 moveInput { get; private set; }
     public Vector2 lastMoveDirection { get; private set; }
 
-    private Animator capibaraAnimator;
+    public Animator capibaraAnimator;
     private Rigidbody rb;
     private bool jumpPressed;
 

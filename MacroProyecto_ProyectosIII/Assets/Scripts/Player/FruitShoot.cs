@@ -122,6 +122,15 @@ public class FruitShoot : MonoBehaviour
                     enemyScript.TakeDamage(GameManager.Instance.fuerza);
                 }
             }
+
+            if (enemy.CompareTag("EnemigoTutorial"))
+            {
+                EnemiTutorial enemigo = enemy.GetComponent<EnemiTutorial>();
+                if (enemigo != null)
+                {
+                    enemigo.TakeDamage(1, TipoAtaque.Melee);
+                }
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class OpenShop : MonoBehaviour
 {
@@ -84,6 +85,11 @@ public class OpenShop : MonoBehaviour
         if (gameManager.isInventoryOpen)
         {
             gameManager.inventory.ToggleInventory();
+        }
+
+        if (SceneManager.GetActiveScene().name == "Tutorial")
+        {
+            TutorialManager.Instance.OnShopOpened();
         }
     }
 

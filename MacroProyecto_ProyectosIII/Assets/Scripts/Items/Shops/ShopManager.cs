@@ -75,6 +75,11 @@ public class ShopManager : MonoBehaviour
             itemASerComprado.cantidad -= cantidad;
 
             itemASerComprado.ActualizarItem();
+
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Tutorial")
+            {
+                TutorialManager.Instance.OnItemBought();
+            }
         }
         else
         {

@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class ItemSpawner : MonoBehaviour
 {
@@ -11,9 +12,26 @@ public class ItemSpawner : MonoBehaviour
     public float popupScale = 1.5f;
     public float popupDuration = 0.3f;
 
+    [Header("Temporizador Visible")]
+    public TMP_Text temporizadorTexto;
+
+    private float tiempoRestante;
+
     private void Start()
     {
+        tiempoRestante = intervaloSpawn;
         InvokeRepeating(nameof(SpawnItem), 0f, intervaloSpawn);
+    }
+
+    private void Update()
+    {
+        tiempoRestante -= Time.deltaTime;
+        if (tiempoRestante < 0f) tiempoRestante = 0f;
+
+        if (temporizadorTexto != null)
+        {
+            temporizadorTexto.text = $"{tiempoRestante:F1}s";
+        }
     }
 
     void SpawnItem()
@@ -22,6 +40,8 @@ public class ItemSpawner : MonoBehaviour
 
         GameObject nuevoItem = Instantiate(itemPrefab, posicion, Quaternion.identity);
         StartCoroutine(PopUpEffect(nuevoItem.transform));
+
+        tiempoRestante = intervaloSpawn;
     }
 
     System.Collections.IEnumerator PopUpEffect(Transform itemTransform)

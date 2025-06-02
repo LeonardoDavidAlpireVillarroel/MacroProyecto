@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public bool isTutorialScene = false;
     public static GameManager Instance { get; private set; }
     [Header("Paneles")]
     public GameObject pausePanel;
@@ -240,6 +241,11 @@ public class GameManager : MonoBehaviour
 
     public void SaveGame()
     {
+        if (isTutorialScene)
+        {
+            return;
+        }
+
         if (ProfileStorage.s_currentProfile == null) return;
 
         ProfileStorage.s_currentProfile.points = TotalPoints;

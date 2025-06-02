@@ -24,6 +24,19 @@ public class Menus : MonoBehaviour
         }
     }
 
+    public void GoToTutorial()
+    {
+        MusicManager.Instance.PlayMusic("Tutorial");
+        ScenesManager.Instance.LoadScene("Tutorial", "CrossFade");
+    }
+
+    public void ExitTutorial()
+    {
+        GameManager.Instance.isTutorialScene = false;
+        MusicManager.Instance.PlayMusic("OtherMenus");
+        ScenesManager.Instance.LoadScene("NewGame", "CrossFade");
+    }
+
     public void GoToNewGame()
     {
         ProfileStorage.s_currentProfile = null;

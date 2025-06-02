@@ -61,6 +61,10 @@ public class DeletePoster : MonoBehaviour
             }
 
             Destroy(selectedItem);
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Tutorial" && TutorialManager.Instance != null)
+            {
+                TutorialManager.Instance.OnItemDeleted();
+            }
             CloseDeletePanel();
         }
     }

@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/NewGame.unity
     guid: 413032603d90eb2468ccaf8c412be6f9
   - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: 7eb719cdd0c9a5d40a27f05bb7acb0cf
+  - enabled: 1
     path: Assets/Scenes/LoadSaveGames.unity
     guid: 3f9e25d1a4449774ea67578a2441a632
   - enabled: 1
