@@ -67,8 +67,8 @@ MonoBehaviour:
     cantidadInicialTienda: 5
     stackLimit: 5
     puntosAlRecoger: 15
-  - nombre: "Munici\xF3n manzanas"
-    ID: 3
+  - nombre: Colmillo
+    ID: 4
     icon: {fileID: 21300000, guid: 3cf46b1089a3e6b45a5f82dc980a1dae, type: 3}
     precioCompra: 10
     precioVenta: 5

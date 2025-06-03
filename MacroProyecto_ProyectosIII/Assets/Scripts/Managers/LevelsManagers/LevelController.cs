@@ -280,7 +280,11 @@ public class LevelController : MonoBehaviour
 
     public void IncrementarItemsRecolectados(int itemID)
     {
-        itemsRecolectados++;
+        if (itemID == 4)
+        {
+            itemsRecolectados++;
+
+        }
 
         if (itemIDsRecolectados.ContainsKey(itemID))
             itemIDsRecolectados[itemID]++;
