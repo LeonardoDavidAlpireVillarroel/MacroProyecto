@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +22,7 @@ public class BossSpawner : MonoBehaviour
     private bool isSpawning = false;
 
     public int totalBossHealth;
-    public Slider totalHealthSlider;
+    [SerializeField] private Slider totalHealthSlider;
     private int maxTotalBossHealth;
     private bool totalHealthInitialized = false;
     private int accumulatedDamage = 0;
@@ -29,6 +30,7 @@ public class BossSpawner : MonoBehaviour
 
     private void Start()
     {
+
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player").transform;
 

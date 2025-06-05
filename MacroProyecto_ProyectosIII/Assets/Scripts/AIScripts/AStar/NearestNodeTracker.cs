@@ -11,7 +11,7 @@ public class NearestNodeTracker : MonoBehaviour
     {
         if (graph == null || graph.nodes == null || graph.nodes.Length == 0)
         {
-            Debug.LogWarning("[NearestNodeTracker] No se ha asignado un grafo o no hay nodos.");
+            //Debug.LogWarning("[NearestNodeTracker] No se ha asignado un grafo o no hay nodos.");
             return;
         }
 
