@@ -69,7 +69,7 @@ public class ProfileData
         this.x = this.y = 0f;
 
         this.playerHealth = 3;
-        this.fuerza = 10;
+        this.fuerza = 1;
         this.points = 50;
         this.inventoryJson = string.Empty;
         this.unlockedLevelCount = 2;
@@ -87,7 +87,7 @@ public class ProfileData
         this.y = y;
 
         this.playerHealth = 3;
-        this.fuerza = 10;
+        this.fuerza = 1;
         this.points = 50;
         this.inventoryJson = string.Empty;
         this.unlockedLevelCount = 2;

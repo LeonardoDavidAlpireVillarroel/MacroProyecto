@@ -12,11 +12,13 @@ public class DashTutorialController : MonoBehaviour
 
     public LevelController levelController;
 
+    private System.Action onCloseCallback;
+
     void Awake()
     {
         if (closeButton != null)
         {
-            closeButton.onClick.AddListener(CloseDashTutorial);
+            closeButton.onClick.AddListener(() => CloseDashTutorial());
         }
     }
 
@@ -24,12 +26,14 @@ public class DashTutorialController : MonoBehaviour
     {
         if (closeButton != null)
         {
-            closeButton.onClick.AddListener(CloseDashTutorial);
+            closeButton.onClick.AddListener(() => CloseDashTutorial());
         }
     }
 
     public void CheckAndShowDashTutorial()
     {
+        if (dashTutorialShown) return;
+
         int dashTutorialSeen = ProfileStorage.s_currentProfile.GetPrefInt("dashTutorialSeen", 0);
         if (dashTutorialSeen == 0)
         {
@@ -49,10 +53,11 @@ public class DashTutorialController : MonoBehaviour
         }
     }
 
-    public void CloseDashTutorial()
+    public void CloseDashTutorial(System.Action callback = null)
     {
         if (dashTutorialCanvasGroup != null && dashTutorialShown)
         {
+            onCloseCallback = callback;
             StartCoroutine(FadeOut());
         }
     }
@@ -61,10 +66,8 @@ public class DashTutorialController : MonoBehaviour
     {
         dashTutorialShown = true;
 
-        float delayBeforePause = 1f;
-        yield return new WaitForSecondsRealtime(delayBeforePause);
-
-        Time.timeScale = 0f;
+        float initialDelay = 0.5f;
+        yield return new WaitForSecondsRealtime(initialDelay);
 
         dashTutorialCanvasGroup.alpha = 0f;
         dashTutorialCanvasGroup.interactable = false;
@@ -83,35 +86,37 @@ public class DashTutorialController : MonoBehaviour
         dashTutorialCanvasGroup.alpha = 1f;
         dashTutorialCanvasGroup.interactable = true;
         dashTutorialCanvasGroup.blocksRaycasts = true;
+
+        Time.timeScale = 0f;
     }
 
     private IEnumerator FadeOut()
     {
-        dashTutorialShown = false;
-        dashTutorialCanvasGroup.interactable = false;
-        dashTutorialCanvasGroup.blocksRaycasts = false;
-
         float duration = 0.5f;
         float elapsed = 0f;
+
+        dashTutorialCanvasGroup.interactable = false;
+        dashTutorialCanvasGroup.blocksRaycasts = false;
 
         while (elapsed < duration)
         {
             elapsed += Time.unscaledDeltaTime;
-            dashTutorialCanvasGroup.alpha = Mathf.Clamp01(1f - (elapsed / duration));
+            dashTutorialCanvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / duration);
             yield return null;
         }
 
         dashTutorialCanvasGroup.alpha = 0f;
+        dashTutorialShown = false;
 
-        Time.timeScale = 1f;
-
-        ProfileStorage.s_currentProfile.SetPrefInt("dashTutorialSeen", 1);
-        ProfileStorage.StorePlayerProfile(GameObject.FindWithTag("Player"), GameManager.Instance);
-
-        if (levelController != null)
+        if (onCloseCallback != null)
         {
-            levelController.StartIntroAfterDash();
-            levelController?.ForzarInicioNivelDesdeDashTutorial();
+            onCloseCallback.Invoke();
+            onCloseCallback = null;
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            LevelController.Instance?.StartIntroAfterDash();
         }
     }
 
