@@ -118,19 +118,20 @@ public class LevelController : MonoBehaviour
             if (dashTutorialSeen == 0)
             {
                 dashTutorialController.CheckAndShowDashTutorial();
-                Time.timeScale = 0f;
-                temporizadorActivo = false;
 
                 dashTutorialController.closeButton.onClick.RemoveAllListeners();
                 dashTutorialController.closeButton.onClick.AddListener(() =>
                 {
                     ProfileStorage.s_currentProfile.SetPrefInt("dashTutorialSeen", 1);
-                    MostrarIntroPanelConTiempoPausado();
+                    dashTutorialController.CloseDashTutorial(() =>
+                    {
+                        StartCoroutine(EsperarYCargarIntro());
+                    });
                 });
             }
             else
             {
-                IniciarIntroSiNoEstaActivo();
+                StartCoroutine(EsperarYCargarIntro());
             }
         }
         else
