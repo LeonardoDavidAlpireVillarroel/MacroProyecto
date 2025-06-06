@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (inventoryAction.WasPressedThisFrame())
+        if (inventoryAction.WasPressedThisFrame() && (shopScript == null || shopScript.shopCanvasGroup.alpha == 0f))
         {
             ToggleInventory();
         }
@@ -237,6 +237,11 @@ public class GameManager : MonoBehaviour
                 StartCoroutine(ShowShootWarningCoroutine());
             }
         }
+
+        //if (shopScript != null && shopScript.shopCanvasGroup.alpha == 1f && !inventory.isInventoryOpen)
+        //{
+        //    ToggleInventory();
+        //}
     }
 
     public void SaveGame()
