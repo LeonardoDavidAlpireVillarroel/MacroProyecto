@@ -1339,6 +1339,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1247685540170622724, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247685540170622724, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247685540170622724, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1247685540170622724, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2302249042898656297, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1387,10 +1403,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4626428550234247753, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4626428550234247753, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4626428550234247753, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5200923492143276635, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
       propertyPath: graph
       value: 
       objectReference: {fileID: 9215799492510579661}
+    - target: {fileID: 5973368887834044707, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5973368887834044707, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5973368887834044707, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5973368887834044707, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8361578007210151200, guid: 3ab891efb918cd14f8cecca05fb84461, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -160333,6 +160377,37 @@ MonoBehaviour:
   from: {fileID: 92622482}
   to: {fileID: 211756460}
   cost: 6.3245554
+--- !u!1 &2097986979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2097986980}
+  m_Layer: 0
+  m_Name: RespawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2097986980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2097986979}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -12.49, y: 0.46069288, z: -7.18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2098250117
 GameObject:
   m_ObjectHideFlags: 0
@@ -172134,6 +172209,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5511028680712197843}
     - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
+      propertyPath: respawnPoint
+      value: 
+      objectReference: {fileID: 2097986980}
+    - target: {fileID: 4247490531988158146, guid: 3941494d0d6a04f4da08d4c29b08809a, type: 3}
       propertyPath: tiempoLimite
       value: 120
       objectReference: {fileID: 0}
@@ -175901,6 +175980,7 @@ SceneRoots:
   - {fileID: 6192214226175021445}
   - {fileID: 329384376}
   - {fileID: 7795884126128415960}
+  - {fileID: 2097986980}
   - {fileID: 15248839}
   - {fileID: 3758577505008118089}
   - {fileID: 4542976317644068234}

@@ -154,6 +154,13 @@ public class Inventory : MonoBehaviour
 
     public void ToggleInventory()
     {
+        if (GameManager.Instance != null &&
+        GameManager.Instance.shopScript != null &&
+        GameManager.Instance.shopScript.shopCanvasGroup.alpha == 1f)
+        {
+            return;
+        }
+
         isInventoryOpen = !isInventoryOpen;
 
         if (isInventoryOpen)
@@ -172,6 +179,18 @@ public class Inventory : MonoBehaviour
             cg.interactable = false;
             cg.blocksRaycasts = false;
         }
+    }
+
+    public void ForceOpenInventory()
+    {
+        isInventoryOpen = true;
+
+        GameManager.Instance.playerController.playerInput.actions.FindActionMap("UI").Enable();
+        cg.alpha = 1;
+        cg.interactable = true;
+        cg.blocksRaycasts = true;
+
+        InventoryUpdate();
     }
 
     private void Update()

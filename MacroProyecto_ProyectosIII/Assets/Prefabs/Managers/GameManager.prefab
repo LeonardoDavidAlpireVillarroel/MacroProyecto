@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3e849d0ac12971478214a1274e5f467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isTutorialScene: 0
   pausePanel: {fileID: 0}
   pauseMenuPanel: {fileID: 0}
   buttonOptionsPanel: {fileID: 0}
@@ -54,9 +55,14 @@ MonoBehaviour:
   isPaused: 0
   playerController: {fileID: 0}
   playerHUD: {fileID: 0}
+  maxLifeMessagePanel: {fileID: 0}
+  maxLifeMessageDuration: 2
+  maxLifeFadeDuration: 1
+  respawnPoint: {fileID: 0}
   health: 3
-  fuerza: 10
-  points: 1000
+  fuerza: 1
+  points: 50
+  gameOverPanel: {fileID: 0}
   inventory: {fileID: 0}
   inventoryUIPanel: {fileID: 0}
   isInventoryOpen: 0
@@ -97,6 +103,15 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  meleeAction:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 11f95086-a409-4f96-b7fa-94210b627576
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
   pointerPositionAction:
     m_Name: Pointer Position
     m_Type: 0
@@ -106,3 +121,12 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  warningShootPanel: {fileID: 0}
+  warningDuration: 2
+  fadeDuration: 0.5
+  currentItemsCollected: 0
+  currentEnemiesDefeated: 0
+  tiempoLimite: 0
+  levelTimer: {fileID: 0}
+  invulnerableTime: 1
+  isInvulnerable: 0

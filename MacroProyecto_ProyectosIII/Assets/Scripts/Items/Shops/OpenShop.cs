@@ -82,10 +82,7 @@ public class OpenShop : MonoBehaviour
         lockedPanel.SetActive(false);
         EnableCanvasGroup(shopCanvasGroup);
 
-        if (gameManager.isInventoryOpen)
-        {
-            gameManager.inventory.ToggleInventory();
-        }
+        gameManager.inventory.ForceOpenInventory();
 
         if (SceneManager.GetActiveScene().name == "Tutorial")
         {
@@ -121,5 +118,10 @@ public class OpenShop : MonoBehaviour
         lockedPanel.SetActive(false);
         proximityPanel.SetActive(false);
         DisableCanvasGroup(shopCanvasGroup);
+
+        if (gameManager.inventory.isInventoryOpen)
+        {
+            gameManager.inventory.ToggleInventory();
+        }
     }
 }

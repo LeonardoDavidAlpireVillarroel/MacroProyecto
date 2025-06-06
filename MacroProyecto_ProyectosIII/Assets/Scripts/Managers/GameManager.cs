@@ -238,10 +238,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        //if (shopScript != null && shopScript.shopCanvasGroup.alpha == 1f && !inventory.isInventoryOpen)
-        //{
-        //    ToggleInventory();
-        //}
+        if (shopScript != null && shopScript.shopCanvasGroup.alpha == 1f && !inventory.isInventoryOpen)
+        {
+            inventory.ForceOpenInventory();
+        }
     }
 
     public void SaveGame()
