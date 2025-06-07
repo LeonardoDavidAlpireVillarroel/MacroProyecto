@@ -39,6 +39,14 @@ public class OpenShop : MonoBehaviour
             isPlayerInside = true;
             proximityPanel.SetActive(true);
             lockedPanel.SetActive(false);
+
+            if (SceneManager.GetActiveScene().name == "Tutorial" &&
+            TutorialManager.Instance != null &&
+            TutorialManager.Instance.currentStep >= 7 &&
+            !playerController.interactAction.enabled)
+            {
+                playerController.interactAction.Enable();
+            }
         }
     }
 
@@ -122,6 +130,11 @@ public class OpenShop : MonoBehaviour
         if (gameManager.inventory.isInventoryOpen)
         {
             gameManager.inventory.ToggleInventory();
+        }
+
+        if (SceneManager.GetActiveScene().name == "Tutorial")
+        {
+            TutorialManager.Instance.panelShowing = false; // <-- añade esto para asegurar que no queda trabado
         }
     }
 }

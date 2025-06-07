@@ -15,7 +15,7 @@ public class TutorialManager : MonoBehaviour
     public static TutorialManager Instance;
 
     public CanvasGroup[] tutorialPanels;
-    private int currentStep = -1;
+    public int currentStep = -1;
 
     private PlayerController player;
     private PlayerInput input;
@@ -29,7 +29,13 @@ public class TutorialManager : MonoBehaviour
     public GameObject shootEnemy;
 
     private HashSet<string> enabledInputs = new HashSet<string>();
-    private bool panelShowing = false;
+    public bool panelShowing = false;
+
+    public ItemsDataBase itemsDatabase;
+
+    private bool canBuyHealthPotion = false;
+    private bool healthPotionBoughtAfterSell = false;
+    private bool healthPotionUsed = false;
 
     private void Awake()
     {
@@ -178,13 +184,13 @@ public class TutorialManager : MonoBehaviour
                 shootEnemy?.SetActive(true);
                 break;
             case 8:
-                SetStep(7); // Habilita interactuar
+                SetStep(9); // Ya habilita el inventario y todo lo necesario
                 break;
             case 9: // Cierra panel de tienda
                 SetStep(8); // Habilita compra
                 break;
-            case 10: // Cierra panel de abrir inventario
-                SetStep(9); // Aquí podrías habilitar el botón o tecla de inventario
+            case 10: // Cierra panel de vender
+                SetStep(9);
                 break;
         }
     }
@@ -338,16 +344,43 @@ public class TutorialManager : MonoBehaviour
         ShowPanel(9);
     }
 
+    public void OnPotionBought(int itemId)
+    {
+        if (!canBuyHealthPotion || healthPotionBoughtAfterSell) return;
+
+        var item = itemsDatabase.GetItemByID(itemId);
+        if (item.HasValue && item.Value.ID == 1)
+        {
+            healthPotionBoughtAfterSell = true;
+        }
+    }
+
     private bool itemDeleted = false;
 
     public void OnItemDeleted()
     {
-        if (itemDeleted || !itemBought || !panel9Closed) return; // Espera que el panel 9 haya sido cerrado
+        if (itemDeleted || !itemBought || !panel9Closed) return;
+
         itemDeleted = true;
+        canBuyHealthPotion = true;
 
         currentStep = -1;
         ShowPanel(10);
     }
+
+    public void OnItemUsed(int itemId)
+    {
+        if (!healthPotionBoughtAfterSell || healthPotionUsed) return;
+
+        var item = itemsDatabase.GetItemByID(itemId);
+        if (item.HasValue && item.Value.ID == 1)
+        {
+            healthPotionUsed = true;
+            currentStep = -1;
+            ShowPanel(11); // Panel final
+        }
+    }
+
 
     #endregion
 }

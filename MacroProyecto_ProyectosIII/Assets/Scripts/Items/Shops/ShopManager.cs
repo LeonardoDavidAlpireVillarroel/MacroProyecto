@@ -92,6 +92,11 @@ public class ShopManager : MonoBehaviour
         GameManager.Instance.points += DB.ObjectsDataBase[index].precioVenta * cantidad;
 
         Inv.GetComponent<Inventory>().VenderItem(index, cantidad);
+
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Tutorial" && TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnItemDeleted();
+        }
     }
 
     public void VenderItemDesdeSlot(int slotIndex, int cantidad)
@@ -103,6 +108,11 @@ public class ShopManager : MonoBehaviour
         GameManager.Instance.points         += ganancia;
 
         inv.VenderItemEnSlot(slotIndex, cantidad);
+
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Tutorial" && TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.OnItemDeleted();
+        }
     }
 
     public void EsconderItems(int caso)
