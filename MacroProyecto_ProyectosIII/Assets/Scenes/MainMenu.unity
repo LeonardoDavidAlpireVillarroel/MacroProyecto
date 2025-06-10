@@ -5946,6 +5946,7 @@ MonoBehaviour:
   jumpSpeed: 3
   doubleJumpSpeed: 4
   isDashing: 0
+  capibaraAnimator: {fileID: 0}
   moveAction:
     m_Name: 
     m_Type: 0
