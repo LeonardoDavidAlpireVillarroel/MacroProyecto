@@ -54,7 +54,7 @@ MonoBehaviour:
     cantidadInicialTienda: 1
     stackLimit: 3
     puntosAlRecoger: 35
-  - nombre: "Munici\xF3n manzanas"
+  - nombre: Manzana
     ID: 3
     icon: {fileID: 21300000, guid: 9c6d5881467fae3409f970942ec94625, type: 3}
     precioCompra: 10
@@ -62,7 +62,7 @@ MonoBehaviour:
     clase: 1
     type: 1
     acumulable: 1
-    description: Proyectiles manzana
+    description: Proyectiles de juugosas manzanas.
     Void: MunicionManzanas
     cantidadInicialTienda: 5
     stackLimit: 5

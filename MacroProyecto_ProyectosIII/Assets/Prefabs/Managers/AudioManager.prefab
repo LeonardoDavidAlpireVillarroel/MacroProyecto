@@ -97,6 +97,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: b82b0d87309722341a8926c780d9426d, type: 3}
   - trackName: Level4
     clip: {fileID: 8300000, guid: b82b0d87309722341a8926c780d9426d, type: 3}
+  - trackName: Credits
+    clip: {fileID: 8300000, guid: b82b0d87309722341a8926c780d9426d, type: 3}
 --- !u!114 &4020500993866939624
 MonoBehaviour:
   m_ObjectHideFlags: 0

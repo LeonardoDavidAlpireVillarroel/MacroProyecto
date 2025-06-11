@@ -98,4 +98,19 @@ public class LoadLevel : MonoBehaviour
         MusicManager.Instance.PlayMusic("MainMenu");
         ScenesManager.Instance.LoadScene("MainMenu", "CrossFade");
     }
+
+    public void LoadCredits()
+    {
+        GameManager.Instance.RestoreBackupState();
+
+        if (MapController.Instance.unlockLevel < 3)
+        {
+            MapController.Instance.unlockLevel = 3;
+        }
+
+        MapController.Instance.UnlockLevels();
+        Time.timeScale = 1;
+        MusicManager.Instance.PlayMusic("Credits");
+        ScenesManager.Instance.LoadScene("Credits", "CrossFade");
+    }
 }
