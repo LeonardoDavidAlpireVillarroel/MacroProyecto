@@ -102,7 +102,7 @@ public class SnakeBossAI : MonoBehaviour
         float elapsed = 0f;
         float appearTime = 0.5f;
         Vector3 startPos = transform.position;
-        Vector3 endPos = spawnPosition + new Vector3(0, 0.5f, 0);
+        Vector3 endPos = spawnPosition + new Vector3(0, 1.5f, 0);
 
         while (elapsed < appearTime)
         {

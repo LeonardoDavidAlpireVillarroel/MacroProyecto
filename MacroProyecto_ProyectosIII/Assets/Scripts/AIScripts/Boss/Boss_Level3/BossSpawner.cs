@@ -27,6 +27,7 @@ public class BossSpawner : MonoBehaviour
     private bool totalHealthInitialized = false;
     private int accumulatedDamage = 0;
 
+    private LevelController levelController;
 
     private void Start()
     {
@@ -38,6 +39,8 @@ public class BossSpawner : MonoBehaviour
         UpdateShootIntervals();
 
         StartCoroutine(SpawnBossesRoutine());
+
+        levelController = LevelController.Instance;
     }
 
     private IEnumerator SpawnBossesRoutine()
@@ -169,8 +172,12 @@ public class BossSpawner : MonoBehaviour
 
         if (totalBossHealth <= 0)
         {
-            Debug.Log("You win!");
             DespawnAllBosses();
+
+            if (levelController != null && levelController.esLevel3)
+            {
+                levelController.FinishLevelEarly("¡Todos los jefes derrotados!");
+            }
         }
     }
 
