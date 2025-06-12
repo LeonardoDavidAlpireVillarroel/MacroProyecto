@@ -3405,6 +3405,10 @@ PrefabInstance:
       propertyPath: dynamicTargetTracker
       value: 
       objectReference: {fileID: 1918040482}
+    - target: {fileID: 2814757252867784321, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
+      propertyPath: health
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3381716420257219799, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: entity
       value: 
@@ -59275,6 +59279,10 @@ PrefabInstance:
       propertyPath: dynamicTargetTracker
       value: 
       objectReference: {fileID: 1918040482}
+    - target: {fileID: 2814757252867784321, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
+      propertyPath: health
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3381716420257219799, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: entity
       value: 
@@ -74224,6 +74232,10 @@ PrefabInstance:
       propertyPath: dynamicTargetTracker
       value: 
       objectReference: {fileID: 1918040482}
+    - target: {fileID: 2814757252867784321, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
+      propertyPath: health
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3381716420257219799, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: entity
       value: 
@@ -74274,7 +74286,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6247227834614391848, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: m_Name
-      value: Enemy_05
+      value: Enemy_04
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -83645,84 +83657,6 @@ MonoBehaviour:
   from: {fileID: 89028620}
   to: {fileID: 1171719960}
   cost: 6.3245554
---- !u!1001 &1075183430
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1693035815}
-    m_Modifications:
-    - target: {fileID: 1805536798987307919, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: graphComponent
-      value: 
-      objectReference: {fileID: 9215799492510579661}
-    - target: {fileID: 1805536798987307919, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: dynamicTargetTracker
-      value: 
-      objectReference: {fileID: 1918040482}
-    - target: {fileID: 3381716420257219799, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: entity
-      value: 
-      objectReference: {fileID: 1157201671}
-    - target: {fileID: 3496919160137004380, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: objective
-      value: 
-      objectReference: {fileID: 1918040483}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 13.23
-      objectReference: {fileID: 0}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.22
-      objectReference: {fileID: 0}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 13.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6247227834614391848, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-      propertyPath: m_Name
-      value: Enemy_04
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
---- !u!4 &1075183431 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4110660339080952695, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-  m_PrefabInstance: {fileID: 1075183430}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1076415393
 GameObject:
   m_ObjectHideFlags: 0
@@ -127757,7 +127691,6 @@ Transform:
   - {fileID: 1704701846}
   - {fileID: 754290533}
   - {fileID: 28368177}
-  - {fileID: 1075183431}
   - {fileID: 952957294}
   - {fileID: 2059074137}
   - {fileID: 1762987563}
@@ -128402,6 +128335,10 @@ PrefabInstance:
       propertyPath: dynamicTargetTracker
       value: 
       objectReference: {fileID: 1918040482}
+    - target: {fileID: 2814757252867784321, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
+      propertyPath: health
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3381716420257219799, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: entity
       value: 
@@ -133035,6 +132972,10 @@ PrefabInstance:
       propertyPath: dynamicTargetTracker
       value: 
       objectReference: {fileID: 1918040482}
+    - target: {fileID: 2814757252867784321, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
+      propertyPath: health
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3381716420257219799, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: entity
       value: 
@@ -133085,7 +133026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6247227834614391848, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: m_Name
-      value: Enemy_07
+      value: Enemy_06
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -149176,6 +149117,10 @@ PrefabInstance:
       propertyPath: dynamicTargetTracker
       value: 
       objectReference: {fileID: 1918040482}
+    - target: {fileID: 2814757252867784321, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
+      propertyPath: health
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3381716420257219799, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: entity
       value: 
@@ -149226,7 +149171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6247227834614391848, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: m_Name
-      value: Enemy_08
+      value: Enemy_07
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -155659,6 +155604,10 @@ PrefabInstance:
       propertyPath: dynamicTargetTracker
       value: 
       objectReference: {fileID: 1918040482}
+    - target: {fileID: 2814757252867784321, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
+      propertyPath: health
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3381716420257219799, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: entity
       value: 
@@ -155709,7 +155658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6247227834614391848, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
       propertyPath: m_Name
-      value: Enemy_06
+      value: Enemy_05
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -157889,11 +157838,6 @@ MonoBehaviour:
   from: {fileID: 654923452}
   to: {fileID: 1945578225}
   cost: 2
---- !u!1 &2085777127 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6247227834614391848, guid: 804a289c7865f514fab0669b6f4fe779, type: 3}
-  m_PrefabInstance: {fileID: 1075183430}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2085907366
 GameObject:
   m_ObjectHideFlags: 0
@@ -169970,7 +169914,6 @@ MonoBehaviour:
   - {fileID: 1704701845}
   - {fileID: 1975142018}
   - {fileID: 1749076282}
-  - {fileID: 2085777127}
   - {fileID: 903817126}
   - {fileID: 102780646}
   - {fileID: 527488790}

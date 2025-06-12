@@ -479,6 +479,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void LoseLifesForBoss(int damage)
+    {
+        if (isInvulnerable || isProcessingGameOver) return;
+
+        if (health > 0)
+        {
+            health -= damage;
+            playerHUD.DesactivateLifes(health);
+
+            SaveGame();
+
+            StartCoroutine(InvulnerabilityCoroutine());
+
+            if (health == 0)
+            {
+                TriggerGameOver();
+                if (playerController != null)
+                    playerController.enabled = false;
+            }
+        }
+    }
+
     public void RecoverLifes()
     {
         playerHUD.ActivateLife(health);
