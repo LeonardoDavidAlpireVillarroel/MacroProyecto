@@ -25,5 +25,10 @@ public class FruitProjectile : MonoBehaviour
             }
             Destroy(gameObject);
         }
+
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

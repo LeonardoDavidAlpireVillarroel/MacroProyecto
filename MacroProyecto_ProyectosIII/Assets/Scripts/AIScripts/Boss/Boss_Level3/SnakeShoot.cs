@@ -29,5 +29,10 @@ public class SnakeShoot : MonoBehaviour
             GameManager.Instance.LoseLifesForBoss(3);
             Destroy(gameObject);
         }
+
+        if (other.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
