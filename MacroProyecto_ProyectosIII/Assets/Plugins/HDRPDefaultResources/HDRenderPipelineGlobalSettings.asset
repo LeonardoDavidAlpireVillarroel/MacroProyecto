@@ -191,28 +191,7 @@ MonoBehaviour:
       - rid: 1599601714234130663
       - rid: 1599601714234130664
     m_RuntimeSettings:
-      m_List:
-      - rid: 1599601714234130633
-      - rid: 1599601714234130635
-      - rid: 1599601714234130637
-      - rid: 1599601714234130638
-      - rid: 1599601714234130640
-      - rid: 1599601714234130641
-      - rid: 1599601714234130642
-      - rid: 1599601714234130644
-      - rid: 1599601714234130645
-      - rid: 1599601714234130646
-      - rid: 1599601714234130647
-      - rid: 1599601714234130648
-      - rid: 1599601714234130650
-      - rid: 1599601714234130651
-      - rid: 1599601714234130652
-      - rid: 1599601714234130656
-      - rid: 1599601714234130657
-      - rid: 1599601714234130660
-      - rid: 1599601714234130662
-      - rid: 1599601714234130663
-      - rid: 1599601714234130664
+      m_List: []
   renderingLayerNames:
   - Default
   lightLayerName0: 
@@ -475,7 +454,7 @@ MonoBehaviour:
       type: {class: HDRPDefaultVolumeProfileSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
-        m_VolumeProfile: {fileID: 11400000, guid: af1285d9021be5f49ae0e9380cdfda05, type: 2}
+        m_VolumeProfile: {fileID: 0}
     - rid: 1599601714234130651
       type: {class: WaterSystemRuntimeResources, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
@@ -795,7 +774,7 @@ MonoBehaviour:
       type: {class: LookDevVolumeProfileSettings, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
         m_Version: 0
-        m_VolumeProfile: {fileID: 11400000, guid: 065e8bf2222bbd5459c6eb0710395a31, type: 2}
+        m_VolumeProfile: {fileID: 0}
     - rid: 8225726469799936007
       type: {class: HDRenderingLayersLimitSettings, ns: UnityEditor.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Editor}
       data:
